@@ -219,8 +219,7 @@
                            $uoptions['buyer'] = 'Tom & Jerry & Szabi';
                            $uoptions['licence'] = 'extended';
                            $uoptions['supported_until'] = '24.12.2038';
-
-                     </td>
+                           ?>
                   </tr>
                   <tr>
                      <td>
