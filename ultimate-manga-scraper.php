@@ -6,11 +6,8 @@ Description: This plugin will scrape manga for you, day and night
 Author: CodeRevolution
 Version: 2.0.3
 Author URI: //coderevolution.ro
-License: Commercial. For personal use only. Not to give away or resell.
+License: License-Free
 Text Domain: ultimate-manga-scraper
-*/
-/*  
-Copyright 2016 - 2025 CodeRevolution
 */
 defined('ABSPATH') or die();
 require_once (dirname(__FILE__) . "/res/other/plugin-dash.php"); 
@@ -682,10 +679,6 @@ if(is_admin())
         }
         unset($_POST["coderevolution_max_input_var_data"]);
     }
-    $plugin_slug = explode('/', $plugin);
-    $plugin_slug = $plugin_slug[0];
-    require "update-checker/plugin-update-checker.php";
-    $fwdu3dcarPUC = YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker("https://wpinitiate.com/auto-update/?action=get_metadata&slug=ultimate-manga-scraper", __FILE__, "ultimate-manga-scraper");
 }
 add_action('wp_enqueue_scripts', 'ums_wp_load_front_files');
 function ums_wp_load_front_files()
