@@ -6,11 +6,8 @@ Description: This plugin will scrape manga for you, day and night
 Author: CodeRevolution
 Version: 2.0.3
 Author URI: //coderevolution.ro
-License: Commercial. For personal use only. Not to give away or resell.
+License: License-Free
 Text Domain: ultimate-manga-scraper
-*/
-/*  
-Copyright 2016 - 2025 CodeRevolution
 */
 defined('ABSPATH') or die();
 require_once (dirname(__FILE__) . "/res/other/plugin-dash.php"); 
@@ -682,58 +679,11 @@ if(is_admin())
         }
         unset($_POST["coderevolution_max_input_var_data"]);
     }
-    $plugin_slug = explode('/', $plugin);
-    $plugin_slug = $plugin_slug[0];
-    if(isset($_POST[$plugin_slug . '_register']) && isset($_POST[$plugin_slug. '_register_code']) && trim($_POST[$plugin_slug . '_register_code']) != '')
-    {
-        $uoptions = array();
-        $uoptions['item_id'] = 34167486;
-        $uoptions['item_uid'] = 'pqwl9-he9jk-p6t92-c8sdu-og987-rqidc-egybg';
-        $uoptions['code'] = $_POST[$plugin_slug . '_register_code'];
-        $uoptions['item_name'] = ' Ultimate Web Novel and Manga Scraper';
-        $uoptions['created_at'] = '24.12.1974';
-        $uoptions['buyer'] = 'Tom & Jerry & Szabi';
-        $uoptions['licence'] = 'extended';
-        $uoptions['supported_until'] = '24.12.2038';
-        update_option($plugin_slug . '_registration', $uoptions);
-        update_option('coderevolution_settings_changed', 2);
-    }
-    $uoptions = array();
-    $is_activated = ums_is_activated($plugin_slug, $uoptions);
-    if($is_activated === true || $is_activated === 2)
-    {
-        require "update-checker/plugin-update-checker.php";
-        $fwdu3dcarPUC = YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker("https://wpinitiate.com/auto-update/?action=get_metadata&slug=ultimate-manga-scraper", __FILE__, "ultimate-manga-scraper");
-    }
-    else
-    {
-        add_action("after_plugin_row_{$plugin}", function( $plugin_file, $plugin_data, $status ) {
-            $plugin_url = 'https://codecanyon.net/item/ultimate-web-novel-and-manga-scraper/34167486';
-            echo '<tr class="active"><td>&nbsp;</td><td colspan="2"><p class="cr_auto_update">';
-          echo sprintf( wp_kses( __( 'The plugin is not registered. Automatic updating is disabled. Please purchase a license for it from <a href="%s" target="_blank">here</a> and register  the plugin from the \'Main Settings\' menu using your purchase code. <a href="%s" target="_blank">How I find my purchase code?', 'ultimate-manga-scraper'), array(  'a' => array( 'href' => array(), 'target' => array() ) ) ), esc_url_raw( 'https://1.envato.market/c/1264868/275988/4415?u=' . urlencode($plugin_url)), esc_url_raw('//www.youtube.com/watch?v=NElJ5t_Wd48') );
-          echo '</a></p> </td></tr>';
-        }, 10, 3 );
-        add_action('admin_enqueue_scripts', 'ums_admin_enqueue_all');
-        add_filter("plugin_action_links_$plugin", 'ums_add_activation_link');
-    }
-}
-function ums_admin_enqueue_all()
-{
-    $reg_css_code = '.cr_auto_update{background-color:#fff8e5;margin:5px 20px 15px 20px;border-left:4px solid #fff;padding:12px 12px 12px 12px !important;border-left-color:#ffb900;}';
-    wp_register_style( 'ums-plugin-reg-style', false );
-    wp_enqueue_style( 'ums-plugin-reg-style' );
-    wp_add_inline_style( 'ums-plugin-reg-style', $reg_css_code );
 }
 add_action('wp_enqueue_scripts', 'ums_wp_load_front_files');
 function ums_wp_load_front_files()
 {
     wp_enqueue_style('coderevolution-front-css', plugins_url('styles/coderevolution-front.css', __FILE__));
-}
-function ums_add_activation_link($links)
-{
-    $settings_link = '<a href="admin.php?page=ums_admin_settings">' . esc_html__('Activate Plugin License', 'ultimate-manga-scraper') . '</a>';
-    array_push($links, $settings_link);
-    return $links;
 }
 $min_timeout = 1;
 
@@ -760,60 +710,37 @@ add_action('network_admin_menu', 'ums_register_my_custom_menu_page');
 function ums_register_my_custom_menu_page()
 {
     $plugin = plugin_basename(__FILE__);
-    $plugin_slug = explode('/', $plugin);
-    $plugin_slug = $plugin_slug[0];
-    $uoptions = array();
-    $is_activated = ums_is_activated($plugin_slug, $uoptions);
-    if($is_activated === true || $is_activated === 2)
-    {
-        require(dirname(__FILE__) . "/res/ums-main.php");
-        add_menu_page('Ultimate Web Novel & Manga Scraper', 'Ultimate Web Novel & Manga Scraper', 'manage_options', 'ums_admin_settings', 'ums_admin_settings', plugins_url('images/icon.png', __FILE__));
-        $main = add_submenu_page('ums_admin_settings', esc_html__("Main Settings", 'ultimate-manga-scraper'), esc_html__("Main Settings", 'ultimate-manga-scraper'), 'manage_options', 'ums_admin_settings');
-        add_action( 'load-' . $main, 'ums_load_all_admin_js' );
-        add_action( 'load-' . $main, 'ums_load_main_admin_js' );
-        $ums_Main_Settings = get_option('ums_Main_Settings', false);
-        if (isset($ums_Main_Settings['ums_enabled']) && $ums_Main_Settings['ums_enabled'] == 'on') {
-            add_action('admin_enqueue_scripts', 'ums_enhancements_enqueue_scripts');
-            $mangaxyzx = add_submenu_page('ums_admin_settings', esc_html__('Manga Scraper (Madara Theme Sites)', 'ultimate-manga-scraper'), esc_html__('Manga Scraper (Madara Theme Sites)', 'ultimate-manga-scraper'), 'manage_options', 'ums_manga_generic_panel', 'ums_manga_generic_panel');
-            add_action( 'load-' . $mangaxyzx, 'ums_load_admin_js' );
-            add_action( 'load-' . $mangaxyzx, 'ums_load_all_admin_js' );
-            $mangaxyz = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (Madara Theme Sites)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (Madara Theme Sites)', 'ultimate-manga-scraper'), 'manage_options', 'ums_novel_generic_panel', 'ums_novel_generic_panel');
-            add_action( 'load-' . $mangaxyz, 'ums_load_admin_js' );
-            add_action( 'load-' . $mangaxyz, 'ums_load_all_admin_js' );
-            $mangax = add_submenu_page('ums_admin_settings', esc_html__('Manga Scraper (FanFox.net)', 'ultimate-manga-scraper'), esc_html__('Manga Scraper (FanFox.net)', 'ultimate-manga-scraper'), 'manage_options', 'ums_items_panel', 'ums_items_panel');
-            add_action( 'load-' . $mangax, 'ums_load_admin_js' );
-            add_action( 'load-' . $mangax, 'ums_load_all_admin_js' );
-            $mangaxyx = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (novlove.com)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (novlove.com)', 'ultimate-manga-scraper'), 'manage_options', 'ums_novel_panel', 'ums_novel_panel');
-            add_action( 'load-' . $mangaxyx, 'ums_load_admin_js' );
-            add_action( 'load-' . $mangaxyx, 'ums_load_all_admin_js' );
-            //$mangaxy = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (NewNovel.org)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (NewNovel.org)', 'ultimate-manga-scraper'), 'manage_options', 'ums_vipnovel_panel', 'ums_vipnovel_panel');
-            //add_action( 'load-' . $mangaxy, 'ums_load_admin_js' );
-            //add_action( 'load-' . $mangaxy, 'ums_load_all_admin_js' );
-            $mangaxx = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (WuxiaWorld.site)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (WuxiaWorld.site)', 'ultimate-manga-scraper'), 'manage_options', 'ums_text_panel', 'ums_text_panel');
-            add_action( 'load-' . $mangaxx, 'ums_load_admin_js' );
-            add_action( 'load-' . $mangaxx, 'ums_load_all_admin_js' );
-            $enhancements = add_submenu_page('ums_admin_settings', esc_html__("Madara Enhancements", 'ultimate-manga-scraper'), esc_html__("Madara Enhancements", 'ultimate-manga-scraper'), 'manage_options', 'ums_enhancements', [ 'UMS_Madara_Handler', 'ums_enhancements' ]);
-            add_action( 'load-' . $enhancements, 'ums_load_all_admin_js' );
-            $logs = add_submenu_page('ums_admin_settings', esc_html__("Activity & Logging", 'ultimate-manga-scraper'), esc_html__("Activity & Logging", 'ultimate-manga-scraper'), 'manage_options', 'ums_logs', 'ums_logs');
-            add_action( 'load-' . $logs, 'ums_load_all_admin_js' );
-        }
+    require(dirname(__FILE__) . "/res/ums-main.php");
+    add_menu_page('Ultimate Web Novel & Manga Scraper', 'Ultimate Web Novel & Manga Scraper', 'manage_options', 'ums_admin_settings', 'ums_admin_settings', plugins_url('images/icon.png', __FILE__));
+    $main = add_submenu_page('ums_admin_settings', esc_html__("Main Settings", 'ultimate-manga-scraper'), esc_html__("Main Settings", 'ultimate-manga-scraper'), 'manage_options', 'ums_admin_settings');
+    add_action( 'load-' . $main, 'ums_load_all_admin_js' );
+    add_action( 'load-' . $main, 'ums_load_main_admin_js' );
+    $ums_Main_Settings = get_option('ums_Main_Settings', false);
+    if (isset($ums_Main_Settings['ums_enabled']) && $ums_Main_Settings['ums_enabled'] == 'on') {
+        add_action('admin_enqueue_scripts', 'ums_enhancements_enqueue_scripts');
+        $mangaxyzx = add_submenu_page('ums_admin_settings', esc_html__('Manga Scraper (Madara Theme Sites)', 'ultimate-manga-scraper'), esc_html__('Manga Scraper (Madara Theme Sites)', 'ultimate-manga-scraper'), 'manage_options', 'ums_manga_generic_panel', 'ums_manga_generic_panel');
+        add_action( 'load-' . $mangaxyzx, 'ums_load_admin_js' );
+        add_action( 'load-' . $mangaxyzx, 'ums_load_all_admin_js' );
+        $mangaxyz = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (Madara Theme Sites)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (Madara Theme Sites)', 'ultimate-manga-scraper'), 'manage_options', 'ums_novel_generic_panel', 'ums_novel_generic_panel');
+        add_action( 'load-' . $mangaxyz, 'ums_load_admin_js' );
+        add_action( 'load-' . $mangaxyz, 'ums_load_all_admin_js' );
+        $mangax = add_submenu_page('ums_admin_settings', esc_html__('Manga Scraper (FanFox.net)', 'ultimate-manga-scraper'), esc_html__('Manga Scraper (FanFox.net)', 'ultimate-manga-scraper'), 'manage_options', 'ums_items_panel', 'ums_items_panel');
+        add_action( 'load-' . $mangax, 'ums_load_admin_js' );
+        add_action( 'load-' . $mangax, 'ums_load_all_admin_js' );
+        $mangaxyx = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (novlove.com)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (novlove.com)', 'ultimate-manga-scraper'), 'manage_options', 'ums_novel_panel', 'ums_novel_panel');
+        add_action( 'load-' . $mangaxyx, 'ums_load_admin_js' );
+        add_action( 'load-' . $mangaxyx, 'ums_load_all_admin_js' );
+        //$mangaxy = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (NewNovel.org)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (NewNovel.org)', 'ultimate-manga-scraper'), 'manage_options', 'ums_vipnovel_panel', 'ums_vipnovel_panel');
+        //add_action( 'load-' . $mangaxy, 'ums_load_admin_js' );
+        //add_action( 'load-' . $mangaxy, 'ums_load_all_admin_js' );
+        $mangaxx = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (WuxiaWorld.site)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (WuxiaWorld.site)', 'ultimate-manga-scraper'), 'manage_options', 'ums_text_panel', 'ums_text_panel');
+        add_action( 'load-' . $mangaxx, 'ums_load_admin_js' );
+        add_action( 'load-' . $mangaxx, 'ums_load_all_admin_js' );
+        $enhancements = add_submenu_page('ums_admin_settings', esc_html__("Madara Enhancements", 'ultimate-manga-scraper'), esc_html__("Madara Enhancements", 'ultimate-manga-scraper'), 'manage_options', 'ums_enhancements', [ 'UMS_Madara_Handler', 'ums_enhancements' ]);
+        add_action( 'load-' . $enhancements, 'ums_load_all_admin_js' );
+        $logs = add_submenu_page('ums_admin_settings', esc_html__("Activity & Logging", 'ultimate-manga-scraper'), esc_html__("Activity & Logging", 'ultimate-manga-scraper'), 'manage_options', 'ums_logs', 'ums_logs');
+        add_action( 'load-' . $logs, 'ums_load_all_admin_js' );
     }
-    else
-    {
-        require(dirname(__FILE__) . "/res/ums-activation.php");
-        add_menu_page('Ultimate Web Novel & Manga Scraper', 'Ultimate Web Novel & Manga Scraper', 'manage_options', 'ums_admin_settings', 'ums_admin_settings', plugins_url('images/icon.png', __FILE__));
-        $main = add_submenu_page('ums_admin_settings', esc_html__("Activation", 'ultimate-manga-scraper'), esc_html__("Activation", 'ultimate-manga-scraper'), 'manage_options', 'ums_admin_settings');
-        add_action( 'load-' . $main, 'ums_load_admin_js' );
-        add_action( 'load-' . $main, 'ums_load_main_admin_js' );
-        add_action( 'load-' . $main, 'ums_load_activation' );
-    }
-}
-function ums_load_activation(){
-    add_action('admin_enqueue_scripts', 'ums_enqueue_activation');
-}
-function ums_enqueue_activation(){
-    wp_register_style('ums-activation-style', plugins_url('styles/ums-activation.css', __FILE__), false, false);
-    wp_enqueue_style('ums-activation-style');
 }
 function ums_load_admin_js(){
     add_action('admin_enqueue_scripts', 'ums_enqueue_admin_js');
