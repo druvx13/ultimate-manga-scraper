@@ -81,7 +81,7 @@ Each rule allows you to specify the manga or web novel to scrape (by URL or keyw
 - **CloudFlare Issues:** If your site is behind CloudFlare, make sure to enable the "My Server Is Using CloudFlare Caching" option in the Main Settings.
 - **JavaScript-Rendered Content:** If you're scraping a site that uses JavaScript to load content, use one of the headless browser options (PhantomJS, Puppeteer, or HeadlessBrowserAPI).
 
-## Support
+## Support (From Official Plugin Creators)
 
 If you need help with the plugin, please check our [knowledge base](//coderevolution.ro/knowledge-base/) or contact [our support team](//coderevolution.ro/support).
 
