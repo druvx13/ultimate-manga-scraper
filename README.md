@@ -1,97 +1,148 @@
-
 # Ultimate Web Novel & Manga Scraper
 
-This WordPress plugin automatically scrapes web novels and manga from various sources and publishes them on your Madara-powered website.
+**Institutional-Grade Documentation Edition**
 
-## Description
+This repository contains the **Ultimate Web Novel & Manga Scraper**, a comprehensive WordPress plugin designed to automate the ingestion of manga and web novel content. It is engineered to integrate seamlessly with the **Madara** theme, transforming a standard WordPress installation into a fully automated content aggregation platform.
 
-The Ultimate Web Novel & Manga Scraper is a powerful tool designed to automate the process of fetching and publishing web novels and manga. It integrates seamlessly with the Madara theme, allowing you to create a comprehensive manga and web novel site with minimal effort.
+---
 
-### Key Features:
+## 📖 Table of Contents
 
-- **Automated Scraping:** Schedule automatic scraping of manga and web novels from popular sources.
-- **Madara Theme Integration:** Works perfectly with the Madara theme, ensuring compatibility and a smooth user experience.
-- **Multiple Scrapers:** Includes scrapers for FanFox.net, novlove.com, WuxiaWorld.site, and other Madara-based sites.
-- **Advanced Scraping Options:** Configure advanced search parameters, including genres, authors, artists, and release years.
-- **Content Translation:** Automatically translate scraped content using Google Translate, DeepL, or Microsoft Translator.
-- **Proxy Support:** Use web proxies to avoid getting blocked while scraping.
-- **Headless Browser Support:** Utilize PhantomJS, Puppeteer, or HeadlessBrowserAPI to scrape content from sites that rely on JavaScript.
+1.  [Project Overview](#project-overview)
+2.  [Feature Inventory](#feature-inventory)
+3.  [System Requirements](#system-requirements)
+4.  [Technology Stack](#technology-stack)
+5.  [Directory Overview](#directory-overview)
+6.  [Installation](#installation)
+7.  [Environment Setup](#environment-setup)
+8.  [Configuration](#configuration)
+9.  [Database Setup](#database-setup)
+10. [Admin & System Usage](#admin--system-usage)
+11. [Development Workflow](#development-workflow)
+12. [Production Deployment](#production-deployment)
+13. [Security Considerations](#security-considerations)
+14. [Limitations & Assumptions](#limitations--assumptions)
+15. [Maintenance](#maintenance)
+16. [Licensing](#licensing)
 
-## Requirements
+---
 
-- **WordPress:** Version 4.0 or higher.
-- **Madara Theme:** This plugin requires the [Madara - WordPress Theme for Manga](https://mangabooth.com/product/wp-manga-theme-madara/) to be installed and active.
-- **Madara Core Plugin:** The Madara Core plugin, which comes with the theme, must also be active.
+## 1. Project Overview
 
-## Installation
+The plugin operates as a "God Object" within the WordPress ecosystem, specifically targeting the **Madara** manga theme. It acts as a bridge between external content sources (MangaFox, WuxiaWorld, Madara-based sites, etc.) and the local WordPress database.
 
-1.  **Upload Plugin:** Upload the plugin files to the `/wp-content/plugins/ultimate-manga-scraper` directory, or install the plugin through the WordPress plugins screen directly.
-2.  **Activate Plugin:** Activate the plugin through the 'Plugins' screen in WordPress.
-3.  **Configure Settings:** Use the **Ultimate Web Novel & Manga Scraper** -> **Main Settings** screen to configure the plugin.
+It handles the entire lifecycle of content acquisition:
+*   **Scheduling**: Cron-based execution.
+*   **Fetching**: Multi-mode scraping (cURL, PhantomJS, Puppeteer).
+*   **Processing**: HTML parsing, cleaning, and text spinning.
+*   **Translation**: Automated translation via Google/DeepL/Microsoft.
+*   **Storage**: Saving to local FS, DB, or Cloud Storage (S3).
 
-## Configuration
+## 2. Feature Inventory
 
-The plugin's settings are divided into several sections, which can be accessed from the WordPress admin menu.
+*   **Multi-Source Scraping**: Built-in rules for major manga/novel sites.
+*   **Headless Browser Support**: Renders JavaScript-heavy sites using PhantomJS or Puppeteer.
+*   **Translation Pipeline**: Converts content language on-the-fly.
+*   **Proxy Support**: Rotates proxies to bypass IP bans.
+*   **Cloudflare Bypass**: Mechanisms to handle anti-bot protection.
+*   **Madara Enhancements**: specialized module for cloning other Madara sites via AJAX.
+*   **Auto-Update**: Updates existing manga with new chapters automatically.
 
-### Main Settings
+## 3. System Requirements
 
-- **Main Switch:** Enable or disable the entire plugin.
-- **Scraping Enhancements:**
-    - **HeadlessBrowserAPI Key:** Enter your API key to use the HeadlessBrowserAPI for scraping JavaScript-rendered content.
-- **Plugin Options:**
-    - **CloudFlare Caching:** Enable if your server uses CloudFlare to avoid issues with execution time limits.
-    - **Manga Storage Device:** Select the storage location for scraped manga (local, Amazon S3, etc.).
-    - **Logging:** Enable or disable logging for scraping rules.
-    - **Automatic Rerunning of Rules:** Disable to prevent the plugin from automatically restarting a failed scraping process.
-    - **Proxy Settings:** Configure your web proxy address and authentication details.
-    - **Timeouts and Delays:** Set timeouts for rule execution and delays between scraping requests.
-- **Translation Options:**
-    - **Translator API Keys:** Enter your API keys for Google Translator, Microsoft Translator, or DeepL.
-- **PhantomJS Settings:**
-    - **PhantomJS Path:** Set the server path for the PhantomJS executable.
-    - **Execution Timeout:** Configure the timeout for PhantomJS execution.
+*   **CMS**: WordPress 5.0+
+*   **Theme**: Madara (Active)
+*   **Plugin Dependency**: Madara Core (`WP_MANGA_STORAGE`)
+*   **PHP**: 7.4+
+*   **Extensions**: `curl`, `dom`, `mbstring`, `json`, `libxml`
+*   **Optional**:
+    *   `Node.js` (for Puppeteer)
+    *   `PhantomJS` binary
+    *   `shell_exec` enabled
 
-### Scraping Rules
+## 4. Technology Stack
 
-You can create and manage scraping rules for different sources:
+*   **Language**: PHP 7/8
+*   **Frontend**: jQuery (Admin UI)
+*   **Parsers**: PHP Simple HTML DOM Parser, DOMDocument
+*   **Headless**: PhantomJS (JS), Puppeteer (Node.js)
+*   **Database**: MySQL/MariaDB (WordPress Schema + Madara Custom Tables)
 
-- **Manga Scraper (FanFox.net)**
-- **Web Novel Scraper (novlove.com)**
-- **Web Novel Scraper (WuxiaWorld.site)**
-- **Manga Scraper (Madara Theme Sites)**
-- **Web Novel Scraper (Madara Theme Sites)**
+## 5. Directory Overview
 
-Each rule allows you to specify the manga or web novel to scrape (by URL or keyword), set a scraping schedule, define the number of chapters to fetch, and configure various other options.
+See [DIRECTORY_STRUCTURE.md](DIRECTORY_STRUCTURE.md) for a complete manifest.
 
-## Usage
+*   `root`: Core logic (`ultimate-manga-scraper.php`).
+*   `includes/`: Madara integration classes.
+*   `res/`: Libraries, drivers, and admin UI templates.
+*   `images/`, `scripts/`, `styles/`: Assets.
 
-1.  **Navigate to the Plugin Settings:** In your WordPress dashboard, go to **Ultimate Web Novel & Manga Scraper**.
-2.  **Configure Main Settings:** Set up your API keys, proxy settings, and other global options in the **Main Settings** tab.
-3.  **Create a Scraping Rule:**
-    -   Go to one of the scraper sections (e.g., **Manga Scraper (FanFox.net)**).
-    -   Enter the URL or search keyword for the manga you want to scrape.
-    -   Set the scraping schedule (in hours or minutes).
-    -   Configure other options, such as the number of chapters to scrape, post status, and author.
-    -   Save the rule.
-4.  **Run the Rule:** You can either wait for the rule to run on its schedule or trigger it manually by clicking the "Run This Rule Now" button.
+## 6. Installation
 
-## Troubleshooting
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed steps.
 
-- **Scraping Failures:** If a scraping rule fails, check the **Activity & Logging** tab for detailed error messages.
-- **CloudFlare Issues:** If your site is behind CloudFlare, make sure to enable the "My Server Is Using CloudFlare Caching" option in the Main Settings.
-- **JavaScript-Rendered Content:** If you're scraping a site that uses JavaScript to load content, use one of the headless browser options (PhantomJS, Puppeteer, or HeadlessBrowserAPI).
+1.  Upload plugin to `/wp-content/plugins/`.
+2.  Activate via WordPress Admin.
+3.  Ensure Madara theme is active.
 
-## Support (From Official Plugin Creators)
+## 7. Environment Setup
 
-If you need help with the plugin, please check our [knowledge base](//coderevolution.ro/knowledge-base/) or contact [our support team](//coderevolution.ro/support).
+*   **Permissions**: Ensure the web server can write to `wp-content/uploads` and `wp-content/plugins/ultimate-manga-scraper`.
+*   **Cron**: Disable WP-Cron and setup a system cron for reliability.
 
-## Changelog
+## 8. Configuration
 
-### 2.0.3
-- Added Nulled Version.
+See [CONFIGURATION.md](CONFIGURATION.md).
 
-### 2.0.2
-- Bugfixes and performance improvements.
+Configuration is handled via **Ultimate Web Novel & Manga Scraper -> Main Settings**. Key areas:
+*   **Headless Settings**: Paths to binaries.
+*   **Translation Keys**: API credentials.
+*   **Storage Backend**: Local vs Cloud.
 
-### 1.0
-- Initial release.
+## 9. Database Setup
+
+The plugin utilizes the standard WordPress `wp_options` table for storing rules and settings. Content is stored in `wp_posts` (Manga) and `wp_postmeta`. Chapter data is managed by Madara's storage engine.
+
+## 10. Admin & System Usage
+
+1.  **Define Rules**: Go to the specific scraper tab (e.g., Manga Scraper).
+2.  **Add URL**: Paste the TOC URL of the target manga.
+3.  **Set Schedule**: Define how often to check for updates.
+4.  **Run**: Click "Run This Rule Now" or wait for Cron.
+5.  **Monitor**: Watch the "Activity & Logging" tab.
+
+## 11. Development Workflow
+
+*   **Architecture**: See [ARCHITECTURE.md](ARCHITECTURE.md).
+*   **Data Flow**: See [DATA_FLOW.md](DATA_FLOW.md).
+*   **Modifying**: Edits should primarily be made in `ultimate-manga-scraper.php` for core logic, or `includes/` for Madara-specific logic.
+
+## 12. Production Deployment
+
+*   **Security**: See [SECURITY.md](SECURITY.md).
+*   **Optimization**: Use Redis/Memcached object caching. Use a real Cron job.
+
+## 13. Security Considerations
+
+*   **SSRF**: The plugin makes outbound requests to user-defined URLs.
+*   **RCE**: `shell_exec` is used for headless browsers. Secure your server accordingly.
+*   **Access Control**: Restrict Admin access.
+
+## 14. Limitations & Assumptions
+
+*   **Theme Dependency**: Assumes Madara theme structure is present.
+*   **Site Changes**: Scrapers rely on DOM structure. Target site changes will break scraping until updated.
+*   **Legal**: User is responsible for copyright compliance of scraped content.
+
+## 15. Maintenance
+
+*   **Logs**: Rotate logs (`auto_clear_logs`).
+*   **Updates**: Check [CHANGELOG.md](CHANGELOG.md).
+
+## 16. Licensing
+
+Released into the **Public Domain**. See [LICENSE](LICENSE) for details.
+
+---
+
+**Documentation Index**: [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)
