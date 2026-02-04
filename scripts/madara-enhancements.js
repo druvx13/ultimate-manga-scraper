@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2026 NIKOL
+ * Licensed under LUCA Free License v1.0
+ * DO WHAT THE FUCK YOU WANT TO.
+ */
 jQuery(document).ready(function($) {
     var page = 0; // Initialize the current page number
     var currentQuery = localStorage.getItem('searchQuery') || ''; // Initialize the current search query from localStorage

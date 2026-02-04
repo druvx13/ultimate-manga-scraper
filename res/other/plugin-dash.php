@@ -1,4 +1,9 @@
 <?php
+/*
+ * Copyright (C) 2026 NIKOL
+ * Licensed under LUCA Free License v1.0
+ * DO WHAT THE FUCK YOU WANT TO.
+ */
 if ( !class_exists( 'CodeRevoDashboard' ) ) {
 	class CodeRevoDashboard {
 		var $feed = 'https://wpinitiate.com/custom-feeds/items.xml';

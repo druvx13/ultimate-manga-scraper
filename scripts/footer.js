@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2026 NIKOL
+ * Licensed under LUCA Free License v1.0
+ * DO WHAT THE FUCK YOU WANT TO.
+ */
 "use strict";
 var ajaxurl = mycustomsettings.ajaxurl;
 jQuery(document).ready(function(){

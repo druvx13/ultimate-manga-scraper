@@ -72,7 +72,7 @@ $results = $manager
 
 ## License
 
-Open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Open-source software licensed under the [LUCA Free License v1.0](LICENSE).
 
 ## Copyright
 

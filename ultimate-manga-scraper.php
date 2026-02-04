@@ -1,14 +1,9 @@
 <?php
-/** 
-Plugin Name: Ultimate Web Novel & Manga Scraper
-Plugin URI: //1.envato.market/coderevolution
-Description: This plugin will scrape manga for you, day and night
-Author: CodeRevolution
-Version: 2.0.3
-Author URI: //coderevolution.ro
-License: License-Free
-Text Domain: ultimate-manga-scraper
-*/
+/*
+ * Copyright (C) 2026 NIKOL
+ * Licensed under LUCA Free License v1.0
+ * DO WHAT THE FUCK YOU WANT TO.
+ */
 defined('ABSPATH') or die();
 require_once (dirname(__FILE__) . "/res/other/plugin-dash.php"); 
 
