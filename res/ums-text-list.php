@@ -46,15 +46,8 @@
       <?php
          }
          $hu = get_home_url();
-         if (stristr($hu, '143.198.112.144') !== false) 
-         {
-         ?>
-         <div id="message" class="updated">
-         <p class="cr_saved_notif"><strong>&nbsp;<?php echo esc_html__('This is a demo version of the "Ultimate Web Novel And Manga Scraper" plugin, you will have access to a limited feature set only (maximum scraped chapter count limited to 3). To gain access to the full feature set of the plugin, please purchase it', 'ultimate-manga-scraper');?>&nbsp;<a href="https://1.envato.market/ultimate-manga-scraper" targetr="_blank">CodeCanyon</a>.</strong></p>
-         </div>
-         <?php
-         }
-         ?>
+         // Demo version notice removed - LUCA Free License v1.0: DO WHAT THE FUCK YOU WANT TO.
+?>
       <div>
          <div class="hideMain">
             <hr/>
@@ -181,7 +174,7 @@
                   <td class="cr_comm_td">-</td>
                   <td class="cr_short_td"><input type="text" name="ums_text_list[location][]" placeholder="https://wuxiaworld.site/novel/..." value="" class="cr_width_full"/></td>
                   <td class="cr_comm_td"><input type="number" step="1" min="1" name="ums_text_list[schedule][]" max="8765812" class="cr_width_60" placeholder="Select the rule schedule interval" value="<?php if(isset($ums_Main_Settings['default_schedule']) && $ums_Main_Settings['default_schedule'] != '') {echo esc_html($ums_Main_Settings['default_schedule']);}else{echo '24';} ?>"/></td>
-                  <td class="cr_comm_td"><input type="number" step="1" min="0"<?php if (stristr($hu, '143.198.112.144') !== false){ echo ' max="3"';}?> name="ums_text_list[max][]" placeholder="Select the max # of generated chapters" value="<?php if(isset($ums_Main_Settings['default_chapters']) && $ums_Main_Settings['default_chapters'] != '') {echo esc_html($ums_Main_Settings['default_chapters']);}else{echo '1';} ?>" class="cr_width_60"/></td>
+                  <td class="cr_comm_td"><input type="number" step="1" min="0" name="ums_text_list[max][]" placeholder="Select the max # of generated chapters" value="<?php if(isset($ums_Main_Settings['default_chapters']) && $ums_Main_Settings['default_chapters'] != '') {echo esc_html($ums_Main_Settings['default_chapters']);}else{echo '1';} ?>" class="cr_width_60"/></td>
                   <td class="cr_status"><select id="submit_status" name="ums_text_list[submit_status][]" class="cr_width_70">
                   <option value="pending"><?php echo esc_html__("Pending -> Moderate", 'ultimate-manga-scraper');?></option>
                   <option value="draft"><?php echo esc_html__("Draft -> Moderate", 'ultimate-manga-scraper');?></option>
@@ -235,7 +228,7 @@
                   </div>
                   </div>
                   <b><?php echo esc_html__("Maximum Number Of Novels to Scrape:", 'ultimate-manga-scraper');?></b>
-                  </td><td><input type="number" min="1" name="ums_text_list[max_manga][]"<?php if (stristr($hu, '143.198.112.144') !== false){ echo ' max="1"';}?> value="<?php if(isset($ums_Main_Settings['default_manga']) && $ums_Main_Settings['default_manga'] != '') {echo esc_html($ums_Main_Settings['default_manga']);}else{echo '1';} ?>" placeholder="Maximum number of web novels to scrape" class="cr_width_full">
+                  </td><td><input type="number" min="1" name="ums_text_list[max_manga][]" value="<?php if(isset($ums_Main_Settings['default_manga']) && $ums_Main_Settings['default_manga'] != '') {echo esc_html($ums_Main_Settings['default_manga']);}else{echo '1';} ?>" placeholder="Maximum number of web novels to scrape" class="cr_width_full">
                   </div>
                   </td></tr>
 				  <tr><td class="cr_min_width_200">
@@ -1112,7 +1105,7 @@
                            <td class="cr_comm_td">' . esc_html($cont) . '</td>
                            <td class="cr_short_td"><input type="text" step="1" name="ums_text_list[location][]" placeholder="https://wuxiaworld.site/novel/..." value="' . esc_attr($manga_name) . '" class="cr_width_full" required/></td>
                            <td class="cr_comm_td"><input type="number" step="1" min="1" placeholder="# h" name="ums_text_list[schedule][]" max="8765812" value="' . esc_attr($schedule) . '" class="cr_width_60" required></td>
-                           <td class="cr_comm_td"><input type="number" step="1" min="0" placeholder="# max" name="ums_text_list[max][]"';if (stristr($hu, '143.198.112.144') !== false){ $output .= ' max="3"';} $output .= ' value="' . esc_attr($max) . '"  class="cr_width_60" required></td>
+                           <td class="cr_comm_td"><input type="number" step="1" min="0" placeholder="# max" name="ums_text_list[max][]"';$output .= ' value="' . esc_attr($max) . '"  class="cr_width_60" required></td>
                            <td class="cr_status"><select id="submit_status" name="ums_text_list[submit_status][]" class="cr_width_70">
                                      <option value="pending"';
                if ($status == 'pending') {
@@ -1197,7 +1190,7 @@
                        <b>' . esc_html__("Maximum Number Of Novel to Scrape", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <input class="cr_width_full" type="number" min="1" name="ums_text_list[max_manga][]"';if (stristr($hu, '143.198.112.144') !== false){ $output .= ' max="1"';} $output .= ' value="' . esc_attr($max_manga) . '" placeholder="Maximum number of web novels to scrape" >
+                       <input class="cr_width_full" type="number" min="1" name="ums_text_list[max_manga][]"';$output .= ' value="' . esc_attr($max_manga) . '" placeholder="Maximum number of web novels to scrape" >
            </div>
            </td></tr>
          <tr><td colspan="2"><h3>' . esc_html__("Miscellaneous Options:", 'ultimate-manga-scraper') . '</h3></td></tr><tr><td class="cr_min_width_200">

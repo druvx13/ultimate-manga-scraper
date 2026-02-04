@@ -796,8 +796,9 @@ function ums_load_all_admin_js(){
 }
 function ums_add_rating_link($links)
 {
-    $settings_link = '<a href="//codecanyon.net/downloads" target="_blank" title="Rate">
-            <i class="wdi-rate-stars"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#ffb900" stroke="#ffb900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#ffb900" stroke="#ffb900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#ffb900" stroke="#ffb900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#ffb900" stroke="#ffb900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#ffb900" stroke="#ffb900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></i></a>';
+    // Rating link changed to GitHub - LUCA Free License v1.0
+    $settings_link = '<a href="//github.com/druvx13/ultimate-manga-scraper" target="_blank" title="' . esc_html__('View on GitHub', 'ultimate-manga-scraper') . '">
+            ' . esc_html__('GitHub', 'ultimate-manga-scraper') . '</a>';
     array_push($links, $settings_link);
     return $links;
 }
@@ -1213,155 +1214,8 @@ function ums_delete_all_posts()
         }
     }
 }
-add_action('wp_ajax_ums_activation', 'ums_activation');
-function ums_activation()
-{
-    $code                 = $_POST['code'];
-    $nonce                   = $_POST['nonce'];
-    if(!wp_verify_nonce( $nonce, 'activation-secret-nonce'))
-    {
-        echo 'You are not allowed to do this action!';
-        die();
-    }
-    $plugin = plugin_basename(__FILE__);
-    $plugin_slug = explode('/', $plugin);
-    $plugin_slug = $plugin_slug[0];
-    if(strlen(trim($code)) != 36 || strstr($code, '-') == false)
-    {
-        ums_log_to_file('Invalid registration code submitted: ' . $code);
-        echo 'Invalid registration code submitted!';
-        die();
-    }
-    else
-    {
-        $ch = curl_init('https://wpinitiate.com/verify-purchase/purchase.php');
-        if($ch !== false)
-        {
-            $data           = array();
-            $data['code']   = trim($code);
-            $data['siteURL']   = get_bloginfo('url');
-            $data['siteName']   = get_bloginfo('name');
-            $data['siteEmail']   = get_bloginfo('admin_email');
-            $fdata = "";
-            foreach ($data as $key => $val) {
-                $fdata .= "$key=" . urlencode(trim($val)) . "&";
-            }
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $fdata);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-            $result = curl_exec($ch);
-            if($result === false)
-            {
-                curl_close($ch);
-                ums_log_to_file('Failed to get verification response: ' . curl_error($ch));
-                echo 'Failed to get verification response: ' . curl_error($ch);
-                die();
-            }
-            else
-            {
-                $rj = json_decode($result, true);
-                if(isset($rj['error']))
-                {
-                    echo $rj['error'];
-                    die();
-                }
-                elseif(isset($rj['item_name']))
-                {
-                    $rj['code'] = $code;
-                    if($rj['item_id'] == '34167486' || $rj['item_id'] == '13371337' || $rj['item_id'] == '19200046')
-                    {
-                        update_option($plugin_slug . '_registration', $rj);
-                    }
-                    else
-                    {
-                        ums_log_to_file('Invalid response from purchase code verification (are you sure you inputted the right purchase code?): ' . print_r($rj, true));
-                        echo 'Invalid response from purchase code verification (are you sure you inputted the right purchase code?): ' . print_r($rj, true);
-                        die();
-                    }
-                }
-                else
-                {
-                    ums_log_to_file('Invalid json from purchase code verification: ' . print_r($result, true));
-                    echo 'Invalid json from purchase code verification: ' . print_r($result, true);
-                    die();
-                }
-            }
-            curl_close($ch);
-        }
-        else
-        {
-            ums_log_to_file('Failed to init curl when trying to make purchase verification.');
-            echo 'Failed to init curl!';
-            die();
-        }
-    }
-    echo 'ok';
-    die();
-}
-add_action('wp_ajax_ums_revoke', 'ums_revoke');
-function ums_revoke()
-{
-    $nonce                   = $_POST['nonce'];
-    if(!wp_verify_nonce($nonce, 'activation-secret-nonce'))
-    {
-        echo 'You are not allowed to do this action!';
-        die();
-    }
-    $plugin = plugin_basename(__FILE__);
-    $plugin_slug = explode('/', $plugin);
-    $plugin_slug = $plugin_slug[0];
-    $ch = curl_init('https://wpinitiate.com/verify-purchase/revoke.php');
-    if($ch !== false)
-    {
-        $data           = array();
-        $data['siteURL']   = get_bloginfo('url');
-
-        $purchase_code = '';
-        $uoptions = array();
-        ums_is_activated($plugin_slug, $uoptions);
-        if(isset($uoptions['code']))
-        {
-            $purchase_code = $uoptions['code'];
-        }
-        if(!empty($purchase_code))
-        {
-            $data['purchaseCode']   = $purchase_code;
-        }
-
-        $fdata = "";
-        foreach ($data as $key => $val) {
-            $fdata .= "$key=" . urlencode(trim($val)) . "&";
-        }
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fdata);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        $result = curl_exec($ch);
-        if($result === false)
-        {
-            update_option($plugin_slug . '_registration', false);
-        }
-        else
-        {
-            update_option($plugin_slug . '_registration', false);
-        }
-    }
-    else
-    {
-        ums_log_to_file('Failed to init curl to revoke verification response.');
-        echo 'Failed to init curl!';
-        die();
-    }
-    echo 'ok';
-    die();
-}
+// License activation/verification functions removed - plugin now uses LUCA Free License v1.0
+// No purchase code or activation required - DO WHAT THE FUCK YOU WANT TO.
 add_action('wp_ajax_ums_my_action', 'ums_my_action_callback');
 function ums_my_action_callback()
 {
@@ -3315,16 +3169,7 @@ function ums_strip_links($content)
 }
 function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
 {
-    $plugin = plugin_basename(__FILE__);
-    $plugin_slug = explode('/', $plugin);
-    $plugin_slug = $plugin_slug[0];
-    $uoptions = array();
-    $is_activated = ums_is_activated($plugin_slug, $uoptions);
-    if($is_activated !== true && $is_activated !== 2)
-    {
-        ums_log_to_file('You need to activate the plugin using a valid purchase code for this feature to work.');
-        return 'nochange';
-    }
+    // LUCA Free License v1.0 - No activation required, DO WHAT THE FUCK YOU WANT TO.
     global $wp_filesystem;
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
