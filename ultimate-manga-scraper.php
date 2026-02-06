@@ -1,5 +1,15 @@
 <?php
-/*
+/**
+ * Plugin Name: Ultimate Web Novel & Manga Scraper
+ * Plugin URI: https://github.com/druvx13/ultimate-manga-scraper
+ * Description: This plugin will scrape manga for you, day and night
+ * Author: NIKOL
+ * Version: 2.0.3
+ * Author URI: https://github.com/druvx13/ultimate-manga-scraper
+ * License: LUCA Free License v1.0
+ * License URI: https://github.com/druvx13/ultimate-manga-scraper/blob/main/LICENSE
+ * Text Domain: ultimate-manga-scraper
+ * 
  * Copyright (C) 2026 NIKOL
  * Licensed under LUCA Free License v1.0
  * DO WHAT THE FUCK YOU WANT TO.
