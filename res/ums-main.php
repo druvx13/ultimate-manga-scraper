@@ -1,4 +1,9 @@
 <?php
+/*
+ * Copyright (C) 2026 NIKOL
+ * Licensed under LUCA Free License v1.0
+ * DO WHAT THE FUCK YOU WANT TO.
+ */
    function ums_admin_settings()
    {
       $theme = wp_get_theme();
@@ -237,7 +242,7 @@
             <li><?php echo sprintf( wp_kses( __( 'Need help configuring this plugin? Please check it\'s <a href="%s" target="_blank">video tutorial</a>.', 'ultimate-manga-scraper'), array(  'a' => array( 'href' => array(), 'target' => array() ) ) ), esc_url_raw( 'https://www.youtube.com/watch?v=kUz8xXIJNAs&list=PLEiGTaa0iBIgRIhjGCYUk545tWkfJrTru&index=1' ) );?>
             </li>
             <li><?php echo sprintf( wp_kses( __( 'Having issues with the plugin? Please be sure to check our <a href="%s" target="_blank">knowledge-base</a> before you contact <a href="%s" target="_blank">our support</a>!', 'ultimate-manga-scraper'), array(  'a' => array( 'href' => array(), 'target' => array() ) ) ), esc_url_raw( '//coderevolution.ro/knowledge-base' ), esc_url_raw('//coderevolution.ro/support' ) );?></li>
-            <li><?php echo sprintf( wp_kses( __( 'Do you enjoy our plugin? Please give it a <a href="%s" target="_blank">rating</a> on CodeCanyon, or check <a href="%s" target="_blank">our website</a> for other cool plugins.', 'ultimate-manga-scraper'), array(  'a' => array( 'href' => array(), 'target' => array() ) ) ), esc_url_raw( '//codecanyon.net/downloads' ), esc_url_raw( 'https://coderevolution.ro' ) );?></a></li>
+            <li><?php echo sprintf( wp_kses( __( 'Do you enjoy this free plugin? Check <a href="%s" target="_blank">our website</a> for other cool plugins, or visit the <a href="%s" target="_blank">GitHub repository</a>.', 'ultimate-manga-scraper'), array(  'a' => array( 'href' => array(), 'target' => array() ) ) ), esc_url_raw( 'https://coderevolution.ro' ), esc_url_raw( 'https://github.com/druvx13/ultimate-manga-scraper' ) );?></a></li>
          </ul>
          <hr/>
       </td></tr>

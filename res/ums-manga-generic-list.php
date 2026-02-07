@@ -1,4 +1,9 @@
 <?php
+/*
+ * Copyright (C) 2026 NIKOL
+ * Licensed under LUCA Free License v1.0
+ * DO WHAT THE FUCK YOU WANT TO.
+ */
    function ums_manga_generic_panel()
    {
         $theme = wp_get_theme();
@@ -169,7 +174,7 @@
                   <td class="cr_comm_td">-</td>
                   <td class="cr_short_td"><input type="text" name="ums_manga_generic_list[location][]" placeholder="https://mangasite.com/manga/..." value="" class="cr_width_full"/></td>
                   <td class="cr_comm_td"><input type="number" step="1" min="1" name="ums_manga_generic_list[schedule][]" max="8765812" class="cr_width_60" placeholder="Select the rule schedule interval" value="24"/></td>
-                  <td class="cr_comm_td"><input type="number" step="1" min="0"<?php if (stristr($hu, '143.198.112.144') !== false){ echo ' max="3"';}?> name="ums_manga_generic_list[max][]" placeholder="Select the max # of generated chapters" value="1" class="cr_width_60"/></td>
+                  <td class="cr_comm_td"><input type="number" step="1" min="0" name="ums_manga_generic_list[max][]" placeholder="Select the max # of generated chapters" value="1" class="cr_width_60"/></td>
                   <td class="cr_status"><select id="submit_status" name="ums_manga_generic_list[submit_status][]" class="cr_width_70">
                   <option value="pending"><?php echo esc_html__("Pending -> Moderate", 'ultimate-manga-scraper');?></option>
                   <option value="draft"><?php echo esc_html__("Draft -> Moderate", 'ultimate-manga-scraper');?></option>
@@ -209,7 +214,7 @@
                   </div>
                   </div>
                   <b><?php echo esc_html__("Maximum Number Of Manga to Scrape:", 'ultimate-manga-scraper');?></b>
-                  </td><td><input type="number" min="1" name="ums_manga_generic_list[max_manga][]"<?php if (stristr($hu, '143.198.112.144') !== false){ echo ' max="1"';}?> value="1" placeholder="Maximum number of mangas to scrape" class="cr_width_full">
+                  </td><td><input type="number" min="1" name="ums_manga_generic_list[max_manga][]" value="1" placeholder="Maximum number of mangas to scrape" class="cr_width_full">
                   </div>
                   </td></tr>
 				  <tr><td class="cr_min_width_200">
@@ -1028,7 +1033,7 @@
                            <td class="cr_comm_td">' . esc_html($cont) . '</td>
                            <td class="cr_short_td"><input type="text" step="1" name="ums_manga_generic_list[location][]" placeholder="https://mangasite.com/manga/..." value="' . esc_attr($manga_name) . '" class="cr_width_full" required/></td>
                            <td class="cr_comm_td"><input type="number" step="1" min="1" placeholder="# h" name="ums_manga_generic_list[schedule][]" max="8765812" value="' . esc_attr($schedule) . '" class="cr_width_60" required></td>
-                           <td class="cr_comm_td"><input type="number" step="1" min="0" placeholder="# max" name="ums_manga_generic_list[max][]"';if (stristr($hu, '143.198.112.144') !== false){ $output .= ' max="3"';} $output .= ' value="' . esc_attr($max) . '"  class="cr_width_60" required></td>
+                           <td class="cr_comm_td"><input type="number" step="1" min="0" placeholder="# max" name="ums_manga_generic_list[max][]"';$output .= ' value="' . esc_attr($max) . '"  class="cr_width_60" required></td>
                            <td class="cr_status"><select id="submit_status" name="ums_manga_generic_list[submit_status][]" class="cr_width_70">
                                      <option value="pending"';
                if ($status == 'pending') {
@@ -1096,7 +1101,7 @@
                        <b>' . esc_html__("Maximum Number Of Manga to Scrape", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <input class="cr_width_full" type="number" min="1" name="ums_manga_generic_list[max_manga][]"';if (stristr($hu, '143.198.112.144') !== false){ $output .= ' max="1"';} $output .= ' value="' . esc_attr($max_manga) . '" placeholder="Maximum number of mangas to scrape" >
+                       <input class="cr_width_full" type="number" min="1" name="ums_manga_generic_list[max_manga][]"';$output .= ' value="' . esc_attr($max_manga) . '" placeholder="Maximum number of mangas to scrape" >
            </div>
            </td></tr>
          <tr><td colspan="2"><h3>' . esc_html__("Miscellaneous Options:", 'ultimate-manga-scraper') . '</h3></td></tr><tr><td class="cr_min_width_200">

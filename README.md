@@ -141,7 +141,7 @@ The plugin utilizes the standard WordPress `wp_options` table for storing rules 
 
 ## 16. Licensing
 
-Released into the **Public Domain**. See [LICENSE](LICENSE) for details.
+Licensed under the **LUCA Free License v1.0**. See [LICENSE](LICENSE) for details.
 
 ---
 

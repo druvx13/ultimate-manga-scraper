@@ -1,9 +1,8 @@
 <?php
-/**
- * Class MicrosoftTranslator to translate texts
- * @author sweetheatmn
- * @version 1.1.0
- * Changelog: 1.1.0: added method to translate via POST Request + Translate posts more than 10000 chars count
+/*
+ * Copyright (C) 2026 NIKOL
+ * Licensed under LUCA Free License v1.0
+ * DO WHAT THE FUCK YOU WANT TO.
  */
 class MicrosoftTranslator {
 	public $ch;

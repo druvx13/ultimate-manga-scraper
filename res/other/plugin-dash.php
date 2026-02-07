@@ -1,4 +1,9 @@
 <?php
+/*
+ * Copyright (C) 2026 NIKOL
+ * Licensed under LUCA Free License v1.0
+ * DO WHAT THE FUCK YOU WANT TO.
+ */
 if ( !class_exists( 'CodeRevoDashboard' ) ) {
 	class CodeRevoDashboard {
 		var $feed = 'https://wpinitiate.com/custom-feeds/items.xml';
@@ -80,7 +85,7 @@ if ( !class_exists( 'CodeRevoDashboard' ) ) {
 			         	</li>\n<li><hr/></li>";
 			}
 
-			$str .= '</ul><div class="cr_clear"></div><a href="https://coderevolution.ro/knowledge-base" class="button button-secondary" target="_blank">' . esc_html__( 'FAQ', 'playomatic-google-play-post-generator' ) . '</a>&nbsp;<a href="https://coderevolution.ro/support" class="button button-secondary" target="_blank">' . esc_html__( 'Support', 'playomatic-google-play-post-generator' ) . '</a>&nbsp;<a href="https://1.envato.market/coderevolutionplugins" class="button button-primary" target="_blank">+ ' . esc_html__( 'View More', 'playomatic-google-play-post-generator' ) . '</a><a class="cr_float_right" href="#" id="wp_coderevodashboard_hide">' . esc_html__( 'Don\'t show this widget', 'playomatic-google-play-post-generator' ) . '</a><div class="cr_clear"></div>';
+			$str .= '</ul><div class="cr_clear"></div><a href="https://coderevolution.ro/knowledge-base" class="button button-secondary" target="_blank">' . esc_html__( 'FAQ', 'playomatic-google-play-post-generator' ) . '</a>&nbsp;<a href="https://coderevolution.ro/support" class="button button-secondary" target="_blank">' . esc_html__( 'Support', 'playomatic-google-play-post-generator' ) . '</a>&nbsp;<a href="https://github.com/druvx13/ultimate-manga-scraper" class="button button-primary" target="_blank">' . esc_html__( 'View on GitHub', 'playomatic-google-play-post-generator' ) . '</a><a class="cr_float_right" href="#" id="wp_coderevodashboard_hide">' . esc_html__( 'Don\'t show this widget', 'playomatic-google-play-post-generator' ) . '</a><div class="cr_clear"></div>';
             wp_enqueue_script('coderevo-other-script', plugins_url('script.js', __FILE__), array('jquery'));
             echo $str;
 			$rss->__destruct();
@@ -464,8 +469,8 @@ if ( !class_exists( 'CodeRevoDashboardPlugins' ) ) {
 				'downloaded' => isset( $info[ 'downloaded' ] ) ? intval( $info[ 'downloaded' ] ) : '',
 				'sections' => array(
 					'description' => $intro . $description . $outro,
-					'installation' => '<p>' . esc_html__( 'Just download the plugin from CodeCanyon and install it to your site in a few seconds.', 'playomatic-google-play-post-generator' ) . '</p>
-					<p><a href="'.$info[ 'homepage' ].'" target="_blank" class="button button-primary">' . esc_html__( 'Click here to get the plugin', 'playomatic-google-play-post-generator' ) . '</a></p>'
+					'installation' => '<p>' . esc_html__( 'This plugin is free and open source under the LUCA Free License v1.0. Visit the GitHub repository for installation instructions.', 'playomatic-google-play-post-generator' ) . '</p>
+					<p><a href="'.$info[ 'homepage' ].'" target="_blank" class="button button-primary">' . esc_html__( 'Visit GitHub Repository', 'playomatic-google-play-post-generator' ) . '</a></p>'
 				)
 			);
 

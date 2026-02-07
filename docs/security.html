@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Security considerations and best practices">
+    <title>Security - Ultimate Manga Scraper Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-book-reader"></i>
+                <span>Ultimate Manga Scraper</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="api-reference.html">API Reference</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Security</h1>
+            <p>Security considerations and best practices</p>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="content-page">
+        <div class="container">
+            <div class="content">
+                <h2>Security Analysis</h2>
+
+This document outlines the security mechanisms, assumptions, and potential risks associated with the <strong>Ultimate Web Novel & Manga Scraper</strong>.
+
+<h3>Authentication & Authorization</h3>
+
+<ul>
+<li><strong>Role Requirements</strong>: All admin AJAX actions and settings pages require the <code>manage_options</code> capability (Administrator).</li>
+<li><strong>Nonce Verification</strong>:</li>
+</ul>
+<p>    *   AJAX actions (e.g., <code>ums_activation</code>, <code>madara_load_more</code>) are protected by WordPress Nonces (<code>activation-secret-nonce</code>, <code>madara_enhancements_nonce</code>).</p>
+<p>    *   <strong>Note</strong>: Some older AJAX actions in <code>ultimate-manga-scraper.php</code> (like <code>ums_my_action_callback</code>) check <code>current_user_can('edit_posts')</code> but rely on <code>manage_options</code> for the UI.</p>
+
+<h3>Input Validation</h3>
+
+<ul>
+<li><strong>Settings</strong>: Most inputs are sanitized via <code>sanitize_text_field</code> or cast to integers before saving.</li>
+<li><strong>URLs</strong>: Scraper targets are generally trusted as they are entered by the Administrator. However, the plugin performs basic checks (e.g., <code>parse_url</code>).</li>
+<li><strong>HTML Content</strong>: Scraped content goes through <code>ums_sanitize_html_content()</code> which removes dangerous tags:</li>
+</ul>
+<p>    *   <code>script</code>, <code>iframe</code>, <code>object</code>, <code>embed</code>, <code>style</code>, <code>form</code>, etc.</p>
+<p>    *   <strong>Warning</strong>: This sanitization is regex and DOM-based. While robust for general scraping, it should not be considered a military-grade WAF against targeted XSS payloads embedded in source sites.</p>
+
+<h3>System Interaction Risks</h3>
+
+<h4>Remote Code Execution (RCE) via Headless Browsers</h4>
+The plugin allows the execution of system binaries (<code>phantomjs</code>, <code>node</code>) via <code>shell_exec</code>.
+<ul>
+<li><strong>Risk</strong>: If an attacker gains access to the WordPress Admin, they could potentially manipulate the <code>PhantomJS Path</code> setting to execute arbitrary commands.</li>
+<li><strong>Mitigation</strong>: The <code>PhantomJS Path</code> setting is not strictly validated against a whitelist of executables. <strong>Server Administrators should disable <code>shell_exec</code></strong> if headless scraping is not required, or strictly control file permissions.</li>
+</ul>
+
+<h4>Server-Side Request Forgery (SSRF)</h4>
+By definition, this is a web scraper. It fetches content from URLs provided by the admin.
+<ul>
+<li><strong>Risk</strong>: An admin (or compromised admin account) could set a rule to scrape <code>http://localhost:8080</code> or other internal network resources.</li>
+<li><strong>Mitigation</strong>: The plugin does not implement an allowlist/blocklist for IP ranges. It relies on the trust level of the Administrator.</li>
+</ul>
+
+<h3>File System Access</h3>
+The plugin writes files to <code>wp-content/uploads/</code> and <code>wp-content/plugins/ultimate-manga-scraper/</code>.
+<ul>
+<li><strong>Logging</strong>: Logs are written to <code>wp-content/ums_info.log</code>. This file is publicly accessible if the web server configuration does not block <code>.log</code> files.</li>
+</ul>
+    <em>   <strong>Recommendation</strong>: Configure <code>.htaccess</code> or Nginx rules to deny access to <code></em>.log</code> files in <code>wp-content/</code>.
+
+<h3>Data Privacy</h3>
+<ul>
+<li><strong>Cookies</strong>: The scraper may send cookies to target sites (<code>isAdult=1</code>).</li>
+<li><strong>User Data</strong>: The plugin does not collect end-user data, but it does impersonate users (User-Agent rotation) when scraping.</li>
+</ul>
+
+<h3>Security Recommendations for Administrators</h3>
+
+1.  <strong>Block Log Access</strong>: Deny web access to <code>ums_info.log</code>.
+2.  <strong>Restrict Capabilities</strong>: Ensure only trusted admins have <code>manage_options</code>.
+3.  <strong>Disable <code>shell_exec</code></strong>: If not using PhantomJS/Puppeteer.
+4.  <strong>Firewall</strong>: Restrict outbound connections from the server to known manga domains if possible.
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Ultimate Manga Scraper</h3>
+                    <p>Institutional-grade WordPress plugin for manga and web novel content aggregation.</p>
+                    <p class="license">Licensed under LUCA Free License v1.0</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="getting-started.html">Getting Started</a></li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper/issues" target="_blank">Issue Tracker</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="license.html">License</a></li>
+                        <li><a href="security.html#disclosure">Security Disclosure</a></li>
+                        <li><a href="notice.html">Third-Party Notices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 NIKOL. Licensed under LUCA Free License v1.0.</p>
+                <p>Built with <i class="fas fa-heart"></i> for the manga community</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script src="js/main.js"></script>
+</body>
+</html>
