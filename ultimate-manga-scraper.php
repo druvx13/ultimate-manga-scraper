@@ -741,6 +741,9 @@ function ums_register_my_custom_menu_page()
         $mangaxx = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (WuxiaWorld.site)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (WuxiaWorld.site)', 'ultimate-manga-scraper'), 'manage_options', 'ums_text_panel', 'ums_text_panel');
         add_action( 'load-' . $mangaxx, 'ums_load_admin_js' );
         add_action( 'load-' . $mangaxx, 'ums_load_all_admin_js' );
+        $mangafanmtl = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (FanMTL / ReadWN / Wuxia Sites)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (FanMTL / ReadWN / Wuxia Sites)', 'ultimate-manga-scraper'), 'manage_options', 'ums_fanmtl_panel', 'ums_fanmtl_panel');
+        add_action( 'load-' . $mangafanmtl, 'ums_load_admin_js' );
+        add_action( 'load-' . $mangafanmtl, 'ums_load_all_admin_js' );
         $enhancements = add_submenu_page('ums_admin_settings', esc_html__("Madara Enhancements", 'ultimate-manga-scraper'), esc_html__("Madara Enhancements", 'ultimate-manga-scraper'), 'manage_options', 'ums_enhancements', [ 'UMS_Madara_Handler', 'ums_enhancements' ]);
         add_action( 'load-' . $enhancements, 'ums_load_all_admin_js' );
         $logs = add_submenu_page('ums_admin_settings', esc_html__("Activity & Logging", 'ultimate-manga-scraper'), esc_html__("Activity & Logging", 'ultimate-manga-scraper'), 'manage_options', 'ums_logs', 'ums_logs');
@@ -6815,7 +6818,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                             $latest_scraped = get_post_meta( $existing_post_id, 'ums_latest_scraped', true );
                             if(!empty($latest_scraped))
                             {
-                                if(stristr($latest_scraped, 'novlove'))
+                                if(stristr($latest_scraped, 'novlove') || stristr($latest_scraped, 'fanmtl') || stristr($latest_scraped, 'fannovels') || stristr($latest_scraped, 'fansmtl') || stristr($latest_scraped, 'readwn') || stristr($latest_scraped, 'novelmt') || stristr($latest_scraped, 'novelmtl') || stristr($latest_scraped, 'wuxiabee') || stristr($latest_scraped, 'wuxiafox') || stristr($latest_scraped, 'wuxiago') || stristr($latest_scraped, 'wuxiahere') || stristr($latest_scraped, 'wuxiahub') || stristr($latest_scraped, 'wuxiamtl') || stristr($latest_scraped, 'wuxiaone') || stristr($latest_scraped, 'wuxiap') || stristr($latest_scraped, 'wuxiapub') || stristr($latest_scraped, 'wuxiaspot') || stristr($latest_scraped, 'wuxiar') || stristr($latest_scraped, 'wuxiau') || stristr($latest_scraped, 'wuxiazone'))
                                 {
                                     $first_chapter = $latest_scraped;
                                 }
@@ -6832,6 +6835,17 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     $href = $link->getAttribute('href');
                                     if ($href) {
                                         $chapterUrls[] = $href;
+                                    }
+                                }
+                                // FanMTL / ReadWN uses "chapter-list" instead of "list-chapter"
+                                if(empty($chapterUrls))
+                                {
+                                    $links = $xpath->query('//ul[contains(@class, "chapter-list")]//a');
+                                    foreach ($links as $link) {
+                                        $href = $link->getAttribute('href');
+                                        if ($href) {
+                                            $chapterUrls[] = $href;
+                                        }
                                     }
                                 }
                                 if($reverse == true)
@@ -12412,6 +12426,7 @@ function ums_admin_load_files()
 require(dirname(__FILE__) . "/res/ums-rules-list.php");
 require(dirname(__FILE__) . "/res/ums-text-list.php");
 require(dirname(__FILE__) . "/res/ums-novel-list.php");
+require(dirname(__FILE__) . "/res/ums-fanmtl-list.php");
 require(dirname(__FILE__) . "/res/ums-vipnovel-list.php");
 require(dirname(__FILE__) . "/res/ums-novel-generic-list.php");
 require(dirname(__FILE__) . "/res/ums-manga-generic-list.php");
