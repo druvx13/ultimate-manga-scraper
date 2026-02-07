@@ -4,7 +4,6 @@
  * Licensed under LUCA Free License v1.0
  * DO WHAT THE FUCK YOU WANT TO.
  */
-﻿<?php
 class GoogleTranslatorAPI{
 	public $ch;
     public $apikey;
