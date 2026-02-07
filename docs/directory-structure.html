@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete documentation for the Ultimate Web Novel & Manga Scraper WordPress plugin">
+    <title>Directory Structure - Ultimate Web Novel & Manga Scraper</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 Documentation</h2>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search documentation..." class="search-input">
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-section">
+                    <h3>Getting Started</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="user-guide.html">User Guide</a></li>
+                        <li><a href="installation.html">Installation</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Configuration</h3>
+                    <ul>
+                        <li><a href="configuration.html">Configuration Reference</a></li>
+                        <li><a href="deployment.html">Deployment Guide</a></li>
+                        <li><a href="performance.html">Performance Tuning</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Developer Resources</h3>
+                    <ul>
+                        <li><a href="architecture.html">Architecture</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="data-flow.html">Data Flow</a></li>
+                        <li><a href="directory-structure.html" class="active">Directory Structure</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Support & Security</h3>
+                    <ul>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="changelog.html">Changelog</a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank" class="github-link">
+                    View on GitHub →
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Directory Structure</h1>
+                <p class="subtitle">Ultimate Web Novel & Manga Scraper Documentation</p>
+            </header>
+            
+            <div class="content">
+                <h1>Directory Structure</h1>
+                <p>This document provides a detailed overview of the file and directory structure of the <strong>Ultimate Web Novel &amp; Manga Scraper</strong> repository.</p>
+                <section></section><section><h2>Root Directory</h2>
+                <div class="table-wrapper"><table>
+                <thead>
+                <tr>
+                <th align="left">File</th>
+                <th align="left">Purpose</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                <td align="left"><code>ultimate-manga-scraper.php</code></td>
+                <td align="left"><strong>Core Plugin File</strong>. Handles initialization, hooks, cron scheduling, scraping logic, settings pages, and database interactions. Effectively the &quot;God Object&quot; of the plugin.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>index.php</code></td>
+                <td align="left">Silence is golden. Prevents directory listing.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>LICENSE</code></td>
+                <td align="left">Legal terms (Unlicense + Disclaimer).</td>
+                </tr>
+                <tr>
+                <td align="left"><code>README.md</code></td>
+                <td align="left">General documentation.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>sitemap.txt</code></td>
+                <td align="left">Sitemap template or artifact.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>sitemap_box.txt</code></td>
+                <td align="left">Sitemap template or artifact.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>sitemap_vip.txt</code></td>
+                <td align="left">Sitemap template or artifact.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>NOTICE.md</code></td>
+                <td align="left">Third-party software attributions.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>SECURITY_DISCLOSURE.md</code></td>
+                <td align="left">Security policy.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>CHANGELOG.md</code></td>
+                <td align="left">Version history.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ARCHITECTURE.md</code></td>
+                <td align="left">System architecture documentation.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>DATA_FLOW.md</code></td>
+                <td align="left">Data flow documentation.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>SECURITY.md</code></td>
+                <td align="left">Security analysis documentation.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>CONFIGURATION.md</code></td>
+                <td align="left">Configuration reference.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>DEPLOYMENT.md</code></td>
+                <td align="left">Deployment guide.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>TROUBLESHOOTING.md</code></td>
+                <td align="left">Troubleshooting guide.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>DOCUMENTATION_INDEX.md</code></td>
+                <td align="left">Index of all documentation.</td>
+                </tr>
+                </tbody></table></div>
+                <section></section><section><h2><code>includes/</code></h2>
+                <p><em>Contains helper classes for specific integrations.</em></p>
+                <div class="table-wrapper"><table>
+                <thead>
+                <tr>
+                <th align="left">File</th>
+                <th align="left">Purpose</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                <td align="left"><code>class-madara-fetcher.php</code></td>
+                <td align="left"><strong>Madara Theme Integration</strong>. Handles fetching manga lists and details specifically for Madara-based sites using AJAX endpoints.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>class-madara-handler.php</code></td>
+                <td align="left"><strong>Admin Handler</strong>. Manages the &quot;Madara Enhancements&quot; admin page, AJAX actions for adding manga, and searching.</td>
+                </tr>
+                </tbody></table></div>
+                <section></section><section><h2><code>res/</code></h2>
+                <p><em>Contains resources, libraries, and sub-modules.</em></p>
+                <div class="table-wrapper"><table>
+                <thead>
+                <tr>
+                <th align="left">File/Directory</th>
+                <th align="left">Purpose</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                <td align="left"><code>simple_html_dom.php</code></td>
+                <td align="left"><strong>Library</strong>. PHP Simple HTML DOM Parser for parsing scraped HTML.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ImageResize/</code></td>
+                <td align="left"><strong>Library</strong>. PHP class for resizing images.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>mangafox-master/</code></td>
+                <td align="left"><strong>Library</strong>. Specialized scraper library for FanFox (MangaFox). Contains its own <code>composer.json</code> and structure.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>phantomjs/</code></td>
+                <td align="left"><strong>Binary/Script</strong>. Contains <code>phantom.js</code> script used by the PhantomJS executable.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>puppeteer/</code></td>
+                <td align="left"><strong>Binary/Script</strong>. Contains <code>puppeteer.js</code> node script used for headless scraping.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ums-main.php</code></td>
+                <td align="left"><strong>Admin UI</strong>. Settings page layout.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ums-rules-list.php</code></td>
+                <td align="left"><strong>Admin UI</strong>. Logic for displaying and managing scraping rules (Manga).</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ums-novel-list.php</code></td>
+                <td align="left"><strong>Admin UI</strong>. Logic for displaying and managing scraping rules (Novels).</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ums-logs.php</code></td>
+                <td align="left"><strong>Admin UI</strong>. Activity logging interface.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ums-translator.php</code></td>
+                <td align="left"><strong>Logic</strong>. Google Translate API integration (Free/Scraping method).</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ums-translator-microsoft.php</code></td>
+                <td align="left"><strong>Logic</strong>. Microsoft Translator API integration.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>UMSJavaScriptUnpacker.php</code></td>
+                <td align="left"><strong>Logic</strong>. Decodes packed JavaScript often found on manga sites (eval/packer).</td>
+                </tr>
+                <tr>
+                <td align="left"><code>synonyms.dat</code></td>
+                <td align="left"><strong>Data</strong>. Data file for synonyms (possibly for text spinning).</td>
+                </tr>
+                <tr>
+                <td align="left"><code>other/</code></td>
+                <td align="left"><strong>Misc</strong>. Contains <code>plugin-dash.php</code> (dashboard widgets) and generic JS scripts.</td>
+                </tr>
+                </tbody></table></div>
+                <section></section><section><h2><code>images/</code></h2>
+                <p><em>Plugin assets.</em></p>
+                <div class="table-wrapper"><table>
+                <thead>
+                <tr>
+                <th align="left">File</th>
+                <th align="left">Purpose</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                <td align="left"><code>icon.png</code></td>
+                <td align="left">Plugin icon.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>image-placeholder.jpg</code></td>
+                <td align="left">Fallback image for missing manga covers.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>running.gif</code>, <code>ok.gif</code>, <code>failed.gif</code></td>
+                <td align="left">Status indicators for the admin UI.</td>
+                </tr>
+                </tbody></table></div>
+                <section></section><section><h2><code>scripts/</code></h2>
+                <p><em>Frontend and Admin JavaScript.</em></p>
+                <div class="table-wrapper"><table>
+                <thead>
+                <tr>
+                <th align="left">File</th>
+                <th align="left">Purpose</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                <td align="left"><code>main.js</code></td>
+                <td align="left">Core admin JS.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>madara-enhancements.js</code></td>
+                <td align="left">JS for the &quot;Madara Enhancements&quot; tab (AJAX loading/adding).</td>
+                </tr>
+                <tr>
+                <td align="left"><code>footer.js</code></td>
+                <td align="left">JS loaded in the admin footer.</td>
+                </tr>
+                </tbody></table></div>
+                <section></section><section><h2><code>styles/</code></h2>
+                <p><em>CSS Stylesheets.</em></p>
+                <div class="table-wrapper"><table>
+                <thead>
+                <tr>
+                <th align="left">File</th>
+                <th align="left">Purpose</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                <td align="left"><code>ums-rules.css</code></td>
+                <td align="left">Styling for the rules list tables.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ums-browser.css</code></td>
+                <td align="left">Styling for the embedded browser or scrapers.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>coderevolution-style.css</code></td>
+                <td align="left">Generic plugin styles.</td>
+                </tr>
+                </tbody></table></div>
+                <section><h2><code>languages/</code></h2>
+                <p><em>Translation files.</em></p>
+                <div class="table-wrapper"><table>
+                <thead>
+                <tr>
+                <th align="left">File</th>
+                <th align="left">Purpose</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                <td align="left"><code>ultimate-manga-scraper.pot</code></td>
+                <td align="left">POT template for internationalization.</td>
+                </tr>
+                </tbody></table></div>
+                </section>
+            </div>
+            
+            <footer class="page-footer">
+                <p>&copy; 2024 Ultimate Web Novel & Manga Scraper - Released into the Public Domain</p>
+                <p>
+                    <a href="https://github.com/druvx13/ultimate-manga-scraper">GitHub</a> •
+                    <a href="security.html#disclosure">Report Security Issue</a> •
+                    <a href="changelog.html">Changelog</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

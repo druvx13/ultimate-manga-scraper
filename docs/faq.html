@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete documentation for the Ultimate Web Novel & Manga Scraper WordPress plugin">
+    <title>FAQ - Ultimate Web Novel & Manga Scraper</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 Documentation</h2>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search documentation..." class="search-input">
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-section">
+                    <h3>Getting Started</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="user-guide.html">User Guide</a></li>
+                        <li><a href="installation.html">Installation</a></li>
+                        <li><a href="faq.html" class="active">FAQ</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Configuration</h3>
+                    <ul>
+                        <li><a href="configuration.html">Configuration Reference</a></li>
+                        <li><a href="deployment.html">Deployment Guide</a></li>
+                        <li><a href="performance.html">Performance Tuning</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Developer Resources</h3>
+                    <ul>
+                        <li><a href="architecture.html">Architecture</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="data-flow.html">Data Flow</a></li>
+                        <li><a href="directory-structure.html">Directory Structure</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Support & Security</h3>
+                    <ul>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="changelog.html">Changelog</a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank" class="github-link">
+                    View on GitHub →
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>FAQ</h1>
+                <p class="subtitle">Ultimate Web Novel & Manga Scraper Documentation</p>
+            </header>
+            
+            <div class="content">
+                <h1>Frequently Asked Questions (FAQ)</h1>
+                <section></section><section><h2>General Questions</h2>
+                <h3>What is the Ultimate Web Novel &amp; Manga Scraper?</h3>
+                <p>The Ultimate Web Novel &amp; Manga Scraper is a WordPress plugin designed to automate the process of importing manga and web novel content from various sources into your WordPress site. It&#39;s specifically built to work with the Madara theme.</p>
+                <h3>Is this plugin legal to use?</h3>
+                <p>The plugin itself is legal software. However, <strong>you</strong> are responsible for ensuring that your use of the plugin complies with:</p>
+                <ul>
+                <li>Copyright laws in your jurisdiction</li>
+                <li>Terms of service of the sites you&#39;re scraping</li>
+                <li>Fair use policies</li>
+                </ul>
+                <p>Always obtain proper permissions before scraping and republishing content.</p>
+                <h3>What makes this different from other scrapers?</h3>
+                <ul>
+                <li><strong>Madara Integration</strong>: Purpose-built for the Madara manga theme</li>
+                <li><strong>Multi-Source Support</strong>: Works with MangaFox, WuxiaWorld, and any Madara-based site</li>
+                <li><strong>Headless Browser Support</strong>: Can scrape JavaScript-heavy sites</li>
+                <li><strong>Translation Pipeline</strong>: Built-in translation capabilities</li>
+                <li><strong>Auto-Update</strong>: Automatically checks for new chapters</li>
+                </ul>
+                <section></section><section><h2>Installation &amp; Setup</h2>
+                <h3>What are the minimum requirements?</h3>
+                <ul>
+                <li>WordPress 5.0+</li>
+                <li>PHP 7.2+ (7.4+ recommended)</li>
+                <li>Madara Theme (active)</li>
+                <li>Madara Core Plugin</li>
+                <li>PHP extensions: cURL, DOM, mbstring, json</li>
+                </ul>
+                <h3>Do I need a special hosting plan?</h3>
+                <p>For basic usage, shared hosting can work. However, for production use we recommend:</p>
+                <ul>
+                <li>VPS or dedicated server</li>
+                <li>2GB+ RAM</li>
+                <li>20GB+ storage</li>
+                <li>Unmetered bandwidth</li>
+                </ul>
+                <h3>Can I use this without the Madara theme?</h3>
+                <p>No. The plugin is tightly integrated with Madara&#39;s data structures and storage engine. It checks for the Madara theme and won&#39;t activate without it.</p>
+                <h3>Do I need PhantomJS or Puppeteer?</h3>
+                <p>Not for all sites. Many static sites work fine with basic cURL scraping. Headless browsers are only needed for:</p>
+                <ul>
+                <li>JavaScript-rendered content</li>
+                <li>Sites with Cloudflare protection</li>
+                <li>Complex dynamic content</li>
+                </ul>
+                <section></section><section><h2>Configuration</h2>
+                <h3>How do I get translation API keys?</h3>
+                <p><strong>Google Translate API:</strong></p>
+                <ol>
+                <li>Go to Google Cloud Console</li>
+                <li>Create a new project</li>
+                <li>Enable Cloud Translation API</li>
+                <li>Create credentials (API key)</li>
+                <li>Copy key to plugin settings</li>
+                </ol>
+                <p><strong>DeepL:</strong></p>
+                <ol>
+                <li>Sign up at deepl.com/pro</li>
+                <li>Get API key from account settings</li>
+                <li>Enter in plugin settings</li>
+                </ol>
+                <p><strong>Microsoft Translator:</strong></p>
+                <ol>
+                <li>Sign up for Azure account</li>
+                <li>Create Translator resource</li>
+                <li>Get API key</li>
+                <li>Enter in plugin settings</li>
+                </ol>
+                <h3>What&#39;s the difference between &quot;Google Translate&quot; and &quot;Google Translate API&quot;?</h3>
+                <ul>
+                <li><strong>Google Translate (Free)</strong>: Scrapes the Google Translate website. Free but unreliable and may get blocked</li>
+                <li><strong>Google Translate API</strong>: Official paid API. Reliable but costs money per character</li>
+                </ul>
+                <h3>How do I configure proxy settings?</h3>
+                <ol>
+                <li>Purchase proxies from a provider (residential proxies work best)</li>
+                <li>In Main Settings → Proxy Settings:<ul>
+                <li><strong>Single proxy</strong>: <code>123.45.67.89:8080</code></li>
+                <li><strong>Multiple proxies</strong> (rotation): <code>proxy1:8080,proxy2:8080,proxy3:8080</code></li>
+                <li><strong>With authentication</strong>: Enter <code>username:password</code> in Proxy Auth field</li>
+                </ul>
+                </li>
+                </ol>
+                <section></section><section><h2>Usage</h2>
+                <h3>How often should I set the schedule?</h3>
+                <p>It depends on your needs:</p>
+                <ul>
+                <li><strong>Popular ongoing manga</strong>: 12-24 hours</li>
+                <li><strong>Weekly releases</strong>: 168 hours (7 days)</li>
+                <li><strong>Completed manga</strong>: Don&#39;t schedule, run manually once</li>
+                <li><strong>Test rules</strong>: 1-2 hours (for testing only)</li>
+                </ul>
+                <p><strong>Recommendation</strong>: Start with 24 hours and adjust based on update frequency.</p>
+                <h3>Can I import old chapters from a manga that&#39;s already started?</h3>
+                <p>Yes! Two methods:</p>
+                <p><strong>Method 1: Reverse Chapters</strong></p>
+                <ol>
+                <li>Enable &quot;Reverse Chapters&quot; in rule settings</li>
+                <li>Set &quot;Max Chapters&quot; to 10-20</li>
+                <li>Run rule multiple times to backfill</li>
+                </ol>
+                <p><strong>Method 2: Chapter Range</strong></p>
+                <ol>
+                <li>Specify start and end chapter numbers</li>
+                <li>Run rule</li>
+                </ol>
+                <h3>How do I update existing manga with new chapters?</h3>
+                <p>The plugin automatically handles this:</p>
+                <ol>
+                <li>It checks if manga exists by URL or title</li>
+                <li>Compares chapter lists</li>
+                <li>Only imports new chapters</li>
+                <li>Existing chapters are skipped</li>
+                </ol>
+                <p>No special configuration needed!</p>
+                <h3>Can I scrape multiple manga simultaneously?</h3>
+                <p>Yes. Create multiple rules and they&#39;ll run according to their schedules. However:</p>
+                <ul>
+                <li>Rules run sequentially (not parallel) to avoid server overload</li>
+                <li>Use file locking prevents multiple instances</li>
+                <li>Stagger schedules to spread load</li>
+                </ul>
+                <section></section><section><h2>Troubleshooting</h2>
+                <h3>Why is my rule not running automatically?</h3>
+                <p>Common causes:</p>
+                <ol>
+                <li><p><strong>WP-Cron not triggered</strong>: Your site needs traffic to trigger WP-Cron</p>
+                <ul>
+                <li><strong>Solution</strong>: Set up system cron (see DEPLOYMENT.md)</li>
+                </ul>
+                </li>
+                <li><p><strong>Schedule not met</strong>: Check <code>last_run</code> time</p>
+                <ul>
+                <li><strong>Solution</strong>: Wait for schedule interval to pass</li>
+                </ul>
+                </li>
+                <li><p><strong>Plugin disabled</strong>: Main switch is OFF</p>
+                <ul>
+                <li><strong>Solution</strong>: Enable in Main Settings</li>
+                </ul>
+                </li>
+                <li><p><strong>Rule inactive</strong>: Individual rule is disabled</p>
+                <ul>
+                <li><strong>Solution</strong>: Check &quot;Active&quot; checkbox in rule settings</li>
+                </ul>
+                </li>
+                </ol>
+                <h3>Why are images broken or not loading?</h3>
+                <p><strong>Diagnosis Steps:</strong></p>
+                <ol>
+                <li><p>Check if images downloaded:</p>
+                <ul>
+                <li>Navigate to <code>wp-content/uploads/manga/{manga-id}/</code></li>
+                <li>Look for chapter folders with images</li>
+                </ul>
+                </li>
+                <li><p>If no images:</p>
+                <ul>
+                <li><strong>Cause</strong>: Download failed</li>
+                <li><strong>Solutions</strong>: Enable proxy, increase timeout, use headless browser</li>
+                </ul>
+                </li>
+                <li><p>If images exist but don&#39;t display:</p>
+                <ul>
+                <li><strong>Cause</strong>: Permission issues or wrong path</li>
+                <li><strong>Solutions</strong>: Set permissions to 644 for files, 755 for directories</li>
+                </ul>
+                </li>
+                <li><p>If images are 0 bytes:</p>
+                <ul>
+                <li><strong>Cause</strong>: Hotlink protection</li>
+                <li><strong>Solution</strong>: Use proxy or headless browser</li>
+                </ul>
+                </li>
+                </ol>
+                <h3>What does &quot;Cloudflare protection detected&quot; mean?</h3>
+                <p>Cloudflare is an anti-bot service. When detected, normal cURL requests fail.</p>
+                <p><strong>Solutions:</strong></p>
+                <ol>
+                <li>Enable PhantomJS or Puppeteer (best option)</li>
+                <li>Use HeadlessBrowserAPI (commercial service)</li>
+                <li>Try different proxies</li>
+                <li>Use &quot;My Server Is Using CloudFlare Caching&quot; option if your server is behind Cloudflare</li>
+                </ol>
+                <h3>The scraper used to work but now it doesn&#39;t. Why?</h3>
+                <p><strong>Most Common Cause</strong>: Target site changed their HTML structure</p>
+                <p><strong>Solutions:</strong></p>
+                <ol>
+                <li>Check site manually - did layout change?</li>
+                <li>Enable detailed logging</li>
+                <li>Look for parsing errors in logs</li>
+                <li>Try switching to headless browser</li>
+                <li>If Madara site, use Madara Generic Scraper instead</li>
+                </ol>
+                <p><strong>Note</strong>: Site structure changes require plugin code updates. This is a limitation of all web scrapers.</p>
+                <h3>Why is scraping so slow?</h3>
+                <p>Several factors affect speed:</p>
+                <ol>
+                <li><strong>Network latency</strong>: Distance to source server</li>
+                <li><strong>Request timeout</strong>: Intentional delays to avoid bans (configurable)</li>
+                <li><strong>Headless browsers</strong>: PhantomJS/Puppeteer add overhead</li>
+                <li><strong>Image downloads</strong>: Large images take time</li>
+                <li><strong>Translation</strong>: API calls add latency</li>
+                </ol>
+                <p><strong>Optimization Tips:</strong></p>
+                <ul>
+                <li>Reduce request timeout (but risk getting banned)</li>
+                <li>Reduce max chapters per run</li>
+                <li>Use faster storage (SSD vs HDD)</li>
+                <li>Increase PHP memory limit</li>
+                <li>Skip translation for testing</li>
+                </ul>
+                <h3>&quot;Maximum execution time exceeded&quot; error - how to fix?</h3>
+                <p>This means PHP script timed out.</p>
+                <p><strong>Solutions:</strong></p>
+                <ol>
+                <li><p><strong>Increase PHP timeout</strong>:</p>
+                <ul>
+                <li>Edit <code>php.ini</code>: <code>max_execution_time = 300</code></li>
+                <li>Or in <code>wp-config.php</code>: <code>set_time_limit(300);</code></li>
+                </ul>
+                </li>
+                <li><p><strong>Reduce chapters per run</strong>:</p>
+                <ul>
+                <li>Lower &quot;Max Chapters&quot; to 1-5</li>
+                </ul>
+                </li>
+                <li><p><strong>Increase plugin timeout</strong>:</p>
+                <ul>
+                <li>Main Settings → Rule Timeout: 300 seconds</li>
+                </ul>
+                </li>
+                <li><p><strong>Use system cron</strong>:</p>
+                <ul>
+                <li>System cron doesn&#39;t have same limits as web requests</li>
+                </ul>
+                </li>
+                </ol>
+                <section></section><section><h2>Performance &amp; Optimization</h2>
+                <h3>How much storage do I need?</h3>
+                <p>Depends on number of manga and chapters:</p>
+                <p><strong>Rough estimates:</strong></p>
+                <ul>
+                <li>Average manga chapter: 20-50 images</li>
+                <li>Average image size: 200KB - 1MB</li>
+                <li>Per chapter: 4MB - 50MB</li>
+                <li>Full manga (100 chapters): 400MB - 5GB</li>
+                </ul>
+                <p><strong>Recommendations:</strong></p>
+                <ul>
+                <li>Starting out: 20GB+</li>
+                <li>Medium site (100 manga): 100GB+</li>
+                <li>Large site (1000+ manga): 500GB - 1TB+</li>
+                </ul>
+                <h3>How much bandwidth do I need?</h3>
+                <p><strong>Initial scraping</strong> (one-time):</p>
+                <ul>
+                <li>Downloading a full manga: 400MB - 5GB</li>
+                <li>100 manga: 40GB - 500GB</li>
+                </ul>
+                <p><strong>Monthly bandwidth</strong> (serving to users):</p>
+                <ul>
+                <li>1000 chapter views/month × 30MB = 30GB</li>
+                <li>Scale accordingly</li>
+                </ul>
+                <p><strong>Tip</strong>: Use CDN (CloudFlare, Amazon CloudFront) to reduce origin bandwidth.</p>
+                <h3>Can I use a CDN for images?</h3>
+                <p>Yes! Options:</p>
+                <ol>
+                <li><p><strong>Amazon S3 + CloudFront</strong>:</p>
+                <ul>
+                <li>Configure Madara S3 integration</li>
+                <li>Select &quot;amazon_s3&quot; in plugin settings</li>
+                </ul>
+                </li>
+                <li><p><strong>CloudFlare</strong>:</p>
+                <ul>
+                <li>Enable CloudFlare for your domain</li>
+                <li>Images automatically cached</li>
+                </ul>
+                </li>
+                <li><p><strong>Custom CDN</strong>:</p>
+                <ul>
+                <li>Use filters to modify image URLs</li>
+                <li>See API_REFERENCE.md for hooks</li>
+                </ul>
+                </li>
+                </ol>
+                <h3>How do I reduce server load?</h3>
+                <ol>
+                <li><strong>Stagger schedules</strong>: Don&#39;t run all rules at same time</li>
+                <li><strong>Limit concurrency</strong>: Rules run sequentially by design</li>
+                <li><strong>Use object caching</strong>: Redis or Memcached for WordPress</li>
+                <li><strong>Optimize database</strong>: Regular optimization and indexing</li>
+                <li><strong>Increase hardware</strong>: More RAM, faster CPU</li>
+                <li><strong>Offload tasks</strong>: Use external services (HeadlessBrowserAPI, S3)</li>
+                </ol>
+                <section></section><section><h2>Advanced Topics</h2>
+                <h3>Can I scrape sites not listed in the plugin?</h3>
+                <p>Yes, using the <strong>Generic Madara Scraper</strong>:</p>
+                <ul>
+                <li>Works with any Madara-themed site</li>
+                <li>Or <strong>Madara Enhancements</strong> for visual browsing</li>
+                </ul>
+                <p>For non-Madara sites, code modifications are required.</p>
+                <h3>Can I modify the scraping logic?</h3>
+                <p>Yes! The plugin is open source. Main scraping logic is in <code>ultimate-manga-scraper.php</code>.</p>
+                <p><strong>Before modifying:</strong></p>
+                <ol>
+                <li>Create a backup</li>
+                <li>Test in development environment</li>
+                <li>Understand PHP and WordPress</li>
+                <li>See ARCHITECTURE.md for code structure</li>
+                </ol>
+                <p><strong>Better approach</strong>: Use WordPress filters (see API_REFERENCE.md)</p>
+                <h3>Can I scrape manga to a different post type?</h3>
+                <p>By default, manga is saved as <code>wp-manga</code> post type (Madara requirement).</p>
+                <p>To change this, you&#39;d need to:</p>
+                <ol>
+                <li>Modify post creation code in plugin</li>
+                <li>Handle chapter storage differently</li>
+                <li>Update taxonomies</li>
+                </ol>
+                <p><strong>Not recommended</strong>: This breaks Madara integration.</p>
+                <h3>Is there an API to trigger scraping externally?</h3>
+                <p>Yes, via WordPress admin-ajax:</p>
+                <pre><code class="language-bash">curl -X POST https://yoursite.com/wp-admin/admin-ajax.php \
+                  -d &quot;action=ums_my_action_callback&amp;id=5&amp;type=manga&amp;nonce=NONCE&quot;
+                </code></pre>
+                <p><strong>Requirements:</strong></p>
+                <ul>
+                <li>Valid nonce (get from admin page)</li>
+                <li>Proper authentication cookies</li>
+                <li><code>manage_options</code> capability</li>
+                </ul>
+                <p><strong>Better</strong>: Use WP-CLI if you have shell access:</p>
+                <pre><code class="language-bash">wp cron event run umsaction
+                </code></pre>
+                <h3>Can I import from a different Madara site?</h3>
+                <p>Yes! This is what <strong>Madara Enhancements</strong> is designed for:</p>
+                <ol>
+                <li>Go to Madara Enhancements tab</li>
+                <li>Enter source Madara site URL</li>
+                <li>Browse and select manga</li>
+                <li>Click Import</li>
+                </ol>
+                <p>This uses the source site&#39;s AJAX API for structured data (more reliable than HTML scraping).</p>
+                <h3>Can I export my rules?</h3>
+                <p>Rules are stored in <code>wp_options</code> table. To export:</p>
+                <p><strong>Method 1: Database export</strong></p>
+                <pre><code class="language-sql">SELECT * FROM wp_options WHERE option_name LIKE &#39;ums_%&#39;;
+                </code></pre>
+                <p><strong>Method 2: WordPress export</strong></p>
+                <ul>
+                <li>Use a plugin like &quot;All-in-One WP Migration&quot;</li>
+                <li>Or export database manually</li>
+                </ul>
+                <p><strong>Import</strong>: Import SQL to new site</p>
+                <section></section><section><h2>Legal &amp; Ethical</h2>
+                <h3>Am I allowed to scrape manga and novels?</h3>
+                <p><strong>Legal perspective</strong>: Laws vary by jurisdiction. Generally:</p>
+                <ul>
+                <li>✗ Copyrighted content without permission is illegal</li>
+                <li>✓ Public domain content is okay</li>
+                <li>✓ Content you own is okay</li>
+                <li>? Fair use may apply in some cases (educational, transformative)</li>
+                </ul>
+                <p><strong>Recommendation</strong>: Consult a lawyer in your jurisdiction.</p>
+                <h3>What about robots.txt?</h3>
+                <p><code>robots.txt</code> is a <strong>request</strong>, not a law, but respecting it is ethical.</p>
+                <p>The plugin doesn&#39;t check <code>robots.txt</code> by default. You should:</p>
+                <ol>
+                <li>Manually check each site&#39;s robots.txt</li>
+                <li>Respect their wishes</li>
+                <li>Only scrape sites that allow it</li>
+                </ol>
+                <h3>How can I use this plugin ethically?</h3>
+                <p><strong>Best practices:</strong></p>
+                <ol>
+                <li>Only scrape sites you have permission to scrape</li>
+                <li>Respect rate limits and robots.txt</li>
+                <li>Provide attribution to original sources</li>
+                <li>Don&#39;t republish copyrighted content without license</li>
+                <li>Consider official APIs when available</li>
+                </ol>
+                <p><strong>Legitimate uses:</strong></p>
+                <ul>
+                <li>Personal archival</li>
+                <li>Research and analysis</li>
+                <li>Aggregating public domain content</li>
+                <li>Internal corporate use with licensed content</li>
+                </ul>
+                <section></section><section><h2>Technical Details</h2>
+                <h3>What PHP extensions are required?</h3>
+                <p><strong>Required:</strong></p>
+                <ul>
+                <li><code>curl</code>: For HTTP requests</li>
+                <li><code>dom</code>: For HTML parsing</li>
+                <li><code>mbstring</code>: For multi-byte string handling</li>
+                <li><code>json</code>: For JSON parsing</li>
+                <li><code>libxml</code>: For XML/HTML processing</li>
+                </ul>
+                <p><strong>Optional:</strong></p>
+                <ul>
+                <li><code>gd</code> or <code>imagick</code>: For image processing</li>
+                <li><code>zip</code>: For backup/export features</li>
+                </ul>
+                <h3>Does this work with WordPress Multisite?</h3>
+                <p>Potentially, but not officially supported or tested. Issues:</p>
+                <ul>
+                <li>Plugin activation per site</li>
+                <li>Shared resources might conflict</li>
+                <li>Cron jobs might interfere</li>
+                </ul>
+                <p><strong>Recommendation</strong>: Use separate WordPress installations for each site.</p>
+                <h3>Can I contribute to the plugin?</h3>
+                <p>Yes! The plugin is open source (Public Domain license).</p>
+                <p><strong>Ways to contribute:</strong></p>
+                <ol>
+                <li>Report bugs</li>
+                <li>Submit pull requests</li>
+                <li>Improve documentation</li>
+                <li>Add support for new sites</li>
+                <li>Translate to other languages</li>
+                </ol>
+                <h3>What data does the plugin collect?</h3>
+                <p>The plugin collects:</p>
+                <ul>
+                <li>✓ Scraped content from target sites</li>
+                <li>✓ Execution logs (locally)</li>
+                <li>✗ No user analytics</li>
+                <li>✗ No phone-home functionality</li>
+                <li>✗ No data sent to third parties (except translation APIs if configured)</li>
+                </ul>
+                <p><strong>Privacy</strong>: All data stays on your server.</p>
+                <section><h2>Getting More Help</h2>
+                <h3>Where can I find more documentation?</h3>
+                <ul>
+                <li><strong>README.md</strong>: Overview and quick start</li>
+                <li><strong>USER_GUIDE.md</strong>: Comprehensive user documentation (this file)</li>
+                <li><strong>ARCHITECTURE.md</strong>: Technical architecture and code structure</li>
+                <li><strong>API_REFERENCE.md</strong>: Developer API documentation</li>
+                <li><strong>TROUBLESHOOTING.md</strong>: Common problems and solutions</li>
+                <li><strong>SECURITY.md</strong>: Security analysis and recommendations</li>
+                <li><strong>DEPLOYMENT.md</strong>: Installation and server setup</li>
+                <li><strong>CONFIGURATION.md</strong>: All configuration options</li>
+                </ul>
+                <h3>Something&#39;s not working. What should I do?</h3>
+                <ol>
+                <li><strong>Check logs</strong>: Enable detailed logging and check <code>ums_info.log</code></li>
+                <li><strong>Check TROUBLESHOOTING.md</strong>: See if your issue is listed</li>
+                <li><strong>Test in isolation</strong>: Create a minimal rule with 1 chapter</li>
+                <li><strong>Check permissions</strong>: Verify file/folder permissions</li>
+                <li><strong>Check dependencies</strong>: Ensure Madara theme and PHP extensions are present</li>
+                <li><strong>Update plugin</strong>: Make sure you&#39;re using the latest version</li>
+                </ol>
+                <h3>How do I report a bug?</h3>
+                <p>When reporting bugs, include:</p>
+                <ul>
+                <li>Plugin version</li>
+                <li>WordPress version</li>
+                <li>PHP version</li>
+                <li>Madara theme version</li>
+                <li>Exact error message</li>
+                <li>Steps to reproduce</li>
+                <li>Relevant log excerpts</li>
+                </ul>
+                <h3>Can I request new features?</h3>
+                <p>Yes! Feature requests are welcome. Consider:</p>
+                <ul>
+                <li>Is it generally useful?</li>
+                <li>Does it fit the plugin&#39;s scope?</li>
+                <li>Is it technically feasible?</li>
+                </ul>
+                <hr>
+                <p><strong>Still have questions?</strong> Check the other documentation files or review the source code.</p>
+                </section>
+            </div>
+            
+            <footer class="page-footer">
+                <p>&copy; 2024 Ultimate Web Novel & Manga Scraper - Released into the Public Domain</p>
+                <p>
+                    <a href="https://github.com/druvx13/ultimate-manga-scraper">GitHub</a> •
+                    <a href="security.html#disclosure">Report Security Issue</a> •
+                    <a href="changelog.html">Changelog</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

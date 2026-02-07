@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete documentation for the Ultimate Web Novel & Manga Scraper WordPress plugin">
+    <title>Troubleshooting - Ultimate Web Novel & Manga Scraper</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 Documentation</h2>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search documentation..." class="search-input">
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-section">
+                    <h3>Getting Started</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="user-guide.html">User Guide</a></li>
+                        <li><a href="installation.html">Installation</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Configuration</h3>
+                    <ul>
+                        <li><a href="configuration.html">Configuration Reference</a></li>
+                        <li><a href="deployment.html">Deployment Guide</a></li>
+                        <li><a href="performance.html">Performance Tuning</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Developer Resources</h3>
+                    <ul>
+                        <li><a href="architecture.html">Architecture</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="data-flow.html">Data Flow</a></li>
+                        <li><a href="directory-structure.html">Directory Structure</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Support & Security</h3>
+                    <ul>
+                        <li><a href="troubleshooting.html" class="active">Troubleshooting</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="changelog.html">Changelog</a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank" class="github-link">
+                    View on GitHub →
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Troubleshooting</h1>
+                <p class="subtitle">Ultimate Web Novel & Manga Scraper Documentation</p>
+            </header>
+            
+            <div class="content">
+                <h1>Troubleshooting Guide</h1>
+                <section></section><section><h2>Common Issues</h2>
+                <h3>1. &quot;Plugin requires Madara Theme&quot; Error</h3>
+                <ul>
+                <li><strong>Cause</strong>: The plugin checks for the active theme name or parent theme.</li>
+                <li><strong>Solution</strong>: Ensure you have the <strong>Madara</strong> theme installed and active. If you are using a child theme, ensure the <code>Template</code> in <code>style.css</code> is <code>madara</code>.</li>
+                </ul>
+                <h3>2. Scraping Fails (No Content)</h3>
+                <ul>
+                <li><strong>Cause</strong>: Target site layout changed, Cloudflare protection, or IP ban.</li>
+                <li><strong>Solution</strong>:<ul>
+                <li><strong>Check Logs</strong>: Go to <strong>Activity &amp; Logging</strong>.</li>
+                <li><strong>Cloudflare</strong>: Enable &quot;My Server Is Using CloudFlare Caching&quot; in Main Settings.</li>
+                <li><strong>Headless</strong>: Switch the rule to use &quot;Puppeteer&quot; or &quot;PhantomJS&quot;.</li>
+                <li><strong>Proxy</strong>: Configure a proxy in Main Settings if your server IP is blocked.</li>
+                </ul>
+                </li>
+                </ul>
+                <h3>3. Images Not Loading (Broken Images)</h3>
+                <ul>
+                <li><strong>Cause</strong>: Hotlink protection by source site or failed download.</li>
+                <li><strong>Solution</strong>:<ul>
+                <li>Check <code>wp-content/uploads/manga/</code> to see if files exist.</li>
+                <li>If 0 bytes or missing, the download failed. Use a Proxy.</li>
+                <li>If files exist but don&#39;t show, check file permissions (<code>chmod 644</code>).</li>
+                </ul>
+                </li>
+                </ul>
+                <h3>4. &quot;Maximum Execution Time Exceeded&quot;</h3>
+                <ul>
+                <li><strong>Cause</strong>: PHP script timed out while downloading many images.</li>
+                <li><strong>Solution</strong>:<ul>
+                <li>Increase <code>max_execution_time</code> in <code>php.ini</code>.</li>
+                <li>Increase &quot;Rule Timeout&quot; in Main Settings.</li>
+                <li>Reduce &quot;Max Chapters&quot; per run in the Rule settings.</li>
+                </ul>
+                </li>
+                </ul>
+                <h3>5. Translation Not Working</h3>
+                <ul>
+                <li><strong>Cause</strong>: API Key invalid or Quota exceeded.</li>
+                <li><strong>Solution</strong>:<ul>
+                <li>Verify your Google/DeepL/Bing API keys.</li>
+                <li>Check if &quot;Google Translate (Free)&quot; is being blocked (Google rate limits this aggressively).</li>
+                </ul>
+                </li>
+                </ul>
+                <h3>6. Cron Jobs Not Running</h3>
+                <ul>
+                <li><strong>Cause</strong>: WP-Cron relying on site traffic.</li>
+                <li><strong>Solution</strong>: Set up a real system cron (see <code>DEPLOYMENT.md</code>).</li>
+                </ul>
+                <h3>7. PhantomJS/Puppeteer Errors</h3>
+                <ul>
+                <li><strong>Cause</strong>: Binaries not executable or missing dependencies (libfontconfig, etc.).</li>
+                <li><strong>Solution</strong>:<ul>
+                <li>SSH into server.</li>
+                <li>Try running the command manually: <code>phantomjs --version</code> or <code>node --version</code>.</li>
+                <li>Ensure <code>shell_exec</code> is enabled in PHP.</li>
+                </ul>
+                </li>
+                </ul>
+                <section><h2>Debugging</h2>
+                <p>To enable verbose logs:</p>
+                <ol>
+                <li>Go to <strong>Main Settings</strong>.</li>
+                <li>Check <strong>Enable Detailed Logging</strong>.</li>
+                <li>Save.</li>
+                <li>Run a rule.</li>
+                <li>Check <code>wp-content/ums_info.log</code>.</li>
+                </ol>
+                </section>
+            </div>
+            
+            <footer class="page-footer">
+                <p>&copy; 2024 Ultimate Web Novel & Manga Scraper - Released into the Public Domain</p>
+                <p>
+                    <a href="https://github.com/druvx13/ultimate-manga-scraper">GitHub</a> •
+                    <a href="security.html#disclosure">Report Security Issue</a> •
+                    <a href="changelog.html">Changelog</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

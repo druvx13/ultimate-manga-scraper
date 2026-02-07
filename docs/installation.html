@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete documentation for the Ultimate Web Novel & Manga Scraper WordPress plugin">
+    <title>Installation & Overview - Ultimate Web Novel & Manga Scraper</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 Documentation</h2>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search documentation..." class="search-input">
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-section">
+                    <h3>Getting Started</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="user-guide.html">User Guide</a></li>
+                        <li><a href="installation.html" class="active">Installation</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Configuration</h3>
+                    <ul>
+                        <li><a href="configuration.html">Configuration Reference</a></li>
+                        <li><a href="deployment.html">Deployment Guide</a></li>
+                        <li><a href="performance.html">Performance Tuning</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Developer Resources</h3>
+                    <ul>
+                        <li><a href="architecture.html">Architecture</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="data-flow.html">Data Flow</a></li>
+                        <li><a href="directory-structure.html">Directory Structure</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Support & Security</h3>
+                    <ul>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="changelog.html">Changelog</a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank" class="github-link">
+                    View on GitHub →
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Installation & Overview</h1>
+                <p class="subtitle">Ultimate Web Novel & Manga Scraper Documentation</p>
+            </header>
+            
+            <div class="content">
+                <h1>Ultimate Web Novel &amp; Manga Scraper</h1>
+                <p><strong>Institutional-Grade Documentation Edition</strong></p>
+                <p>This repository contains the <strong>Ultimate Web Novel &amp; Manga Scraper</strong>, a comprehensive WordPress plugin designed to automate the ingestion of manga and web novel content. It is engineered to integrate seamlessly with the <strong>Madara</strong> theme, transforming a standard WordPress installation into a fully automated content aggregation platform.</p>
+                <hr>
+                <section></section><section><h2>📖 Table of Contents</h2>
+                <ol>
+                <li><a href="#project-overview">Project Overview</a></li>
+                <li><a href="#feature-inventory">Feature Inventory</a></li>
+                <li><a href="#system-requirements">System Requirements</a></li>
+                <li><a href="#technology-stack">Technology Stack</a></li>
+                <li><a href="#directory-overview">Directory Overview</a></li>
+                <li><a href="#installation">Installation</a></li>
+                <li><a href="#environment-setup">Environment Setup</a></li>
+                <li><a href="#configuration">Configuration</a></li>
+                <li><a href="#database-setup">Database Setup</a></li>
+                <li><a href="#admin--system-usage">Admin &amp; System Usage</a></li>
+                <li><a href="#development-workflow">Development Workflow</a></li>
+                <li><a href="#production-deployment">Production Deployment</a></li>
+                <li><a href="#security-considerations">Security Considerations</a></li>
+                <li><a href="#limitations--assumptions">Limitations &amp; Assumptions</a></li>
+                <li><a href="#maintenance">Maintenance</a></li>
+                <li><a href="#licensing">Licensing</a></li>
+                </ol>
+                <hr>
+                <section></section><section><h2>1. Project Overview</h2>
+                <p>The plugin operates as a &quot;God Object&quot; within the WordPress ecosystem, specifically targeting the <strong>Madara</strong> manga theme. It acts as a bridge between external content sources (MangaFox, WuxiaWorld, Madara-based sites, etc.) and the local WordPress database.</p>
+                <p>It handles the entire lifecycle of content acquisition:</p>
+                <ul>
+                <li><strong>Scheduling</strong>: Cron-based execution.</li>
+                <li><strong>Fetching</strong>: Multi-mode scraping (cURL, PhantomJS, Puppeteer).</li>
+                <li><strong>Processing</strong>: HTML parsing, cleaning, and text spinning.</li>
+                <li><strong>Translation</strong>: Automated translation via Google/DeepL/Microsoft.</li>
+                <li><strong>Storage</strong>: Saving to local FS, DB, or Cloud Storage (S3).</li>
+                </ul>
+                <section></section><section><h2>2. Feature Inventory</h2>
+                <ul>
+                <li><strong>Multi-Source Scraping</strong>: Built-in rules for major manga/novel sites.</li>
+                <li><strong>Headless Browser Support</strong>: Renders JavaScript-heavy sites using PhantomJS or Puppeteer.</li>
+                <li><strong>Translation Pipeline</strong>: Converts content language on-the-fly.</li>
+                <li><strong>Proxy Support</strong>: Rotates proxies to bypass IP bans.</li>
+                <li><strong>Cloudflare Bypass</strong>: Mechanisms to handle anti-bot protection.</li>
+                <li><strong>Madara Enhancements</strong>: specialized module for cloning other Madara sites via AJAX.</li>
+                <li><strong>Auto-Update</strong>: Updates existing manga with new chapters automatically.</li>
+                </ul>
+                <section></section><section><h2>3. System Requirements</h2>
+                <ul>
+                <li><strong>CMS</strong>: WordPress 5.0+</li>
+                <li><strong>Theme</strong>: Madara (Active)</li>
+                <li><strong>Plugin Dependency</strong>: Madara Core (<code>WP_MANGA_STORAGE</code>)</li>
+                <li><strong>PHP</strong>: 7.4+</li>
+                <li><strong>Extensions</strong>: <code>curl</code>, <code>dom</code>, <code>mbstring</code>, <code>json</code>, <code>libxml</code></li>
+                <li><strong>Optional</strong>:<ul>
+                <li><code>Node.js</code> (for Puppeteer)</li>
+                <li><code>PhantomJS</code> binary</li>
+                <li><code>shell_exec</code> enabled</li>
+                </ul>
+                </li>
+                </ul>
+                <section></section><section><h2>4. Technology Stack</h2>
+                <ul>
+                <li><strong>Language</strong>: PHP 7/8</li>
+                <li><strong>Frontend</strong>: jQuery (Admin UI)</li>
+                <li><strong>Parsers</strong>: PHP Simple HTML DOM Parser, DOMDocument</li>
+                <li><strong>Headless</strong>: PhantomJS (JS), Puppeteer (Node.js)</li>
+                <li><strong>Database</strong>: MySQL/MariaDB (WordPress Schema + Madara Custom Tables)</li>
+                </ul>
+                <section></section><section><h2>5. Directory Overview</h2>
+                <p>See <a href="DIRECTORY_STRUCTURE.md">DIRECTORY_STRUCTURE.md</a> for a complete manifest.</p>
+                <ul>
+                <li><code>root</code>: Core logic (<code>ultimate-manga-scraper.php</code>).</li>
+                <li><code>includes/</code>: Madara integration classes.</li>
+                <li><code>res/</code>: Libraries, drivers, and admin UI templates.</li>
+                <li><code>images/</code>, <code>scripts/</code>, <code>styles/</code>: Assets.</li>
+                </ul>
+                <section></section><section><h2>6. Installation</h2>
+                <p>See <a href="DEPLOYMENT.md">DEPLOYMENT.md</a> for detailed steps.</p>
+                <ol>
+                <li>Upload plugin to <code>/wp-content/plugins/</code>.</li>
+                <li>Activate via WordPress Admin.</li>
+                <li>Ensure Madara theme is active.</li>
+                </ol>
+                <section></section><section><h2>7. Environment Setup</h2>
+                <ul>
+                <li><strong>Permissions</strong>: Ensure the web server can write to <code>wp-content/uploads</code> and <code>wp-content/plugins/ultimate-manga-scraper</code>.</li>
+                <li><strong>Cron</strong>: Disable WP-Cron and setup a system cron for reliability.</li>
+                </ul>
+                <section></section><section><h2>8. Configuration</h2>
+                <p>See <a href="CONFIGURATION.md">CONFIGURATION.md</a>.</p>
+                <p>Configuration is handled via <strong>Ultimate Web Novel &amp; Manga Scraper -&gt; Main Settings</strong>. Key areas:</p>
+                <ul>
+                <li><strong>Headless Settings</strong>: Paths to binaries.</li>
+                <li><strong>Translation Keys</strong>: API credentials.</li>
+                <li><strong>Storage Backend</strong>: Local vs Cloud.</li>
+                </ul>
+                <section></section><section><h2>9. Database Setup</h2>
+                <p>The plugin utilizes the standard WordPress <code>wp_options</code> table for storing rules and settings. Content is stored in <code>wp_posts</code> (Manga) and <code>wp_postmeta</code>. Chapter data is managed by Madara&#39;s storage engine.</p>
+                <section></section><section><h2>10. Admin &amp; System Usage</h2>
+                <ol>
+                <li><strong>Define Rules</strong>: Go to the specific scraper tab (e.g., Manga Scraper).</li>
+                <li><strong>Add URL</strong>: Paste the TOC URL of the target manga.</li>
+                <li><strong>Set Schedule</strong>: Define how often to check for updates.</li>
+                <li><strong>Run</strong>: Click &quot;Run This Rule Now&quot; or wait for Cron.</li>
+                <li><strong>Monitor</strong>: Watch the &quot;Activity &amp; Logging&quot; tab.</li>
+                </ol>
+                <section></section><section><h2>11. Development Workflow</h2>
+                <ul>
+                <li><strong>Architecture</strong>: See <a href="ARCHITECTURE.md">ARCHITECTURE.md</a>.</li>
+                <li><strong>Data Flow</strong>: See <a href="DATA_FLOW.md">DATA_FLOW.md</a>.</li>
+                <li><strong>Modifying</strong>: Edits should primarily be made in <code>ultimate-manga-scraper.php</code> for core logic, or <code>includes/</code> for Madara-specific logic.</li>
+                </ul>
+                <section></section><section><h2>12. Production Deployment</h2>
+                <ul>
+                <li><strong>Security</strong>: See <a href="SECURITY.md">SECURITY.md</a>.</li>
+                <li><strong>Optimization</strong>: Use Redis/Memcached object caching. Use a real Cron job.</li>
+                </ul>
+                <section></section><section><h2>13. Security Considerations</h2>
+                <ul>
+                <li><strong>SSRF</strong>: The plugin makes outbound requests to user-defined URLs.</li>
+                <li><strong>RCE</strong>: <code>shell_exec</code> is used for headless browsers. Secure your server accordingly.</li>
+                <li><strong>Access Control</strong>: Restrict Admin access.</li>
+                </ul>
+                <section></section><section><h2>14. Limitations &amp; Assumptions</h2>
+                <ul>
+                <li><strong>Theme Dependency</strong>: Assumes Madara theme structure is present.</li>
+                <li><strong>Site Changes</strong>: Scrapers rely on DOM structure. Target site changes will break scraping until updated.</li>
+                <li><strong>Legal</strong>: User is responsible for copyright compliance of scraped content.</li>
+                </ul>
+                <section></section><section><h2>15. Maintenance</h2>
+                <ul>
+                <li><strong>Logs</strong>: Rotate logs (<code>auto_clear_logs</code>).</li>
+                <li><strong>Updates</strong>: Check <a href="CHANGELOG.md">CHANGELOG.md</a>.</li>
+                </ul>
+                <section><h2>16. Licensing</h2>
+                <p>Released into the <strong>Public Domain</strong>. See <a href="LICENSE">LICENSE</a> for details.</p>
+                <hr>
+                <p><strong>Documentation Index</strong>: <a href="DOCUMENTATION_INDEX.md">DOCUMENTATION_INDEX.md</a></p>
+                </section>
+            </div>
+            
+            <footer class="page-footer">
+                <p>&copy; 2024 Ultimate Web Novel & Manga Scraper - Released into the Public Domain</p>
+                <p>
+                    <a href="https://github.com/druvx13/ultimate-manga-scraper">GitHub</a> •
+                    <a href="security.html#disclosure">Report Security Issue</a> •
+                    <a href="changelog.html">Changelog</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

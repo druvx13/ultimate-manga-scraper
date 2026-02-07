@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete documentation for the Ultimate Web Novel & Manga Scraper WordPress plugin">
+    <title>Performance Tuning - Ultimate Web Novel & Manga Scraper</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 Documentation</h2>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search documentation..." class="search-input">
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-section">
+                    <h3>Getting Started</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="user-guide.html">User Guide</a></li>
+                        <li><a href="installation.html">Installation</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Configuration</h3>
+                    <ul>
+                        <li><a href="configuration.html">Configuration Reference</a></li>
+                        <li><a href="deployment.html">Deployment Guide</a></li>
+                        <li><a href="performance.html" class="active">Performance Tuning</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Developer Resources</h3>
+                    <ul>
+                        <li><a href="architecture.html">Architecture</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="data-flow.html">Data Flow</a></li>
+                        <li><a href="directory-structure.html">Directory Structure</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Support & Security</h3>
+                    <ul>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="changelog.html">Changelog</a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank" class="github-link">
+                    View on GitHub →
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Performance Tuning</h1>
+                <p class="subtitle">Ultimate Web Novel & Manga Scraper Documentation</p>
+            </header>
+            
+            <div class="content">
+                <h1>Performance Tuning Guide</h1>
+                <section></section><section><h2>Overview</h2>
+                <p>This guide provides detailed recommendations for optimizing the performance of the <strong>Ultimate Web Novel &amp; Manga Scraper</strong> plugin. Whether you&#39;re running a small personal site or a high-traffic manga aggregation platform, these tips will help you maximize efficiency and minimize resource usage.</p>
+                <section></section><section><h2>Table of Contents</h2>
+                <ol>
+                <li><a href="#server-optimization">Server Optimization</a></li>
+                <li><a href="#wordpress-optimization">WordPress Optimization</a></li>
+                <li><a href="#plugin-settings-optimization">Plugin Settings Optimization</a></li>
+                <li><a href="#database-optimization">Database Optimization</a></li>
+                <li><a href="#network--scraping-optimization">Network &amp; Scraping Optimization</a></li>
+                <li><a href="#storage-optimization">Storage Optimization</a></li>
+                <li><a href="#monitoring--profiling">Monitoring &amp; Profiling</a></li>
+                </ol>
+                <section></section><section><h2>Server Optimization</h2>
+                <h3>Hardware Requirements</h3>
+                <p><strong>Minimum (Testing):</strong></p>
+                <ul>
+                <li>1 CPU core</li>
+                <li>1GB RAM</li>
+                <li>10GB storage</li>
+                <li>Shared hosting</li>
+                </ul>
+                <p><strong>Recommended (Production - Small):</strong></p>
+                <ul>
+                <li>2 CPU cores</li>
+                <li>2GB RAM</li>
+                <li>50GB SSD storage</li>
+                <li>VPS or dedicated server</li>
+                </ul>
+                <p><strong>Recommended (Production - Large):</strong></p>
+                <ul>
+                <li>4+ CPU cores</li>
+                <li>4GB+ RAM</li>
+                <li>200GB+ SSD storage</li>
+                <li>Dedicated server or cloud instance</li>
+                </ul>
+                <h3>PHP Configuration</h3>
+                <p>Edit <code>php.ini</code> (or use <code>.htaccess</code> / <code>wp-config.php</code>):</p>
+                <pre><code class="language-ini">; Memory and execution
+                memory_limit = 256M                ; Increase for large imports
+                max_execution_time = 300           ; Allow long-running scripts
+                max_input_time = 300               ; Allow slow network operations
+
+                ; File uploads (for images)
+                upload_max_filesize = 20M
+                post_max_size = 25M
+
+                ; Performance
+                opcache.enable = 1                 ; Enable OPcache
+                opcache.memory_consumption = 128   ; OPcache memory
+                opcache.interned_strings_buffer = 8
+                opcache.max_accelerated_files = 10000
+                opcache.validate_timestamps = 0    ; Disable in production
+                </code></pre>
+                <p><strong>Applying changes:</strong></p>
+                <pre><code class="language-bash"># Restart PHP-FPM
+                sudo systemctl restart php7.4-fpm
+
+                # Or restart Apache
+                sudo systemctl restart apache2
+                </code></pre>
+                <h3>Web Server Configuration</h3>
+                <h4>Nginx</h4>
+                <pre><code class="language-nginx"># /etc/nginx/sites-available/yoursite
+
+                server {
+                    # Increase timeouts for long scraping operations
+                    fastcgi_read_timeout 300;
+                    fastcgi_send_timeout 300;
+    
+                    # Increase buffer sizes
+                    fastcgi_buffer_size 32k;
+                    fastcgi_buffers 8 32k;
+    
+                    # Cache static assets
+                    location ~* \.(jpg|jpeg|png|gif|ico|css|js)$ {
+                        expires 30d;
+                        add_header Cache-Control &quot;public, immutable&quot;;
+                    }
+    
+                    # Protect log files
+                    location ~ \.log$ {
+                        deny all;
+                    }
+                }
+                </code></pre>
+                <h4>Apache</h4>
+                <pre><code class="language-apache"># .htaccess or httpd.conf
+
+                # Increase timeouts
+                Timeout 300
+                ProxyTimeout 300
+
+                # Enable compression
+                &lt;IfModule mod_deflate.c&gt;
+                    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+                &lt;/IfModule&gt;
+
+                # Cache static assets
+                &lt;IfModule mod_expires.c&gt;
+                    ExpiresActive On
+                    ExpiresByType image/jpeg &quot;access plus 30 days&quot;
+                    ExpiresByType image/png &quot;access plus 30 days&quot;
+                    ExpiresByType text/css &quot;access plus 7 days&quot;
+                    ExpiresByType application/javascript &quot;access plus 7 days&quot;
+                &lt;/IfModule&gt;
+
+                # Protect log files
+                &lt;FilesMatch &quot;\.log$&quot;&gt;
+                    Order allow,deny
+                    Deny from all
+                &lt;/FilesMatch&gt;
+                </code></pre>
+                <h3>Operating System Tuning</h3>
+                <p><strong>Linux file limits:</strong></p>
+                <pre><code class="language-bash"># /etc/security/limits.conf
+                www-data soft nofile 10000
+                www-data hard nofile 10000
+                </code></pre>
+                <p><strong>Apply immediately:</strong></p>
+                <pre><code class="language-bash">sudo sysctl -w fs.file-max=100000
+                </code></pre>
+                <section></section><section><h2>WordPress Optimization</h2>
+                <h3>Object Caching</h3>
+                <p>Install and configure object caching for significant performance gains:</p>
+                <h4>Redis (Recommended)</h4>
+                <pre><code class="language-bash"># Install Redis
+                sudo apt install redis-server
+
+                # Install PHP Redis extension
+                sudo apt install php-redis
+
+                # Restart services
+                sudo systemctl restart redis-server
+                sudo systemctl restart php7.4-fpm
+                </code></pre>
+                <p>Install WordPress Redis plugin:</p>
+                <pre><code class="language-bash">wp plugin install redis-cache --activate
+                wp redis enable
+                </code></pre>
+                <h4>Memcached (Alternative)</h4>
+                <pre><code class="language-bash"># Install Memcached
+                sudo apt install memcached php-memcached
+
+                # Restart services
+                sudo systemctl restart memcached
+                sudo systemctl restart php7.4-fpm
+                </code></pre>
+                <p>Install WordPress Memcached plugin:</p>
+                <pre><code class="language-bash">wp plugin install memcached --activate
+                </code></pre>
+                <h3>WordPress Configuration</h3>
+                <p>Edit <code>wp-config.php</code>:</p>
+                <pre><code class="language-php">// Increase memory limit
+                define(&#39;WP_MEMORY_LIMIT&#39;, &#39;256M&#39;);
+                define(&#39;WP_MAX_MEMORY_LIMIT&#39;, &#39;512M&#39;);
+
+                // Disable post revisions (saves DB space)
+                define(&#39;WP_POST_REVISIONS&#39;, 5);
+                define(&#39;AUTOSAVE_INTERVAL&#39;, 300); // 5 minutes
+
+                // Enable debugging only in development
+                define(&#39;WP_DEBUG&#39;, false);
+                define(&#39;WP_DEBUG_LOG&#39;, false);
+                define(&#39;WP_DEBUG_DISPLAY&#39;, false);
+
+                // Use real cron instead of WP-Cron
+                define(&#39;DISABLE_WP_CRON&#39;, true);
+
+                // Enable object cache
+                define(&#39;WP_CACHE&#39;, true);
+
+                // Compress files
+                define(&#39;COMPRESS_CSS&#39;, true);
+                define(&#39;COMPRESS_SCRIPTS&#39;, true);
+                define(&#39;CONCATENATE_SCRIPTS&#39;, true);
+                define(&#39;ENFORCE_GZIP&#39;, true);
+                </code></pre>
+                <h3>Database Query Optimization</h3>
+                <p>Install <strong>Query Monitor</strong> plugin to identify slow queries:</p>
+                <pre><code class="language-bash">wp plugin install query-monitor --activate
+                </code></pre>
+                <p>Review the slowest queries and optimize them.</p>
+                <section></section><section><h2>Plugin Settings Optimization</h2>
+                <h3>Main Settings</h3>
+                <p><strong>For High Performance:</strong></p>
+                <pre><code>Main Switch: ON
+                Enable Logging: ON (only in testing/debugging)
+                Enable Detailed Logging: OFF (use only when troubleshooting)
+                Auto Clear Logs: Daily (prevent log file from growing)
+
+                Request Timeout: 2-3 seconds (balance between speed and reliability)
+                Rule Timeout: 120 seconds (prevent runaway processes)
+
+                Max Chapters per Run: 10-20 (reduce for faster execution)
+                </code></pre>
+                <h3>Scraping Strategy</h3>
+                <p><strong>Choose the right method:</strong></p>
+                <ol>
+                <li><strong>cURL</strong> (fastest): Use for static HTML sites</li>
+                <li><strong>PhantomJS</strong> (medium): Use only when JavaScript is required</li>
+                <li><strong>Puppeteer</strong> (slowest but most reliable): Use for complex JS or Cloudflare</li>
+                <li><strong>HeadlessBrowserAPI</strong>: Use as last resort (costs money)</li>
+                </ol>
+                <p><strong>Recommendation</strong>: Start with cURL, upgrade only if needed.</p>
+                <h3>Translation Settings</h3>
+                <p><strong>Performance impact:</strong></p>
+                <ul>
+                <li><strong>Disabled</strong>: Fastest (no translation)</li>
+                <li><strong>Google API</strong>: Fast (parallel requests possible)</li>
+                <li><strong>DeepL API</strong>: Fast</li>
+                <li><strong>Microsoft API</strong>: Fast</li>
+                <li><strong>Google Free</strong>: Slowest (scraping, rate limited)</li>
+                </ul>
+                <p><strong>Recommendation</strong>: Use API services, not free scraping.</p>
+                <h3>Storage Settings</h3>
+                <p><strong>Performance comparison:</strong></p>
+                <ol>
+                <li><strong>Local</strong>: Fastest (no network latency)</li>
+                <li><strong>Amazon S3</strong>: Medium (network upload)</li>
+                <li><strong>Imgur</strong>: Slow (API rate limits)</li>
+                <li><strong>Flickr</strong>: Slow (API rate limits)</li>
+                </ol>
+                <p><strong>Recommendation</strong>: Use local for best performance, S3 for scalability.</p>
+                <section></section><section><h2>Database Optimization</h2>
+                <h3>Regular Maintenance</h3>
+                <p><strong>Weekly tasks:</strong></p>
+                <pre><code class="language-bash"># Optimize tables
+                wp db optimize
+
+                # Repair tables (if needed)
+                wp db repair
+
+                # Clean up
+                wp transient delete --all
+                wp post delete $(wp post list --post_status=trash --format=ids) --force
+                </code></pre>
+                <p><strong>Monthly tasks:</strong></p>
+                <pre><code class="language-bash"># Full database optimization
+                mysqlcheck -u root -p --auto-repair --optimize --all-databases
+
+                # Remove old revisions
+                wp post delete $(wp post list --post_type=revision --format=ids) --force
+                </code></pre>
+                <h3>Indexing</h3>
+                <p>Add custom indexes for frequently queried meta:</p>
+                <pre><code class="language-sql">-- Speed up manga lookups by import slug
+                ALTER TABLE wp_postmeta 
+                ADD INDEX idx_manga_import_slug (meta_key, meta_value(191));
+
+                -- Speed up chapter queries
+                ALTER TABLE wp_postmeta 
+                ADD INDEX idx_chapter_index (meta_key, meta_value(50));
+                </code></pre>
+                <h3>Database Caching</h3>
+                <p>Use MySQL/MariaDB query cache:</p>
+                <pre><code class="language-ini">; /etc/mysql/my.cnf or /etc/mysql/mariadb.conf.d/50-server.cnf
+
+                [mysqld]
+                query_cache_type = 1
+                query_cache_size = 128M
+                query_cache_limit = 2M
+
+                # InnoDB settings
+                innodb_buffer_pool_size = 1G
+                innodb_log_file_size = 256M
+                innodb_flush_log_at_trx_commit = 2
+                innodb_flush_method = O_DIRECT
+                </code></pre>
+                <p>Restart MySQL:</p>
+                <pre><code class="language-bash">sudo systemctl restart mysql
+                </code></pre>
+                <section></section><section><h2>Network &amp; Scraping Optimization</h2>
+                <h3>Connection Pooling</h3>
+                <p>Reuse HTTP connections when scraping multiple chapters:</p>
+                <pre><code class="language-php">// In plugin code (advanced)
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_FORBID_REUSE, false);
+                curl_setopt($ch, CURLOPT_FRESH_CONNECT, false);
+                </code></pre>
+                <h3>Parallel Downloads</h3>
+                <p>For multiple images, consider parallel downloads:</p>
+                <pre><code class="language-bash"># Using GNU Parallel (advanced - requires code modification)
+                cat image_urls.txt | parallel -j 4 wget {}
+                </code></pre>
+                <h3>DNS Caching</h3>
+                <p>Install local DNS cache:</p>
+                <pre><code class="language-bash">sudo apt install dnsmasq
+                </code></pre>
+                <p>Configure to cache DNS for 24 hours.</p>
+                <h3>Proxy Rotation</h3>
+                <p>Use proxy rotation for better performance and avoiding bans:</p>
+                <p><strong>Setup:</strong></p>
+                <ol>
+                <li>Get a pool of proxies (residential preferred)</li>
+                <li>Configure in plugin: <code>proxy1:8080,proxy2:8080,proxy3:8080</code></li>
+                <li>Plugin automatically rotates through list</li>
+                </ol>
+                <p><strong>Tip</strong>: Use datacenter proxies for speed, residential for reliability.</p>
+                <section></section><section><h2>Storage Optimization</h2>
+                <h3>Image Optimization</h3>
+                <p><strong>Install ImageMagick:</strong></p>
+                <pre><code class="language-bash">sudo apt install imagemagick php-imagick
+                </code></pre>
+                <p><strong>Optimize images on upload:</strong></p>
+                <pre><code class="language-bash"># Create a script to optimize existing images
+                find wp-content/uploads/manga -name &quot;*.jpg&quot; -exec jpegoptim --max=85 {} \;
+                find wp-content/uploads/manga -name &quot;*.png&quot; -exec optipng -o2 {} \;
+                </code></pre>
+                <p><strong>Add to crontab for automatic optimization:</strong></p>
+                <pre><code class="language-bash">0 2 * * * find /path/to/wp-content/uploads/manga -name &quot;*.jpg&quot; -mtime -1 -exec jpegoptim --max=85 {} \;
+                </code></pre>
+                <h3>WebP Conversion</h3>
+                <p>Convert images to WebP for better compression:</p>
+                <pre><code class="language-bash"># Install WebP tools
+                sudo apt install webp
+
+                # Convert script
+                for file in *.jpg; do
+                    cwebp -q 80 &quot;$file&quot; -o &quot;${file%.jpg}.webp&quot;
+                done
+                </code></pre>
+                <h3>CDN Integration</h3>
+                <p><strong>CloudFlare (Free):</strong></p>
+                <ol>
+                <li>Add your site to CloudFlare</li>
+                <li>Configure DNS</li>
+                <li>Enable &quot;Auto Minify&quot; and &quot;Polish&quot;</li>
+                <li>Set browser cache TTL to 1 month</li>
+                </ol>
+                <p><strong>Amazon CloudFront:</strong></p>
+                <ol>
+                <li>Create CloudFront distribution</li>
+                <li>Point origin to your S3 bucket or domain</li>
+                <li>Configure cache behaviors</li>
+                <li>Update Madara settings to use CloudFront URLs</li>
+                </ol>
+                <h3>Filesystem Optimization</h3>
+                <p><strong>Use SSD:</strong> Manga sites are I/O intensive. SSD provides 10-100x improvement.</p>
+                <p><strong>Mount options</strong> for manga storage:</p>
+                <pre><code class="language-bash"># /etc/fstab
+                /dev/sda1 /var/www/html ext4 noatime,nodiratime 0 0
+                </code></pre>
+                <p>This reduces write operations.</p>
+                <section></section><section><h2>Monitoring &amp; Profiling</h2>
+                <h3>Server Monitoring</h3>
+                <p><strong>Install monitoring tools:</strong></p>
+                <pre><code class="language-bash"># htop for process monitoring
+                sudo apt install htop
+
+                # iotop for I/O monitoring
+                sudo apt install iotop
+
+                # nethogs for network monitoring
+                sudo apt install nethogs
+                </code></pre>
+                <p><strong>Monitor during scraping:</strong></p>
+                <pre><code class="language-bash"># CPU and RAM
+                htop
+
+                # Disk I/O
+                sudo iotop
+
+                # Network usage
+                sudo nethogs
+                </code></pre>
+                <h3>Application Performance Monitoring</h3>
+                <p><strong>Install and configure New Relic (optional):</strong></p>
+                <ol>
+                <li>Sign up at newrelic.com</li>
+                <li>Install PHP agent</li>
+                <li>Monitor performance metrics</li>
+                <li>Identify bottlenecks</li>
+                </ol>
+                <p><strong>Or use Query Monitor plugin</strong> (free):</p>
+                <pre><code class="language-bash">wp plugin install query-monitor --activate
+                </code></pre>
+                <h3>Log Analysis</h3>
+                <p><strong>Analyze plugin logs:</strong></p>
+                <pre><code class="language-bash"># Count errors
+                grep &quot;ERROR&quot; wp-content/ums_info.log | wc -l
+
+                # Find slow operations
+                grep &quot;took.*seconds&quot; wp-content/ums_info.log | sort -t: -k2 -n
+
+                # Most common errors
+                grep &quot;ERROR&quot; wp-content/ums_info.log | cut -d] -f3 | sort | uniq -c | sort -rn | head -10
+                </code></pre>
+                <h3>Performance Benchmarking</h3>
+                <p><strong>Test scraping speed:</strong></p>
+                <pre><code class="language-bash"># Time a single rule execution
+                time wp eval &#39;ums_run_rule(5, &quot;manga&quot;);&#39;
+
+                # Benchmark database queries
+                wp db query &quot;SHOW PROFILES;&quot; --allow-root
+                </code></pre>
+                <p><strong>Monitor page load times:</strong></p>
+                <pre><code class="language-bash"># Install and use Apache Bench
+                ab -n 100 -c 10 https://yoursite.com/manga/one-piece/
+                </code></pre>
+                <section></section><section><h2>Cron Optimization</h2>
+                <h3>System Cron Setup</h3>
+                <p><strong>Optimal configuration:</strong></p>
+                <pre><code class="language-bash"># /etc/crontab
+
+                # Run WP-Cron every minute
+                * * * * * www-data cd /var/www/html &amp;&amp; wp cron event run --due-now --quiet
+
+                # Or using wget
+                * * * * * www-data wget -q -O - https://yoursite.com/wp-cron.php?doing_wp_cron &gt;/dev/null 2&gt;&amp;1
+                </code></pre>
+                <h3>Stagger Rule Execution</h3>
+                <p><strong>Avoid running all rules at once:</strong></p>
+                <p>Instead of:</p>
+                <ul>
+                <li>Rule 1: Every 24 hours at 00:00</li>
+                <li>Rule 2: Every 24 hours at 00:00</li>
+                <li>Rule 3: Every 24 hours at 00:00</li>
+                </ul>
+                <p>Use:</p>
+                <ul>
+                <li>Rule 1: Every 24 hours (starting at 00:00)</li>
+                <li>Rule 2: Every 24 hours (starting at 08:00)</li>
+                <li>Rule 3: Every 24 hours (starting at 16:00)</li>
+                </ul>
+                <p>This spreads the load throughout the day.</p>
+                <h3>Cron Locking</h3>
+                <p>The plugin uses file locking to prevent concurrent execution. Ensure:</p>
+                <pre><code class="language-bash"># Permissions on plugin directory
+                sudo chown -R www-data:www-data /var/www/html/wp-content/plugins/ultimate-manga-scraper
+                sudo chmod -R 755 /var/www/html/wp-content/plugins/ultimate-manga-scraper
+                </code></pre>
+                <section></section><section><h2>Scaling Strategies</h2>
+                <h3>Horizontal Scaling</h3>
+                <p><strong>For very large operations:</strong></p>
+                <ol>
+                <li><strong>Separate scraping server</strong>: Run scraper on dedicated server, sync to production</li>
+                <li><strong>Load balancer</strong>: Distribute web traffic across multiple frontend servers</li>
+                <li><strong>Database replication</strong>: Master for writes, slaves for reads</li>
+                </ol>
+                <h3>Vertical Scaling</h3>
+                <p><strong>When to upgrade:</strong></p>
+                <ul>
+                <li>CPU usage consistently &gt;80%</li>
+                <li>RAM usage consistently &gt;80%</li>
+                <li>Disk I/O wait &gt;10%</li>
+                <li>Network bandwidth saturated</li>
+                </ul>
+                <p><strong>Upgrade path:</strong></p>
+                <ol>
+                <li>Start: 1 core, 1GB RAM</li>
+                <li>Small site: 2 cores, 2GB RAM</li>
+                <li>Medium site: 4 cores, 4GB RAM</li>
+                <li>Large site: 8+ cores, 8GB+ RAM</li>
+                </ol>
+                <section></section><section><h2>Best Practices Summary</h2>
+                <h3>Do&#39;s</h3>
+                <p>✓ Use system cron instead of WP-Cron
+                ✓ Enable object caching (Redis/Memcached)
+                ✓ Use SSD storage for database and uploads
+                ✓ Optimize images before storage
+                ✓ Use CDN for serving images
+                ✓ Monitor server resources regularly
+                ✓ Keep WordPress and plugins updated
+                ✓ Regular database optimization
+                ✓ Stagger scraping schedules
+                ✓ Use appropriate scraping method (cURL vs headless)</p>
+                <h3>Don&#39;ts</h3>
+                <p>✗ Don&#39;t run all rules simultaneously
+                ✗ Don&#39;t use detailed logging in production
+                ✗ Don&#39;t use free translation services for high volume
+                ✗ Don&#39;t scrape more than needed
+                ✗ Don&#39;t ignore log warnings
+                ✗ Don&#39;t use shared hosting for production
+                ✗ Don&#39;t store excessive post revisions
+                ✗ Don&#39;t skip regular backups
+                ✗ Don&#39;t use headless browsers unnecessarily
+                ✗ Don&#39;t set request timeout too low (causes failures)</p>
+                <section></section><section><h2>Troubleshooting Performance Issues</h2>
+                <h3>High CPU Usage</h3>
+                <p><strong>Causes:</strong></p>
+                <ul>
+                <li>Headless browsers (PhantomJS/Puppeteer)</li>
+                <li>Too many concurrent scraping operations</li>
+                <li>Poor database indexing</li>
+                </ul>
+                <p><strong>Solutions:</strong></p>
+                <ul>
+                <li>Limit use of headless browsers</li>
+                <li>Stagger scraping schedules</li>
+                <li>Add database indexes</li>
+                <li>Upgrade CPU</li>
+                </ul>
+                <h3>High Memory Usage</h3>
+                <p><strong>Causes:</strong></p>
+                <ul>
+                <li>Large images in memory</li>
+                <li>PHP memory leaks</li>
+                <li>Too many simultaneous processes</li>
+                </ul>
+                <p><strong>Solutions:</strong></p>
+                <ul>
+                <li>Increase <code>memory_limit</code></li>
+                <li>Process images in batches</li>
+                <li>Restart PHP-FPM regularly</li>
+                <li>Upgrade RAM</li>
+                </ul>
+                <h3>Slow Database Queries</h3>
+                <p><strong>Causes:</strong></p>
+                <ul>
+                <li>Missing indexes</li>
+                <li>Large tables without optimization</li>
+                <li>No query caching</li>
+                </ul>
+                <p><strong>Solutions:</strong></p>
+                <ul>
+                <li>Add indexes (see Database Optimization)</li>
+                <li>Regular OPTIMIZE TABLE</li>
+                <li>Enable query cache</li>
+                <li>Consider database replication</li>
+                </ul>
+                <h3>Network Bottlenecks</h3>
+                <p><strong>Causes:</strong></p>
+                <ul>
+                <li>Slow source sites</li>
+                <li>Bandwidth limitations</li>
+                <li>Too many simultaneous connections</li>
+                </ul>
+                <p><strong>Solutions:</strong></p>
+                <ul>
+                <li>Use faster proxies</li>
+                <li>Limit concurrent downloads</li>
+                <li>Upgrade network bandwidth</li>
+                <li>Use CDN for serving</li>
+                </ul>
+                <section><h2>Conclusion</h2>
+                <p>Performance tuning is an ongoing process. Start with the basics (caching, cron, storage) and progressively optimize based on your specific bottlenecks. Monitor regularly and adjust as your site grows.</p>
+                <p><strong>Quick Wins:</strong></p>
+                <ol>
+                <li>Enable object caching (Redis)</li>
+                <li>Use system cron</li>
+                <li>Optimize images</li>
+                <li>Use SSD storage</li>
+                <li>Configure OPcache</li>
+                </ol>
+                <p>These five changes alone can improve performance by 5-10x for most installations.</p>
+                </section>
+            </div>
+            
+            <footer class="page-footer">
+                <p>&copy; 2024 Ultimate Web Novel & Manga Scraper - Released into the Public Domain</p>
+                <p>
+                    <a href="https://github.com/druvx13/ultimate-manga-scraper">GitHub</a> •
+                    <a href="security.html#disclosure">Report Security Issue</a> •
+                    <a href="changelog.html">Changelog</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
