@@ -1798,8 +1798,8 @@ function ums_get_web_page($url, $ua = '', $use_phantom = '0', $phantom_wait = ''
                     CURLOPT_CONNECTTIMEOUT => 10,
                     CURLOPT_TIMEOUT => 120,
                     CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_SSL_VERIFYHOST => 0,
-                    CURLOPT_SSL_VERIFYPEER => 0,
+                    CURLOPT_SSL_VERIFYHOST => 2,
+                    CURLOPT_SSL_VERIFYPEER => true,
                     CURLOPT_COOKIE => 'isAdult=1'
                 );
                 $ch         = curl_init($url);
@@ -1999,8 +1999,8 @@ function ums_get_manga_page($url)
         CURLOPT_CONNECTTIMEOUT => 10,
         CURLOPT_TIMEOUT => 120,
         CURLOPT_MAXREDIRS => 10,
-        CURLOPT_SSL_VERIFYHOST => 0,
-        CURLOPT_SSL_VERIFYPEER => 0,
+        CURLOPT_SSL_VERIFYHOST => 2,
+        CURLOPT_SSL_VERIFYPEER => true,
         CURLOPT_COOKIE => 'webstickynode=c24fa7357dc1dc361a8957736ebdb93c;wd=2133x1087;presence=EDvF3EtimeF1680850190EuserFA21B01157412606A2EstateFDutF0CEchF_7bCC;fr=0M12KGXSyvzIKQzQc.AWWEs8ckc4zZ1cvV60Dtu9wq6Nw.BkL70H.ia.AAA.0.0.BkL70H.AWXuzvceS5I;c_user=100001157412606;usida=eyJ2ZXIiOjEsImlkIjoiQXJzcWdiMDExNnQwOG0iLCJ0aW1lIjoxNjgwODUwMTg4fQ%3D%3D;dpr=0.8999999761581421;xs=44%3AYKtoDsOJnuA45g%3A2%3A1662217638%3A-1%3A6679%3A%3AAcWh5qXW2KHRwlWehThVlw_TX2bQy1OCtjcqL1AkH0AfYQ'
     );
     $ch         = curl_init($url);
@@ -4915,7 +4915,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                         }
                                     }
                                 }
-                                $post_args['description'] = str_ireplace('wuxiaworld.site', $_SERVER['HTTP_HOST'], $post_args['description']);
+                                $post_args['description'] = str_ireplace('wuxiaworld.site', parse_url(home_url(), PHP_URL_HOST), $post_args['description']);
                                 $arr = ums_spin_and_translate($post_args['title'], $post_args['description'], $rule_translate, 'en');
                                 if($arr === false)
                                 {
@@ -6587,7 +6587,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                         }
                                     }
                                 }
-                                $post_args['description'] = str_ireplace('novlove.com', $_SERVER['HTTP_HOST'], $post_args['description']);
+                                $post_args['description'] = str_ireplace('novlove.com', parse_url(home_url(), PHP_URL_HOST), $post_args['description']);
                                 $arr = ums_spin_and_translate($post_args['title'], $post_args['description'], $rule_translate, 'en');
                                 if($arr === false)
                                 {
@@ -7753,7 +7753,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                         }
                                     }
                                 }
-                                $post_args['description'] = str_ireplace('newnovel.org', $_SERVER['HTTP_HOST'], $post_args['description']);
+                                $post_args['description'] = str_ireplace('newnovel.org', parse_url(home_url(), PHP_URL_HOST), $post_args['description']);
                                 $arr = ums_spin_and_translate($post_args['title'], $post_args['description'], $rule_translate, 'en');
                                 if($arr === false)
                                 {
@@ -9298,7 +9298,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                         }
                                     }
                                 }
-                                $post_args['description'] = str_ireplace($domain, $_SERVER['HTTP_HOST'], $post_args['description']);
+                                $post_args['description'] = str_ireplace($domain, parse_url(home_url(), PHP_URL_HOST), $post_args['description']);
                                 $arr = ums_spin_and_translate($post_args['title'], $post_args['description'], $rule_translate, 'en');
                                 if($arr === false)
                                 {
@@ -10669,7 +10669,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                 $post_args['views'] = $viewsm;
                                 $post_args['ratings'] = $xrating;
                                 $post_args['tags'] = strip_tags( $xtags );
-                                $post_args['description'] = str_ireplace($domain, $_SERVER['HTTP_HOST'], $post_args['description']);
+                                $post_args['description'] = str_ireplace($domain, parse_url(home_url(), PHP_URL_HOST), $post_args['description']);
                                 $arr = ums_spin_and_translate($post_args['title'], $post_args['description'], $rule_translate, 'en');
                                 if($arr === false)
                                 {
@@ -11602,8 +11602,8 @@ function ums_translate($title, $content, $from, $to)
                 CURLOPT_CONNECTTIMEOUT => 10,
                 CURLOPT_TIMEOUT => 60,
                 CURLOPT_MAXREDIRS => 10,
-                CURLOPT_SSL_VERIFYHOST => 0,
-                CURLOPT_SSL_VERIFYPEER => 0
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_SSL_VERIFYPEER => true
             );
             $ch = curl_init();
             if ($ch === FALSE) {

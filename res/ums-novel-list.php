@@ -815,7 +815,9 @@
         $rules_per_page = get_option('ums_posts_per_page', 10);
         if(isset($_POST['posts_per_page']))
         {
-            update_option('ums_posts_per_page', $_POST['posts_per_page']);
+            $posts_per_page = intval($_POST['posts_per_page']);
+            $posts_per_page = max(1, min($posts_per_page, 100)); // Clamp between 1 and 100
+            update_option('ums_posts_per_page', $posts_per_page);
         }
        check_admin_referer('ums_save_rules', '_umsr_nonce');
        $data2 = $_POST['ums_novel_list'];
