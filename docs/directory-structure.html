@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete directory structure reference">
+    <title>Directory Structure - Ultimate Manga Scraper Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-book-reader"></i>
+                <span>Ultimate Manga Scraper</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="api-reference.html">API Reference</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Directory Structure</h1>
+            <p>Complete directory structure reference</p>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="content-page">
+        <div class="container">
+            <div class="content">
+                <h2>Directory Structure</h2>
+
+This document provides a detailed overview of the file and directory structure of the <strong>Ultimate Web Novel & Manga Scraper</strong> repository.
+
+<h3>Root Directory</h3>
+
+<table>
+<thead><tr><th>File</th><th>Purpose</th></tr></thead>
+<tbody><tr><td><code>ultimate-manga-scraper.php</code></td><td><strong>Core Plugin File</strong>. Handles initialization, hooks, cron scheduling, scraping logic, settings pages, and database interactions. Effectively the "God Object" of the plugin.</td></tr><tr><td><code>index.php</code></td><td>Silence is golden. Prevents directory listing.</td></tr><tr><td><code>LICENSE</code></td><td>Legal terms (Unlicense + Disclaimer).</td></tr><tr><td><code>README.md</code></td><td>General documentation.</td></tr><tr><td><code>sitemap.txt</code></td><td>Sitemap template or artifact.</td></tr><tr><td><code>sitemap_box.txt</code></td><td>Sitemap template or artifact.</td></tr><tr><td><code>sitemap_vip.txt</code></td><td>Sitemap template or artifact.</td></tr><tr><td><code>NOTICE.md</code></td><td>Third-party software attributions.</td></tr><tr><td><code>SECURITY_DISCLOSURE.md</code></td><td>Security policy.</td></tr><tr><td><code>CHANGELOG.md</code></td><td>Version history.</td></tr><tr><td><code>ARCHITECTURE.md</code></td><td>System architecture documentation.</td></tr><tr><td><code>DATA_FLOW.md</code></td><td>Data flow documentation.</td></tr><tr><td><code>SECURITY.md</code></td><td>Security analysis documentation.</td></tr><tr><td><code>CONFIGURATION.md</code></td><td>Configuration reference.</td></tr><tr><td><code>DEPLOYMENT.md</code></td><td>Deployment guide.</td></tr><tr><td><code>TROUBLESHOOTING.md</code></td><td>Troubleshooting guide.</td></tr><tr><td><code>DOCUMENTATION_INDEX.md</code></td><td>Index of all documentation.</td></tr></tbody>
+</table>
+<h3><code>includes/</code></h3>
+<em>Contains helper classes for specific integrations.</em>
+
+<table>
+<thead><tr><th>File</th><th>Purpose</th></tr></thead>
+<tbody><tr><td><code>class-madara-fetcher.php</code></td><td><strong>Madara Theme Integration</strong>. Handles fetching manga lists and details specifically for Madara-based sites using AJAX endpoints.</td></tr><tr><td><code>class-madara-handler.php</code></td><td><strong>Admin Handler</strong>. Manages the "Madara Enhancements" admin page, AJAX actions for adding manga, and searching.</td></tr></tbody>
+</table>
+<h3><code>res/</code></h3>
+<em>Contains resources, libraries, and sub-modules.</em>
+
+<table>
+<thead><tr><th>File/Directory</th><th>Purpose</th></tr></thead>
+<tbody><tr><td><code>simple_html_dom.php</code></td><td><strong>Library</strong>. PHP Simple HTML DOM Parser for parsing scraped HTML.</td></tr><tr><td><code>ImageResize/</code></td><td><strong>Library</strong>. PHP class for resizing images.</td></tr><tr><td><code>mangafox-master/</code></td><td><strong>Library</strong>. Specialized scraper library for FanFox (MangaFox). Contains its own <code>composer.json</code> and structure.</td></tr><tr><td><code>phantomjs/</code></td><td><strong>Binary/Script</strong>. Contains <code>phantom.js</code> script used by the PhantomJS executable.</td></tr><tr><td><code>puppeteer/</code></td><td><strong>Binary/Script</strong>. Contains <code>puppeteer.js</code> node script used for headless scraping.</td></tr><tr><td><code>ums-main.php</code></td><td><strong>Admin UI</strong>. Settings page layout.</td></tr><tr><td><code>ums-rules-list.php</code></td><td><strong>Admin UI</strong>. Logic for displaying and managing scraping rules (Manga).</td></tr><tr><td><code>ums-novel-list.php</code></td><td><strong>Admin UI</strong>. Logic for displaying and managing scraping rules (Novels).</td></tr><tr><td><code>ums-logs.php</code></td><td><strong>Admin UI</strong>. Activity logging interface.</td></tr><tr><td><code>ums-translator.php</code></td><td><strong>Logic</strong>. Google Translate API integration (Free/Scraping method).</td></tr><tr><td><code>ums-translator-microsoft.php</code></td><td><strong>Logic</strong>. Microsoft Translator API integration.</td></tr><tr><td><code>UMSJavaScriptUnpacker.php</code></td><td><strong>Logic</strong>. Decodes packed JavaScript often found on manga sites (eval/packer).</td></tr><tr><td><code>synonyms.dat</code></td><td><strong>Data</strong>. Data file for synonyms (possibly for text spinning).</td></tr><tr><td><code>other/</code></td><td><strong>Misc</strong>. Contains <code>plugin-dash.php</code> (dashboard widgets) and generic JS scripts.</td></tr></tbody>
+</table>
+<h3><code>images/</code></h3>
+<em>Plugin assets.</em>
+
+<table>
+<thead><tr><th>File</th><th>Purpose</th></tr></thead>
+<tbody><tr><td><code>icon.png</code></td><td>Plugin icon.</td></tr><tr><td><code>image-placeholder.jpg</code></td><td>Fallback image for missing manga covers.</td></tr><tr><td><code>running.gif</code>, <code>ok.gif</code>, <code>failed.gif</code></td><td>Status indicators for the admin UI.</td></tr></tbody>
+</table>
+<h3><code>scripts/</code></h3>
+<em>Frontend and Admin JavaScript.</em>
+
+<table>
+<thead><tr><th>File</th><th>Purpose</th></tr></thead>
+<tbody><tr><td><code>main.js</code></td><td>Core admin JS.</td></tr><tr><td><code>madara-enhancements.js</code></td><td>JS for the "Madara Enhancements" tab (AJAX loading/adding).</td></tr><tr><td><code>footer.js</code></td><td>JS loaded in the admin footer.</td></tr></tbody>
+</table>
+<h3><code>styles/</code></h3>
+<em>CSS Stylesheets.</em>
+
+<table>
+<thead><tr><th>File</th><th>Purpose</th></tr></thead>
+<tbody><tr><td><code>ums-rules.css</code></td><td>Styling for the rules list tables.</td></tr><tr><td><code>ums-browser.css</code></td><td>Styling for the embedded browser or scrapers.</td></tr><tr><td><code>coderevolution-style.css</code></td><td>Generic plugin styles.</td></tr></tbody>
+</table>
+<h3><code>languages/</code></h3>
+<em>Translation files.</em>
+
+<table>
+<thead><tr><th>File</th><th>Purpose</th></tr></thead>
+<tbody><tr><td><code>ultimate-manga-scraper.pot</code></td><td>POT template for internationalization.</td></tr></tbody>
+</table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Ultimate Manga Scraper</h3>
+                    <p>Institutional-grade WordPress plugin for manga and web novel content aggregation.</p>
+                    <p class="license">Licensed under LUCA Free License v1.0</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="getting-started.html">Getting Started</a></li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper/issues" target="_blank">Issue Tracker</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="license.html">License</a></li>
+                        <li><a href="security.html#disclosure">Security Disclosure</a></li>
+                        <li><a href="notice.html">Third-Party Notices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 NIKOL. Licensed under LUCA Free License v1.0.</p>
+                <p>Built with <i class="fas fa-heart"></i> for the manga community</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script src="js/main.js"></script>
+</body>
+</html>

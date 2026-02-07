@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Installation and deployment guide">
+    <title>Deployment - Ultimate Manga Scraper Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-book-reader"></i>
+                <span>Ultimate Manga Scraper</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="api-reference.html">API Reference</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Deployment</h1>
+            <p>Installation and deployment guide</p>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="content-page">
+        <div class="container">
+            <div class="content">
+                <h2>Deployment Guide</h2>
+
+<h3>System Requirements</h3>
+
+<ul>
+<li><strong>WordPress</strong>: Version 5.0 or higher.</li>
+<li><strong>PHP</strong>: Version 7.2 or higher (7.4+ recommended).</li>
+<li><strong>Theme</strong>: <strong>Madara</strong> (By MangaBooth). This plugin is strictly an add-on for Madara.</li>
+<li><strong>Plugins</strong>:</li>
+</ul>
+<p>    *   <strong>Madara Core</strong> (<code>WP_MANGA_STORAGE</code> class must be available).</p>
+<ul>
+<li><strong>Extensions</strong>:</li>
+</ul>
+<p>    *   <code>cURL</code></p>
+<p>    *   <code>DOM</code> / <code>libxml</code></p>
+<p>    *   <code>mbstring</code></p>
+<p>    *   <code>json</code></p>
+
+<h3>Server Requirements (Optional but Recommended)</h3>
+
+For advanced scraping features (Headless Browser):
+
+<ul>
+<li><strong>Node.js</strong>: Required for Puppeteer support.</li>
+<li><strong>PhantomJS</strong>: Binary installed and executable by the PHP user (Legacy).</li>
+<li><strong>Exec Functions</strong>: PHP <code>shell_exec</code> must be enabled in <code>php.ini</code> (remove from <code>disable_functions</code>) if using headless browsers.</li>
+</ul>
+
+<h3>Installation Steps</h3>
+
+1.  <strong>Upload</strong>:
+    *   Upload the <code>ultimate-manga-scraper</code> folder to <code>/wp-content/plugins/</code>.
+    *   OR upload the <code>.zip</code> file via <strong>Plugins -> Add New -> Upload</strong>.
+2.  <strong>Activate</strong>:
+    *   Activate via the WordPress Plugins menu.
+    *   Ensure the <strong>Madara</strong> theme is active first.
+3.  <strong>Verify Permissions</strong>:
+    *   Ensure the web server (e.g., <code>www-data</code>) has write permissions to:
+        *   <code>/wp-content/uploads/</code> (For storing images).
+        *   <code>/wp-content/</code> (For logs).
+        *   <code>/wp-content/plugins/ultimate-manga-scraper/</code> (For temp files/lock files).
+
+<h3>Configuration</h3>
+
+1.  Go to <strong>Ultimate Web Novel & Manga Scraper -> Main Settings</strong>.
+2.  <strong>Enable Plugin</strong>: Set "Main Switch" to <strong>On</strong>.
+3.  <strong>Storage</strong>: Select "Local" (default).
+4.  <strong>Save Settings</strong>.
+
+<h3>Cron Setup</h3>
+
+The plugin uses WP-Cron. For high-volume scraping, it is highly recommended to disable the default WP-Cron (which runs on page load) and set up a real system cron.
+
+1.  Edit <code>wp-config.php</code>:
+    <pre><code class="language-php">    define('DISABLE_WP_CRON', true);
+    </code></pre>
+<p>2.  Add crontab entry (run every minute):</p>
+    <pre><code class="language-bash">    <em> </em> <em> </em> * wget -q -O - http://your-site.com/wp-cron.php?doing_wp_cron >/dev/null 2>&1
+    </code></pre>
+
+<h3>Post-Deployment Verification</h3>
+
+1.  Create a test rule (e.g., scrape one chapter of a manga).
+2.  Click "Run This Rule Now".
+3.  Check <strong>Activity & Logging</strong> tab for success messages.
+4.  Verify the Manga appears in <strong>Manga -> All Manga</strong>.
+5.  Verify images are loaded in the chapter viewer.
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Ultimate Manga Scraper</h3>
+                    <p>Institutional-grade WordPress plugin for manga and web novel content aggregation.</p>
+                    <p class="license">Licensed under LUCA Free License v1.0</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="getting-started.html">Getting Started</a></li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper/issues" target="_blank">Issue Tracker</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="license.html">License</a></li>
+                        <li><a href="security.html#disclosure">Security Disclosure</a></li>
+                        <li><a href="notice.html">Third-Party Notices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 NIKOL. Licensed under LUCA Free License v1.0.</p>
+                <p>Built with <i class="fas fa-heart"></i> for the manga community</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script src="js/main.js"></script>
+</body>
+</html>

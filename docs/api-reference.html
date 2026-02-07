@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete API documentation with hooks, filters, and functions">
+    <title>API Reference - Ultimate Manga Scraper Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-book-reader"></i>
+                <span>Ultimate Manga Scraper</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="api-reference.html">API Reference</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>API Reference</h1>
+            <p>Complete API documentation with hooks, filters, and functions</p>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="content-page">
+        <div class="container">
+            <div class="content">
+                <h2>API Reference</h2>
+
+<h3>WordPress Hooks & Filters</h3>
+
+The Ultimate Web Novel & Manga Scraper provides several hooks and filters for developers to extend or modify functionality.
+
+<h4>Actions</h4>
+
+<h5><code>ums_before_scrape</code></h5>
+Fires before a scraping rule is executed.
+
+<pre><code class="language-php">do_action('ums_before_scrape', $rule_id, $rule_type);
+</code></pre>
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$rule_id</code> (int): The ID of the rule being executed</li>
+<li><code>$rule_type</code> (string): Type of rule ('manga', 'novel', 'generic')</li>
+</ul>
+
+<strong>Example:</strong>
+<pre><code class="language-php">add_action('ums_before_scrape', 'my_custom_function', 10, 2);
+function my_custom_function($rule_id, $rule_type) {
+    // Your code here
+    error_log("Starting scrape for rule ID: $rule_id");
+}
+</code></pre>
+
+<h5><code>ums_after_scrape</code></h5>
+Fires after a scraping rule completes execution.
+
+<pre><code class="language-php">do_action('ums_after_scrape', $rule_id, $rule_type, $result);
+</code></pre>
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$rule_id</code> (int): The ID of the rule that was executed</li>
+<li><code>$rule_type</code> (string): Type of rule</li>
+<li><code>$result</code> (array): Result data from the scraping operation</li>
+</ul>
+
+<h5><code>ums_chapter_created</code></h5>
+Fires when a new chapter is created.
+
+<pre><code class="language-php">do_action('ums_chapter_created', $post_id, $chapter_data);
+</code></pre>
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$post_id</code> (int): WordPress post ID of the parent manga/novel</li>
+<li><code>$chapter_data</code> (array): Chapter metadata (title, slug, images, etc.)</li>
+</ul>
+
+<h4>Filters</h4>
+
+<h5><code>ums_scraper_user_agent</code></h5>
+Filters the User-Agent string used for HTTP requests.
+
+<pre><code class="language-php">apply_filters('ums_scraper_user_agent', $user_agent);
+</code></pre>
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$user_agent</code> (string): Default User-Agent string</li>
+</ul>
+
+<strong>Returns:</strong>
+<ul>
+<li>(string): Modified User-Agent</li>
+</ul>
+
+<strong>Example:</strong>
+<pre><code class="language-php">add_filter('ums_scraper_user_agent', 'my_custom_user_agent');
+function my_custom_user_agent($user_agent) {
+    return 'MyCustomBot/1.0';
+}
+</code></pre>
+
+<h5><code>ums_translation_text</code></h5>
+Filters text before translation.
+
+<pre><code class="language-php">apply_filters('ums_translation_text', $text, $source_lang, $target_lang);
+</code></pre>
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$text</code> (string): Original text</li>
+<li><code>$source_lang</code> (string): Source language code</li>
+<li><code>$target_lang</code> (string): Target language code</li>
+</ul>
+
+<strong>Returns:</strong>
+<ul>
+<li>(string): Modified text</li>
+</ul>
+
+<h5><code>ums_chapter_images</code></h5>
+Filters the array of chapter images before storage.
+
+<pre><code class="language-php">apply_filters('ums_chapter_images', $images, $chapter_slug);
+</code></pre>
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$images</code> (array): Array of image URLs</li>
+<li><code>$chapter_slug</code> (string): Chapter slug</li>
+</ul>
+
+<strong>Returns:</strong>
+<ul>
+<li>(array): Modified array of images</li>
+</ul>
+
+<h5><code>ums_request_headers</code></h5>
+Filters HTTP request headers.
+
+<pre><code class="language-php">apply_filters('ums_request_headers', $headers, $url);
+</code></pre>
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$headers</code> (array): Default request headers</li>
+<li><code>$url</code> (string): Target URL</li>
+</ul>
+
+<strong>Returns:</strong>
+<ul>
+<li>(array): Modified headers</li>
+</ul>
+
+<h3>PHP Functions</h3>
+
+<h4>Core Functions</h4>
+
+<h5><code>ums_get_web_page($url, $options = [])</code></h5>
+Fetches content from a URL using the appropriate method (cURL, PhantomJS, or Puppeteer).
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$url</code> (string): Target URL</li>
+<li><code>$options</code> (array): Optional settings</li>
+</ul>
+<p>  - <code>use_headless</code> (bool): Force headless browser</p>
+<p>  - <code>timeout</code> (int): Request timeout in seconds</p>
+<p>  - <code>headers</code> (array): Custom HTTP headers</p>
+
+<strong>Returns:</strong>
+<ul>
+<li>(string|false): HTML content or false on failure</li>
+</ul>
+
+<strong>Example:</strong>
+<pre><code class="language-php">$html = ums_get_web_page('https://example.com/manga/title', [
+    'use_headless' => true,
+    'timeout' => 30
+]);
+</code></pre>
+
+<h5><code>ums_translate($text, $target_lang, $source_lang = 'auto')</code></h5>
+Translates text using configured translation service.
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$text</code> (string): Text to translate</li>
+<li><code>$target_lang</code> (string): Target language code (e.g., 'en', 'es', 'zh-CN')</li>
+<li><code>$source_lang</code> (string): Source language code (default: 'auto')</li>
+</ul>
+
+<strong>Returns:</strong>
+<ul>
+<li>(string): Translated text</li>
+</ul>
+
+<strong>Example:</strong>
+<pre><code class="language-php">$translated = ums_translate('Hello World', 'es');
+// Returns: "Hola Mundo"
+</code></pre>
+
+<h5><code>ums_run_rule($rule_id, $rule_type)</code></h5>
+Manually executes a scraping rule.
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$rule_id</code> (int): Rule identifier</li>
+<li><code>$rule_type</code> (string): Type ('manga', 'novel', 'generic')</li>
+</ul>
+
+<strong>Returns:</strong>
+<ul>
+<li>(bool): Success status</li>
+</ul>
+
+<strong>Example:</strong>
+<pre><code class="language-php">// Run manga rule #5
+ums_run_rule(5, 'manga');
+</code></pre>
+
+<h5><code>ums_log($message, $level = 'info')</code></h5>
+Logs a message to the plugin log file.
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$message</code> (string): Message to log</li>
+<li><code>$level</code> (string): Log level ('info', 'warning', 'error')</li>
+</ul>
+
+<strong>Example:</strong>
+<pre><code class="language-php">ums_log('Custom scraping started', 'info');
+ums_log('Failed to download image', 'error');
+</code></pre>
+
+<h4>Utility Functions</h4>
+
+<h5><code>ums_repairHTML($html)</code></h5>
+Cleans and repairs malformed HTML.
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$html</code> (string): HTML content</li>
+</ul>
+
+<strong>Returns:</strong>
+<ul>
+<li>(string): Cleaned HTML</li>
+</ul>
+
+<h5><code>ums_strip_links($html, $keep_text = true)</code></h5>
+Removes or processes links from HTML content.
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$html</code> (string): HTML content</li>
+<li><code>$keep_text</code> (bool): Keep link text (default: true)</li>
+</ul>
+
+<strong>Returns:</strong>
+<ul>
+<li>(string): Processed HTML</li>
+</ul>
+
+<h5><code>ums_detect_cloudflare($html)</code></h5>
+Checks if response contains Cloudflare protection.
+
+<strong>Parameters:</strong>
+<ul>
+<li><code>$html</code> (string): HTML response</li>
+</ul>
+
+<strong>Returns:</strong>
+<ul>
+<li>(bool): True if Cloudflare detected</li>
+</ul>
+
+<h3>REST API Endpoints</h3>
+
+The plugin exposes several REST API endpoints for programmatic access.
+
+<h4>Base URL</h4>
+<pre><code class="language-">/wp-json/ums/v1/
+</code></pre>
+
+<h4>Endpoints</h4>
+
+<h5>GET <code>/rules</code></h5>
+Retrieve all scraping rules.
+
+<strong>Authentication:</strong> Required (Administrator)
+
+<strong>Response:</strong>
+<pre><code class="language-json">{
+    "success": true,
+    "rules": [
+        {
+            "id": 1,
+            "type": "manga",
+            "url": "https://example.com/manga/title",
+            "schedule": 24,
+            "active": true,
+            "last_run": "2026-02-07 08:00:00"
+        }
+    ]
+}
+</code></pre>
+
+<h5>POST <code>/rules</code></h5>
+Create a new scraping rule.
+
+<strong>Authentication:</strong> Required (Administrator)
+
+<strong>Request Body:</strong>
+<pre><code class="language-json">{
+    "type": "manga",
+    "url": "https://example.com/manga/title",
+    "schedule": 24,
+    "max_chapters": 10,
+    "active": true
+}
+</code></pre>
+
+<strong>Response:</strong>
+<pre><code class="language-json">{
+    "success": true,
+    "rule_id": 5,
+    "message": "Rule created successfully"
+}
+</code></pre>
+
+<h5>POST <code>/rules/{id}/run</code></h5>
+Trigger immediate execution of a rule.
+
+<strong>Authentication:</strong> Required (Administrator)
+
+<strong>Response:</strong>
+<pre><code class="language-json">{
+    "success": true,
+    "message": "Rule execution started"
+}
+</code></pre>
+
+<h5>DELETE <code>/rules/{id}</code></h5>
+Delete a scraping rule.
+
+<strong>Authentication:</strong> Required (Administrator)
+
+<strong>Response:</strong>
+<pre><code class="language-json">{
+    "success": true,
+    "message": "Rule deleted successfully"
+}
+</code></pre>
+
+<h3>Database Schema</h3>
+
+<h4>Options Table (<code>wp_options</code>)</h4>
+
+<h5><code>ums_Main_Settings</code></h5>
+Serialized array of global settings.
+
+<strong>Structure:</strong>
+<pre><code class="language-php">array(
+    'ums_enabled' => 'on',
+    'enable_logging' => 'on',
+    'phantomjs_path' => '/usr/bin/phantomjs',
+    'proxy_url' => '',
+    'manga_storage' => 'local',
+    // ... more settings
+)
+</code></pre>
+
+<h5><code>ums_rules_list</code></h5>
+FanFox manga scraping rules.
+
+<strong>Structure:</strong>
+<pre><code class="language-php">array(
+    1 => array(
+        'url' => 'https://fanfox.net/manga/title',
+        'schedule' => 24,
+        'active' => true,
+        'last_run' => 1638360000,
+        'max_chapters' => 10,
+        // ... more fields
+    ),
+    // ... more rules
+)
+</code></pre>
+
+<h5><code>ums_manga_generic_list</code></h5>
+Madara-based manga scraping rules (same structure as <code>ums_rules_list</code>).
+
+<h5><code>ums_novel_list</code></h5>
+Novel scraping rules (same structure).
+
+<h5><code>ums_running_list</code></h5>
+Currently executing rules (lock mechanism).
+
+<strong>Structure:</strong>
+<pre><code class="language-php">array(
+    'manga_1' => true,
+    'novel_5' => true
+)
+</code></pre>
+
+<h4>Post Meta (<code>wp_postmeta</code>)</h4>
+
+<h5><code>_manga_import_slug</code></h5>
+Original slug from source site (used for duplicate detection).
+
+<strong>Type:</strong> string
+
+<h5><code>_manga_source_url</code></h5>
+Original source URL.
+
+<strong>Type:</strong> string
+
+<h5><code>_wp_manga_chapter_type</code></h5>
+Chapter storage type ('manga' or 'text').
+
+<strong>Type:</strong> string
+
+<h3>Constants</h3>
+
+<h4>Plugin Constants</h4>
+
+<pre><code class="language-php">// Plugin version
+UMS_VERSION = '2.0.3';
+
+// Plugin directory path
+UMS_PLUGIN_DIR = '/path/to/wp-content/plugins/ultimate-manga-scraper/';
+
+// Plugin URL
+UMS_PLUGIN_URL = 'https://yoursite.com/wp-content/plugins/ultimate-manga-scraper/';
+</code></pre>
+
+<h4>Usage in Code</h4>
+
+<pre><code class="language-php">// Access plugin directory
+$template_path = UMS_PLUGIN_DIR . 'res/admin-templates/template.php';
+
+// Access plugin URL (for assets)
+$script_url = UMS_PLUGIN_URL . 'scripts/admin.js';
+</code></pre>
+
+<h3>Error Codes</h3>
+
+<h4>Common Error Messages</h4>
+
+<table>
+<thead><tr><th>Code</th><th>Message</th><th>Cause</th></tr></thead>
+<tbody><tr><td><code>UMS_ERR_001</code></td><td>"Failed to fetch URL"</td><td>Network error or invalid URL</td></tr><tr><td><code>UMS_ERR_002</code></td><td>"Cloudflare protection detected"</td><td>Target site has anti-bot protection</td></tr><tr><td><code>UMS_ERR_003</code></td><td>"PhantomJS execution failed"</td><td>Headless browser error</td></tr><tr><td><code>UMS_ERR_004</code></td><td>"Translation API error"</td><td>Invalid API key or quota exceeded</td></tr><tr><td><code>UMS_ERR_005</code></td><td>"Madara storage not available"</td><td>WP_MANGA_STORAGE class not found</td></tr><tr><td><code>UMS_ERR_006</code></td><td>"Image download failed"</td><td>Failed to fetch image from source</td></tr><tr><td><code>UMS_ERR_007</code></td><td>"Maximum execution time exceeded"</td><td>Script timeout</td></tr></tbody>
+</table>
+<h3>Examples</h3>
+
+<h4>Custom Scraper Integration</h4>
+
+<pre><code class="language-php">// Add custom scraper logic
+add_action('ums_before_scrape', 'my_custom_scraper', 10, 2);
+function my_custom_scraper($rule_id, $rule_type) {
+    if ($rule_type === 'custom') {
+        // Your custom scraping logic
+        $html = ums_get_web_page($url);
+        // Process HTML...
+    }
+}
+</code></pre>
+
+<h4>Custom Translation Hook</h4>
+
+<pre><code class="language-php">// Modify text before translation
+add_filter('ums_translation_text', 'preprocess_text', 10, 3);
+function preprocess_text($text, $source, $target) {
+    // Remove special characters
+    $text = preg_replace('/[^\w\s]/', '', $text);
+    return $text;
+}
+</code></pre>
+
+<h4>Programmatic Rule Creation</h4>
+
+<pre><code class="language-php">// Get existing rules
+$rules = get_option('ums_manga_generic_list', array());
+
+// Add new rule
+$new_rule = array(
+    'url' => 'https://example.com/manga/new-title',
+    'schedule' => 12,
+    'active' => true,
+    'last_run' => 0,
+    'max_chapters' => 20,
+    'status' => 'publish',
+    'translation' => 14, // English
+    'use_headless' => false
+);
+
+$rules[] = $new_rule;
+update_option('ums_manga_generic_list', $rules);
+</code></pre>
+
+<h3>Best Practices</h3>
+
+1. <strong>Always check for Madara theme</strong> before executing scraping operations
+2. <strong>Use headless browsers sparingly</strong> - they consume significantly more resources
+3. <strong>Implement rate limiting</strong> to avoid overwhelming target sites
+4. <strong>Cache API responses</strong> when possible to reduce API calls
+5. <strong>Use proper error handling</strong> and logging for debugging
+6. <strong>Test rules on staging</strong> before deploying to production
+7. <strong>Monitor execution times</strong> and adjust timeouts accordingly
+8. <strong>Rotate proxies</strong> for high-volume scraping to avoid IP bans
+
+<h3>Security Considerations</h3>
+
+<ul>
+<li><strong>Never expose API keys</strong> in client-side code</li>
+<li><strong>Validate all user inputs</strong> before processing</li>
+<li><strong>Use nonces</strong> for admin actions</li>
+<li><strong>Check capabilities</strong> before allowing operations</li>
+<li><strong>Sanitize URLs</strong> before making requests to prevent SSRF</li>
+<li><strong>Disable <code>shell_exec</code></strong> if headless browsers are not needed</li>
+<li><strong>Implement rate limiting</strong> to prevent abuse</li>
+<li><strong>Regular security audits</strong> of scraping rules</li>
+</ul>
+
+<h3>Support & Resources</h3>
+
+<ul>
+<li><strong>GitHub Repository:</strong> https://github.com/druvx13/ultimate-manga-scraper</li>
+<li><strong>Issue Tracker:</strong> https://github.com/druvx13/ultimate-manga-scraper/issues</li>
+<li><strong>Documentation:</strong> See <a href="DOCUMENTATION_INDEX.html">DOCUMENTATION_INDEX.md</a></li>
+<li><strong>Security:</strong> See <a href="SECURITY.html">SECURITY.md</a></li>
+</ul>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Ultimate Manga Scraper</h3>
+                    <p>Institutional-grade WordPress plugin for manga and web novel content aggregation.</p>
+                    <p class="license">Licensed under LUCA Free License v1.0</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="getting-started.html">Getting Started</a></li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper/issues" target="_blank">Issue Tracker</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="license.html">License</a></li>
+                        <li><a href="security.html#disclosure">Security Disclosure</a></li>
+                        <li><a href="notice.html">Third-Party Notices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 NIKOL. Licensed under LUCA Free License v1.0.</p>
+                <p>Built with <i class="fas fa-heart"></i> for the manga community</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script src="js/main.js"></script>
+</body>
+</html>
