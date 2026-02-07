@@ -762,9 +762,8 @@
             }
             else
             {
-                if(isset($_GET['ums_page']))
-                {
-                    $current_page = isset($_GET["ums_page"]) ? intval($_GET["ums_page"]) : 1;
+                if(isset($_GET['ums_page'])) {
+                    $current_page = intval($_GET['ums_page']);
                 }
                 else
                 {
@@ -823,9 +822,8 @@
             }
             else
             {
-                if(isset($_GET['ums_page']))
-                {
-                    $current_page = isset($_GET["ums_page"]) ? intval($_GET["ums_page"]) : 1;
+                if(isset($_GET['ums_page'])) {
+                    $current_page = intval($_GET['ums_page']);
                 }
                 else
                 {
@@ -870,9 +868,8 @@
             }
             else
             {
-                if(isset($_GET['ums_page']))
-                {
-                    $current_page = isset($_GET["ums_page"]) ? intval($_GET["ums_page"]) : 1;
+                if(isset($_GET['ums_page'])) {
+                    $current_page = intval($_GET['ums_page']);
                 }
                 else
                 {
@@ -908,9 +905,8 @@
             }
             else
             {
-                if(isset($_GET['ums_page']))
-                {
-                    $current_page = isset($_GET["ums_page"]) ? intval($_GET["ums_page"]) : 1;
+                if(isset($_GET['ums_page'])) {
+                    $current_page = intval($_GET['ums_page']);
                 }
                 else
                 {
@@ -1111,9 +1107,8 @@
            }
            else
            {
-               if(isset($_GET['ums_page']))
-               {
-                   $current_page = isset($_GET["ums_page"]) ? intval($_GET["ums_page"]) : 1;
+               if(isset($_GET['ums_page'])) {
+                    $current_page = intval($_GET['ums_page']);
                }
                else
                {
@@ -1159,9 +1154,8 @@
            }
            else
            {
-               if(isset($_GET['ums_page']))
-               {
-                   $current_page = isset($_GET["ums_page"]) ? intval($_GET["ums_page"]) : 1;
+               if(isset($_GET['ums_page'])) {
+                    $current_page = intval($_GET['ums_page']);
                }
                else
                {
