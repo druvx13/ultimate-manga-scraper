@@ -768,7 +768,7 @@
             }
             if(isset($_GET['ums_page']) && is_numeric($_GET['ums_page']))
             {
-                $this_page = isset($_GET["ums_page"]) ? intval($_GET["ums_page"]) : 1;
+                $this_page = intval($_GET["ums_page"]);
             }
             else
             {
@@ -844,7 +844,7 @@
        $scad = false;
        if(isset($_GET["ums_page"]) && is_numeric($_GET["ums_page"]))
        {
-           $current_page = isset($_GET["ums_page"]) ? intval($_GET["ums_page"]) : 1;
+           $current_page = intval($_GET["ums_page"]);
        }
        else
        {
@@ -1026,7 +1026,7 @@
        if (!empty($rules)) {
             if(isset($_GET["ums_page"]) && is_numeric($_GET["ums_page"]))
             {
-                $current_page = isset($_GET["ums_page"]) ? intval($_GET["ums_page"]) : 1;
+                $current_page = intval($_GET["ums_page"]);
             }
             else
             {
