@@ -806,10 +806,10 @@
 <?php
    }
    if (isset($_POST['ums_fanmtl_list'])) {
-       add_action('admin_init', 'ums_save_rules_novel');
+       add_action('admin_init', 'ums_save_rules_fanmtl');
    }
    
-   function ums_save_rules_novel($data2)
+   function ums_save_rules_fanmtl($data2)
    {
         $init_rules_per_page = get_option('ums_posts_per_page', 10);
         $rules_per_page = get_option('ums_posts_per_page', 10);
