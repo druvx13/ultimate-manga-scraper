@@ -602,15 +602,15 @@
             {
                 if(isset($_GET['ums_page']))
                 {
-                    $curent_page = $_GET["ums_page"];
+                    $current_page = $_GET["ums_page"];
                 }
                 else
                 {
-                    $curent_page = '';
+                    $current_page = '';
                 }
-                if(is_numeric($curent_page))
+                if(is_numeric($current_page))
                 {
-                    $next_page = $curent_page + 1;
+                    $next_page = $current_page + 1;
                     if($next_page > $max_pages)
                     {
                         $next_page = $max_pages;
@@ -619,7 +619,7 @@
                     {
                         $next_page = 1;
                     }
-                    $next_url = str_replace('ums_page=' . $curent_page, 'ums_page=' . $next_page, $next_url);
+                    $next_url = str_replace('ums_page=' . $current_page, 'ums_page=' . $next_page, $next_url);
                 }
                 else
                 {
@@ -663,15 +663,15 @@
             {
                 if(isset($_GET['ums_page']))
                 {
-                    $curent_page = $_GET["ums_page"];
+                    $current_page = $_GET["ums_page"];
                 }
                 else
                 {
-                    $curent_page = '';
+                    $current_page = '';
                 }
-                if(is_numeric($curent_page))
+                if(is_numeric($current_page))
                 {
-                    $go_to = $curent_page - 1;
+                    $go_to = $current_page - 1;
                     if($go_to <= 0)
                     {
                         $go_to = 1;
@@ -680,7 +680,7 @@
                     {
                         $go_to = $max_pages;
                     }
-                    $prev_url = str_replace('ums_page=' . $curent_page, 'ums_page=' . $go_to, $prev_url);
+                    $prev_url = str_replace('ums_page=' . $current_page, 'ums_page=' . $go_to, $prev_url);
                 }
                 else
                 {
@@ -710,15 +710,15 @@
             {
                 if(isset($_GET['ums_page']))
                 {
-                    $curent_page = $_GET["ums_page"];
+                    $current_page = $_GET["ums_page"];
                 }
                 else
                 {
-                    $curent_page = '';
+                    $current_page = '';
                 }
-                if(is_numeric($curent_page))
+                if(is_numeric($current_page))
                 {
-                    $first_url = str_replace('ums_page=' . $curent_page, 'ums_page=1', $first_url);
+                    $first_url = str_replace('ums_page=' . $current_page, 'ums_page=1', $first_url);
                 }
                 else
                 {
@@ -748,15 +748,15 @@
             {
                 if(isset($_GET['ums_page']))
                 {
-                    $curent_page = $_GET["ums_page"];
+                    $current_page = $_GET["ums_page"];
                 }
                 else
                 {
-                    $curent_page = '';
+                    $current_page = '';
                 }
-                if(is_numeric($curent_page))
+                if(is_numeric($current_page))
                 {
-                    $last_url = str_replace('ums_page=' . $curent_page, 'ums_page=' . $max_pages, $last_url);
+                    $last_url = str_replace('ums_page=' . $current_page, 'ums_page=' . $max_pages, $last_url);
                 }
                 else
                 {
@@ -848,13 +848,13 @@
        $scad = false;
        if(isset($_GET["ums_page"]) && is_numeric($_GET["ums_page"]))
        {
-           $curent_page = $_GET["ums_page"];
+           $current_page = $_GET["ums_page"];
        }
        else
        {
-           $curent_page = 1;
+           $current_page = 1;
        }
-       $offset = ($curent_page - 1) * $rules_per_page;
+       $offset = ($current_page - 1) * $rules_per_page;
        $cont  = 0;
        $cat_cont = $offset;
        if (isset($data2['location'][0])) {
@@ -939,15 +939,15 @@
            {
                if(isset($_GET['ums_page']))
                {
-                   $curent_page = $_GET["ums_page"];
+                   $current_page = $_GET["ums_page"];
                }
                else
                {
-                   $curent_page = '';
+                   $current_page = '';
                }
-               if(is_numeric($curent_page))
+               if(is_numeric($current_page))
                {
-                   $last_url = str_replace('ums_page=' . $curent_page, 'ums_page=' . $max_pages, $last_url);
+                   $last_url = str_replace('ums_page=' . $current_page, 'ums_page=' . $max_pages, $last_url);
                }
                else
                {
@@ -987,15 +987,15 @@
            {
                if(isset($_GET['ums_page']))
                {
-                   $curent_page = $_GET["ums_page"];
+                   $current_page = $_GET["ums_page"];
                }
                else
                {
-                   $curent_page = '';
+                   $current_page = '';
                }
-               if(is_numeric($curent_page))
+               if(is_numeric($current_page))
                {
-                   $last_url = str_replace('ums_page=' . $curent_page, 'ums_page=' . $max_pages, $last_url);
+                   $last_url = str_replace('ums_page=' . $current_page, 'ums_page=' . $max_pages, $last_url);
                }
                else
                {
@@ -1032,11 +1032,11 @@
        if (!empty($rules)) {
             if(isset($_GET["ums_page"]) && is_numeric($_GET["ums_page"]))
             {
-                $curent_page = $_GET["ums_page"];
+                $current_page = $_GET["ums_page"];
             }
             else
             {
-                $curent_page = 1;
+                $current_page = 1;
             }
             $unlocker = get_option('ums_minute_running_unlocked', false);
             $rules_per_page = get_option('ums_posts_per_page', 10);
@@ -1085,7 +1085,7 @@
            $unlocker = get_option('ums_minute_running_unlocked', false);
            $rules_per_page = get_option('ums_posts_per_page', 10);
            foreach ($rules as $request => $bundle[]) {
-                if(($cont < ($curent_page - 1) * $rules_per_page) || ($cont >= $curent_page * $rules_per_page))
+                if(($cont < ($current_page - 1) * $rules_per_page) || ($cont >= $current_page * $rules_per_page))
                 {
                     $cont++;
                     continue;

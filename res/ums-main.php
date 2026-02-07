@@ -182,9 +182,6 @@
                      <td>
                         <h1>
                            <span class="gs-sub-heading"><b>Ultimate Web Novel & Manga Scraper - <?php echo esc_html__('Main Switch:', 'ultimate-manga-scraper');?></b>&nbsp;</span>
-                           <?php
-                           //phpCore was here
-                           ?>
                            <span class="cr_07_font">v2.0.3 <sup><small><code>Nulled</code></small></sup>&nbsp;</span>
                            <div class="bws_help_box bws_help_box_right dashicons dashicons-editor-help cr_align_middle">
                               <div class="bws_hidden_help_text cr_min_260px">

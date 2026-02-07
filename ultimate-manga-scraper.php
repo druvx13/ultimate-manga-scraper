@@ -12290,11 +12290,11 @@ function ums_register_mysettings()
     
     if(isset($_GET['ums_page']))
     {
-        $curent_page = $_GET["ums_page"];
+        $current_page = $_GET["ums_page"];
     }
     else
     {
-        $curent_page = '';
+        $current_page = '';
     }
     $all_rules = array();
     $last_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -12339,7 +12339,7 @@ function ums_register_mysettings()
     {
         $max_pages = 1;
     }
-    if((stristr($last_url, 'ums_items_panel') !== false || stristr($last_url, 'ums_novel_panel') !== false || stristr($last_url, 'ums_novel_generic_panel') !== false || stristr($last_url, 'ums_manga_generic_panel') !== false || stristr($last_url, 'ums_text_panel') !== false) && (!is_numeric($curent_page) || $curent_page > $max_pages || $curent_page <= 0))
+    if((stristr($last_url, 'ums_items_panel') !== false || stristr($last_url, 'ums_novel_panel') !== false || stristr($last_url, 'ums_novel_generic_panel') !== false || stristr($last_url, 'ums_manga_generic_panel') !== false || stristr($last_url, 'ums_text_panel') !== false) && (!is_numeric($current_page) || $current_page > $max_pages || $current_page <= 0))
     {
         if(stristr($last_url, 'ums_page=') === false)
         {
@@ -12356,15 +12356,15 @@ function ums_register_mysettings()
         {
             if(isset($_GET['ums_page']))
             {
-                $curent_page = $_GET["ums_page"];
+                $current_page = $_GET["ums_page"];
             }
             else
             {
-                $curent_page = '';
+                $current_page = '';
             }
-            if(is_numeric($curent_page))
+            if(is_numeric($current_page))
             {
-                $last_url = str_replace('ums_page=' . $curent_page, 'ums_page=' . $max_pages, $last_url);
+                $last_url = str_replace('ums_page=' . $current_page, 'ums_page=' . $max_pages, $last_url);
             }
             else
             {
