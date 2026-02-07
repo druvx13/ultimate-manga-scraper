@@ -134,7 +134,9 @@ class GoogleTranslator {
 		global $wp_filesystem;
 		if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
 			include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-			wp_filesystem($creds);
+			if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+			    ums_log_to_file('Failed to initialize WordPress filesystem');
+			}
 		}
 		$upload_dir = wp_upload_dir ();
 		$cache = $upload_dir ['basedir'] . '/tkk.cache';
