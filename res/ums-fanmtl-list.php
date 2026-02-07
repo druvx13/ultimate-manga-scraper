@@ -1049,7 +1049,7 @@
                $rule_id = get_post_meta($post, 'ums_parent_rule', true);
                if ($rule_id != '') {
                    $exp = explode('-', $rule_id);
-                   if(isset($exp[0]) && isset($exp[1]) && $exp[0] == '2')
+                   if(isset($exp[0]) && isset($exp[1]) && $exp[0] == '6')
                    {
                        $posted_items[] = $exp[1];
                    }
@@ -1534,7 +1534,7 @@
                            <td class="cr_comm_td"><div class="bws_help_box bws_help_box_right dashicons dashicons-editor-help cr_align_middle">
                            <div class="bws_hidden_help_text cr_min_260px">' . esc_html__('Novels Generated:', 'ultimate-manga-scraper') . ' ' . esc_html($generated_posts) . '<br/>';
                if ($generated_posts != 0) {
-                   $output .= '<a href="' . get_admin_url() . 'edit.php?coderevolution_post_source=Ums_2_' . esc_html($cont) . '&post_type=wp-manga" target="_blank">' . esc_html__('View Generated Novels', 'ultimate-manga-scraper') . '</a><br/>';
+                   $output .= '<a href="' . get_admin_url() . 'edit.php?coderevolution_post_source=Ums_6_' . esc_html($cont) . '&post_type=wp-manga" target="_blank">' . esc_html__('View Generated Novels', 'ultimate-manga-scraper') . '</a><br/>';
                }
                $output .= esc_html__('Last Run: ', 'ultimate-manga-scraper');
                if ($last_run == '1988-01-27 00:00:00') {
@@ -1601,7 +1601,7 @@
                    }
                    else
                    {
-                       $f = fopen(get_temp_dir() . 'ums_2_' . $cont, 'w');
+                       $f = fopen(get_temp_dir() . 'ums_6_' . $cont, 'w');
                        if($f !== false)
                        {
                            if (!flock($f, LOCK_EX | LOCK_NB)) {
@@ -1622,7 +1622,7 @@
                }
                $output .= '" title="status">
                            <div class="codemainfzr">
-                           <select id="actions" class="actions" name="actions" onchange="actionsChangedManual(' . esc_html($cont) . ', this.value, 2);" onfocus="this.selectedIndex = 0;">
+                           <select id="actions" class="actions" name="actions" onchange="actionsChangedManual(' . esc_html($cont) . ', this.value, 6);" onfocus="this.selectedIndex = 0;">
                                <option value="select" disabled selected>' . esc_html__("Select an Action", 'ultimate-manga-scraper') . '</option>
                                <option value="run">' . esc_html__("Run This Rule Now", 'ultimate-manga-scraper') . '</option>
                                <option value="trash">' . esc_html__("Move All Novels To Trash", 'ultimate-manga-scraper') . '</option>
