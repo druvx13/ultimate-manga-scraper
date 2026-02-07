@@ -735,6 +735,9 @@ function ums_register_my_custom_menu_page()
         $mangaxyx = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (novlove.com)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (novlove.com)', 'ultimate-manga-scraper'), 'manage_options', 'ums_novel_panel', 'ums_novel_panel');
         add_action( 'load-' . $mangaxyx, 'ums_load_admin_js' );
         add_action( 'load-' . $mangaxyx, 'ums_load_all_admin_js' );
+        $mangafan = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (FanMTL/ReadWN)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (FanMTL/ReadWN)', 'ultimate-manga-scraper'), 'manage_options', 'ums_fanmtl_panel', 'ums_fanmtl_panel');
+        add_action( 'load-' . $mangafan, 'ums_load_admin_js' );
+        add_action( 'load-' . $mangafan, 'ums_load_all_admin_js' );
         //$mangaxy = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (NewNovel.org)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (NewNovel.org)', 'ultimate-manga-scraper'), 'manage_options', 'ums_vipnovel_panel', 'ums_vipnovel_panel');
         //add_action( 'load-' . $mangaxy, 'ums_load_admin_js' );
         //add_action( 'load-' . $mangaxy, 'ums_load_all_admin_js' );
@@ -3746,6 +3749,73 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         $rules = get_option('ums_manga_generic_list');
                         $rules[$param][3] = ums_get_date_now();
                         update_option('ums_manga_generic_list', $rules, false);
+                    }
+                }
+            }
+            elseif($type == 6)
+            {
+                $GLOBALS['wp_object_cache']->delete('ums_fanmtl_list', 'options');
+                if (!get_option('ums_fanmtl_list')) {
+                    $rules = array();
+                } else {
+                    $rules = get_option('ums_fanmtl_list');
+                }
+                if (!empty($rules)) {
+                    foreach ($rules as $request => $bundle[]) {
+                        if ($cont == $param) {
+                            $bundle_values    = array_values($bundle);
+                            $myValues         = $bundle_values[$cont];
+                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
+                            $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
+                            $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
+                            $last_run         = isset($array_my_values[3]) ? $array_my_values[3] : '';
+                            $max              = isset($array_my_values[4]) ? $array_my_values[4] : '';
+                            $post_status      = isset($array_my_values[5]) ? $array_my_values[5] : '';
+                            $post_user_name   = isset($array_my_values[6]) ? $array_my_values[6] : '';
+                            $item_create_tag  = isset($array_my_values[7]) ? $array_my_values[7] : '';
+                            $default_category = isset($array_my_values[8]) ? $array_my_values[8] : '';
+                            $auto_categories  = isset($array_my_values[9]) ? $array_my_values[9] : '';
+                            $can_create_tag   = isset($array_my_values[10]) ? $array_my_values[10] : '';
+                            $use_phantom      = isset($array_my_values[11]) ? $array_my_values[11] : '';
+                            $reverse_chapters = isset($array_my_values[12]) ? $array_my_values[12] : '';
+                            $max_manga        = isset($array_my_values[13]) ? $array_my_values[13] : '';
+                            $chapter_warning  = isset($array_my_values[14]) ? $array_my_values[14] : '';
+                            $enable_comments  = isset($array_my_values[15]) ? $array_my_values[15] : '';
+                            $enable_pingback  = isset($array_my_values[16]) ? $array_my_values[16] : '';
+                            $get_date         = isset($array_my_values[17]) ? $array_my_values[17] : '';
+                            $rule_translate   = isset($array_my_values[18]) ? $array_my_values[18] : '';
+                            $no_translate_title= isset($array_my_values[19]) ? $array_my_values[19] : '';
+                            $chapter_slug     = isset($array_my_values[20]) ? $array_my_values[20] : '';
+                            $phantom_wait     = isset($array_my_values[21]) ? $array_my_values[21] : '';
+                            $strip_images     = isset($array_my_values[22]) ? $array_my_values[22] : '';
+                            $found            = 1;
+                            break;
+                        }
+                        $cont = $cont + 1;
+                    }
+                } else {
+                    ums_log_to_file('No rules found for ums_fanmtl_list!');
+                    if($auto == 1)
+                    {
+                        ums_clearFromList($param, $type);
+                    }
+                    return 'fail';
+                }
+                if ($found == 0) {
+                    ums_log_to_file($param . ' not found in ums_fanmtl_list!');
+                    if($auto == 1)
+                    {
+                        ums_clearFromList($param, $type);
+                    }
+                    return 'fail';
+                } else {
+                    if($rerun_count == 0)
+                    {
+                        $GLOBALS['wp_object_cache']->delete('ums_fanmtl_list', 'options');
+                        $rules = get_option('ums_fanmtl_list');
+                        $rules[$param][3] = ums_get_date_now();
+                        update_option('ums_fanmtl_list', $rules, false);
                     }
                 }
             }
@@ -12440,6 +12510,7 @@ function ums_admin_load_files()
 require(dirname(__FILE__) . "/res/ums-rules-list.php");
 require(dirname(__FILE__) . "/res/ums-text-list.php");
 require(dirname(__FILE__) . "/res/ums-novel-list.php");
+require(dirname(__FILE__) . "/res/ums-fanmtl-list.php");
 require(dirname(__FILE__) . "/res/ums-vipnovel-list.php");
 require(dirname(__FILE__) . "/res/ums-novel-generic-list.php");
 require(dirname(__FILE__) . "/res/ums-manga-generic-list.php");
