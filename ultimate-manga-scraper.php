@@ -6209,13 +6209,29 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                             sleep($timeout);
                             require_once (dirname(__FILE__) . "/res/simple_html_dom.php"); 
                             $html = ums_str_get_html( $html_site );
-                            $tag = $html->find( '.title', 0 );
+                            
+                            // Detect if this is a FanMTL/ReadWN/Wuxia site
+                            $is_fanmtl = (stristr($current_manga, 'fanmtl') !== false || stristr($current_manga, 'fannovels') !== false || stristr($current_manga, 'fansmtl') !== false || stristr($current_manga, 'readwn') !== false || stristr($current_manga, 'novelmt') !== false || stristr($current_manga, 'novelmtl') !== false || stristr($current_manga, 'wuxiabee') !== false || stristr($current_manga, 'wuxiafox') !== false || stristr($current_manga, 'wuxiago') !== false || stristr($current_manga, 'wuxiahere') !== false || stristr($current_manga, 'wuxiahub') !== false || stristr($current_manga, 'wuxiamtl') !== false || stristr($current_manga, 'wuxiaone') !== false || stristr($current_manga, 'wuxiap') !== false || stristr($current_manga, 'wuxiapub') !== false || stristr($current_manga, 'wuxiaspot') !== false || stristr($current_manga, 'wuxiar') !== false || stristr($current_manga, 'wuxiau') !== false || stristr($current_manga, 'wuxiazone') !== false);
+                            
+                            $tag = null;
+                            if ($is_fanmtl) {
+                                // FanMTL/ReadWN uses: div.main-head h1
+                                $tag = $html->find('div.main-head h1', 0);
+                            }
+                            if (!$tag) {
+                                // Fallback to novlove selector
+                                $tag = $html->find('.title', 0);
+                            }
+                            
                             $name_str = '';
                             $my_slug = '';
                             $my_slug = str_replace( 'http://', '', $current_manga );
                             $my_slug = str_replace( 'https://', '', $my_slug );
                             $my_slug = str_replace( 'http:', '', $my_slug );
                             $my_slug = str_replace( 'novlove.com/novel/', '', $my_slug );
+                            // Also handle FanMTL URL structure
+                            $my_slug = str_replace( 'fanmtl.com/novel/', '', $my_slug );
+                            $my_slug = str_replace( 'readwn.com/novel/', '', $my_slug );
                             $my_slug = str_replace( '/', '', $my_slug );
                             $my_slug = str_replace( '.html', '', $my_slug );
                             $my_slug = str_replace( '.htm', '', $my_slug );
@@ -6266,22 +6282,35 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     ums_log_to_file('Request blocked, please use a proxy!');
                                     continue;
                                 }
-                                $desc = $html->find( '.desc-text' );
                                 $xd = '';
-                                if(is_array($desc))
-                                {
-                                    foreach($desc as $dd)
-                                    {
-                                        $xd = trim($dd->plaintext);
-                                        $xprefix = 'Description';
-                                        if (substr($xd, 0, strlen($xprefix)) == $xprefix) {
-                                            $xd = substr($xd, strlen($xprefix));
-                                        } 
-                                        $xprefix = 'Summary';
-                                        if (substr($xd, 0, strlen($xprefix)) == $xprefix) {
-                                            $xd = substr($xd, strlen($xprefix));
-                                        } 
+                                // Try FanMTL/ReadWN description selector first
+                                if ($is_fanmtl) {
+                                    $desc_elems = $html->find('.summary .content');
+                                    if (!empty($desc_elems)) {
+                                        foreach($desc_elems as $dd) {
+                                            $xd .= ' ' . trim($dd->innertext);
+                                        }
                                         $xd = trim($xd);
+                                    }
+                                }
+                                // Fallback to novlove selectors
+                                if (empty($xd)) {
+                                    $desc = $html->find( '.desc-text' );
+                                    if(is_array($desc))
+                                    {
+                                        foreach($desc as $dd)
+                                        {
+                                            $xd = trim($dd->plaintext);
+                                            $xprefix = 'Description';
+                                            if (substr($xd, 0, strlen($xprefix)) == $xprefix) {
+                                                $xd = substr($xd, strlen($xprefix));
+                                            }
+                                            $xprefix = 'Summary';
+                                            if (substr($xd, 0, strlen($xprefix)) == $xprefix) {
+                                                $xd = substr($xd, strlen($xprefix));
+                                            } 
+                                            $xd = trim($xd);
+                                        }
                                     }
                                 }
                                 if($xd == '')
@@ -6363,6 +6392,16 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                 $desc = str_ireplace('bronovel.com', $domainx, $desc);
                                 $desc = str_ireplace('bronovel', get_bloginfo('name'), $desc);
                                 $thumb = '';
+                                // Try FanMTL/ReadWN cover selector first
+                                if ($is_fanmtl && $thumb == '') {
+                                    $cover_elem = $html->find('figure.cover img', 0);
+                                    if ($cover_elem) {
+                                        $thumb = $cover_elem->src;
+                                        if (empty($thumb)) {
+                                            $thumb = $cover_elem->{'data-src'};
+                                        }
+                                    }
+                                }
                                 if($thumb == '')
                                 {
                                     preg_match_all('#<img class="lazy"(?:\s*title="[^"]*?"\s*)? (?:data-)?src="([^"]*?)"#is', $html_site, $xmathc);
@@ -6500,11 +6539,22 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                 }
                                 $xauthor = '';
                                 $author = '';
-                                preg_match_all('#<h3>Author:<\/h3>[\n\s]*<a[\n\s]*href="[^"]*?">([^<]*?)<\/a>#i', $html_site, $xmathc);
-                                if(isset($xmathc[1][0]))
-                                {
-                                    $author = trim($xmathc[1][0]);
-                                    $xauthor = trim($xmathc[1][0]);
+                                // Try FanMTL/ReadWN author selector first
+                                if ($is_fanmtl) {
+                                    $author_elem = $html->find('span[itemprop="author"]', 0);
+                                    if ($author_elem) {
+                                        $author = trim($author_elem->plaintext);
+                                        $xauthor = $author;
+                                    }
+                                }
+                                // Fallback to novlove selectors
+                                if(empty($author)) {
+                                    preg_match_all('#<h3>Author:<\/h3>[\n\s]*<a[\n\s]*href="[^"]*?">([^<]*?)<\/a>#i', $html_site, $xmathc);
+                                    if(isset($xmathc[1][0]))
+                                    {
+                                        $author = trim($xmathc[1][0]);
+                                        $xauthor = trim($xmathc[1][0]);
+                                    }
                                 }
                                 if(empty($author))
                                 {
