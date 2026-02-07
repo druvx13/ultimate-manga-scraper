@@ -854,7 +854,9 @@ function ums_auto_clear_log()
     global $wp_filesystem;
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-       wp_filesystem($creds);
+       if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+           ums_log_to_file('Failed to initialize WordPress filesystem');
+       }
     }
     if ($wp_filesystem->exists(WP_CONTENT_DIR . '/ums_info.log')) {
         $wp_filesystem->delete(WP_CONTENT_DIR . '/ums_info.log');
@@ -1823,7 +1825,10 @@ function ums_get_web_page($url, $ua = '', $use_phantom = '0', $phantom_wait = ''
                     global $wp_filesystem;
                     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                        wp_filesystem($creds);
+                        if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                            ums_log_to_file('Failed to initialize WordPress filesystem in ums_get_web_page');
+                            return $content;
+                        }
                     }
                     return $wp_filesystem->get_contents($url);
                 }
@@ -2317,7 +2322,10 @@ function ums_wp_mcl_e_upload_file( $url, $use_phantom, $phantom_wait, $post_id =
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') )
     {
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-        wp_filesystem($creds);
+        if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+            ums_log_to_file('Failed to initialize WordPress filesystem in ums_create_featured_image');
+            return false;
+        }
     }
     $file = $wp_filesystem->put_contents( $file_tmp_path, $content );
     $wp_filetype = wp_check_filetype(basename($file_tmp_path), null );
@@ -2698,7 +2706,9 @@ function ums_fetch_single_chapter( $chapter, $volume_id, $post_id, $itemx, $stor
     global $wp_filesystem;
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-       wp_filesystem($creds);
+       if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+           ums_log_to_file('Failed to initialize WordPress filesystem');
+       }
     }
     if (!$wp_filesystem->exists( $extract ) ){
         if( ! wp_mkdir_p( $extract ) ){
@@ -2826,7 +2836,9 @@ function ums_get_upload_cloud_list($upload_cloud_file){
     global $wp_filesystem;
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-       wp_filesystem($creds);
+       if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+           ums_log_to_file('Failed to initialize WordPress filesystem');
+       }
     }
     if ($wp_filesystem->exists( $upload_cloud_file ) ){
         $content = $wp_filesystem->get_contents( $upload_cloud_file );
@@ -2929,7 +2941,9 @@ function ums_fetch_single_chapter_generic( $ums_chapter_images, $volume_id, $pos
     global $wp_filesystem;
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-       wp_filesystem($creds);
+       if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+           ums_log_to_file('Failed to initialize WordPress filesystem');
+       }
     }
     if (!$wp_filesystem->exists( $extract ) ){
         if( ! wp_mkdir_p( $extract ) ){
@@ -3041,7 +3055,9 @@ function ums_put_upload_cloud_list( $item, $upload_cloud_file ){
         global $wp_filesystem;
         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-            wp_filesystem($creds);
+            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                ums_log_to_file('Failed to initialize WordPress filesystem');
+            }
         }
         $list[ $item['id'] ] = $item;
         $wp_filesystem->put_contents( $upload_cloud_file, json_encode( $list, JSON_PRETTY_PRINT ) );
@@ -3183,7 +3199,9 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
     global $wp_filesystem;
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-        wp_filesystem($creds);
+        if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+            ums_log_to_file('Failed to initialize WordPress filesystem');
+        }
     }
     $theme = wp_get_theme();
     if ( 'Madara' != $theme->name && 'Madara' != $theme->parent_theme ) {
@@ -4417,7 +4435,9 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         global $wp_filesystem;
                         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                            wp_filesystem($creds);
+                            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                                ums_log_to_file('Failed to initialize WordPress filesystem');
+                            }
                         }
                         $prefixh = 'http://wuxiaworld.site/novel/';
                         $wprefixh = 'http://www.wuxiaworld.site/novel/';
@@ -5992,7 +6012,9 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         global $wp_filesystem;
                         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                            wp_filesystem($creds);
+                            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                                ums_log_to_file('Failed to initialize WordPress filesystem');
+                            }
                         }
                         $prefixh = 'http://novlove.com/novel/';
                         $wprefixh = 'http://www.novlove.com/novel/';
@@ -7272,7 +7294,9 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         global $wp_filesystem;
                         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                            wp_filesystem($creds);
+                            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                                ums_log_to_file('Failed to initialize WordPress filesystem');
+                            }
                         }
                         $prefixh = 'http://newnovel.org/novel/';
                         $wprefixh = 'http://www.newnovel.org/novel/';
@@ -8794,7 +8818,9 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         global $wp_filesystem;
                         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                            wp_filesystem($creds);
+                            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                                ums_log_to_file('Failed to initialize WordPress filesystem');
+                            }
                         }
                         $manga_names = explode(',', $manga_name);
                         $manga_names = array_map('trim', $manga_names);
@@ -10274,7 +10300,9 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         global $wp_filesystem;
                         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                            wp_filesystem($creds);
+                            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                                ums_log_to_file('Failed to initialize WordPress filesystem');
+                            }
                         }
                         $manga_names = explode(',', $manga_name);
                         $manga_names = array_map('trim', $manga_names);
