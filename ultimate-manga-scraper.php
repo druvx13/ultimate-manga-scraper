@@ -7368,7 +7368,13 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                 ums_log_to_file('Failed to initialize WordPress filesystem');
                             }
                         }
-                        $allowed_domains = array('fanmtl.com', 'readwn.com', 'wuxiabee.com', 'wuxiafox.com', 'mtlnovel.me', 'novelmt.com', 'wuxiabox.com', 'freewebnovel.com', 'readlightnovel.me', 'readnovelfull.com', 'novelhall.com', 'novelall.com', 'wuxiaworld.site', 'lightnovelworld.com', 'novelbin.com', 'bestlightnovel.com', 'readlightnovels.net', 'novelonlinefull.com', 'readfreewebnovel.com', 'novelmt.org');
+                        $allowed_domains = array(
+                            'fanmtl.com', 'readwn.com', 'wuxiabee.com', 'wuxiafox.com', 
+                            'mtlnovel.me', 'novelmt.com', 'wuxiabox.com', 'freewebnovel.com', 
+                            'readlightnovel.me', 'readnovelfull.com', 'novelhall.com', 'novelall.com', 
+                            'wuxiaworld.site', 'lightnovelworld.com', 'novelbin.com', 'bestlightnovel.com', 
+                            'readlightnovels.net', 'novelonlinefull.com', 'readfreewebnovel.com', 'novelmt.org'
+                        );
                         $manga_names = explode(',', $manga_name);
                         $manga_names = array_map('trim', $manga_names);
                         foreach($manga_names as $mngn)

@@ -498,7 +498,7 @@
                             <div class="bws_help_box bws_help_box_right dashicons dashicons-editor-help cr_align_middle">
                                 <div class="bws_hidden_help_text cr_min_260px">
                                 <?php
-                                    echo esc_html__("Do you want to not translate web novel titles", 'ultimate-manga-scraper');
+                                    echo esc_html__("Do you want to not translate web novel titles?", 'ultimate-manga-scraper');
                                     ?>
                                 </div>
                             </div>
@@ -777,7 +777,7 @@
                      <td><?php echo esc_html__("Success", 'ultimate-manga-scraper');?> - <b><?php echo esc_html__("New Novel Created", 'ultimate-manga-scraper');?></b></td>
                   </tr>
                   <tr>
-                     <td><img id="fail_img" src="<?php echo esc_url_raw(plugin_dir_url(dirname(__FILE__)) . 'images/failed.gif');?>" alt="Faield" title="status"></td>
+                     <td><img id="fail_img" src="<?php echo esc_url_raw(plugin_dir_url(dirname(__FILE__)) . 'images/failed.gif');?>" alt="Failed" title="status"></td>
                      <td><?php echo esc_html__("Failed", 'ultimate-manga-scraper');?> - <b><?php echo esc_html__("An Error Occurred.", 'ultimate-manga-scraper');?> <b><?php echo esc_html__("Please check 'Activity and Logging' plugin menu for details.", 'ultimate-manga-scraper');?></b></td>
                   </tr>
                   <tr>
