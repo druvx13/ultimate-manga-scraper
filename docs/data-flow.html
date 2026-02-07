@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Data flow and processing pipeline">
+    <title>Data Flow - Ultimate Manga Scraper Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-book-reader"></i>
+                <span>Ultimate Manga Scraper</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="api-reference.html">API Reference</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Data Flow</h1>
+            <p>Data flow and processing pipeline</p>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="content-page">
+        <div class="container">
+            <div class="content">
+                <h2>Data Flow</h2>
+
+This document details the lifecycle of data within the <strong>Ultimate Web Novel & Manga Scraper</strong>, from configuration to persistent storage.
+
+<h3>1. Rule Creation (Input)</h3>
+
+<strong>Actor</strong>: Administrator
+<strong>Interface</strong>: WordPress Admin (<code>ums_rules_list.php</code>, <code>ums_novel_list.php</code>)
+
+1.  User inputs target URL (e.g., FanFox manga URL).
+2.  User configures parameters:
+    *   Schedule (e.g., "Every hour").
+    *   Chapter limits.
+    *   Translation settings.
+    *   Status mapping.
+3.  <strong>Storage</strong>: Rule is saved as a serialized array in <code>wp_options</code>.
+    *   Key: <code>ums_rules_list</code> (Manga), <code>ums_novel_list</code> (Novels).
+    *   Format: <code>array( id => array( url, schedule, active, last_run, ... ) )</code>.
+
+<h3>2. Cron Execution (Trigger)</h3>
+
+<strong>Trigger</strong>: WP-Cron (<code>umsaction</code> hook).
+
+1.  <strong>Loader</strong>: <code>ums_cron()</code> fetches rule arrays from <code>wp_options</code>.
+2.  <strong>Evaluator</strong>: Iterates through each rule.
+    *   Calculates <code>next_run = last_run + schedule</code>.
+    *   If <code>now >= next_run</code>, proceeds.
+3.  <strong>Dispatcher</strong>: Calls <code>ums_run_rule($id, $type)</code>.
+
+<h3>3. Scraping Process (Ingestion)</h3>
+
+<strong>Function</strong>: <code>ums_run_rule()</code>
+
+1.  <strong>Locking</strong>: Checks <code>ums_running_list</code> to ensure the rule isn't already running.
+2.  <strong>Fetching (Phase 1: Listing)</strong>:
+    *   Fetches the main Manga/Novel TOC page.
+    *   Strategy: <code>ums_get_web_page()</code> -> attempts cURL -> falls back to PhantomJS/Puppeteer if configured or if Cloudflare is detected.
+3.  <strong>Parsing</strong>:
+    *   DOM Parser extracts: Title, Cover Image, Author, Genre, Status, Chapter List.
+    *   Checks if Manga already exists in DB (by Title or <code>_manga_import_slug</code>).
+4.  <strong>Creation (Parent Post)</strong>:
+    *   If new, calls <code>wp_insert_post()</code> (<code>post_type = 'wp-manga'</code>).
+    *   Downloads Cover Image -> <code>wp_insert_attachment()</code> -> Sets as Featured Image.
+    *   Sets Taxonomies (<code>wp-manga-genre</code>, etc.).
+5.  <strong>Fetching (Phase 2: Chapters)</strong>:
+    *   Iterates through detected chapters.
+    *   Checks against existing chapters in DB (<code>wp_manga_chapter->get_chapter_by_slug</code>).
+    *   If new:
+        *   Fetches Chapter Page.
+        *   <strong>Manga</strong>: Extracts image URLs (<code>ums_extractMangaImages</code>).
+        *   <strong>Novel</strong>: Extracts text content (<code>ums_repairHTML</code>, <code>ums_strip_links</code>).
+
+<h3>4. Processing & Transformation</h3>
+
+1.  <strong>Translation (Optional)</strong>:
+    *   If enabled, content (Novel text or Manga Title) is sent to <code>ums_translate()</code>.
+    *   Calls external API (Google/DeepL/Bing).
+2.  <strong>Text Spinning (Optional)</strong>:
+    *   If enabled, replaces words with synonyms from <code>synonyms.dat</code>.
+
+<h3>5. Storage (Persistence)</h3>
+
+<strong>Manga Images</strong>:
+1.  Downloads image binary.
+2.  <strong>Path</strong>: <code>wp-content/uploads/manga/{manga_id}/{chapter_slug}/</code>.
+3.  <strong>File System</strong>: Uses <code>WP_Filesystem</code> to write files.
+
+<strong>Database</strong>:
+1.  <strong>Madara Tables</strong>:
+    *   Typically stores chapter metadata in custom tables (depending on Madara version) or custom post types.
+    *   The plugin uses <code>WP_MANGA_STORAGE</code> global class to abstract this.
+    *   Calls <code>$wp_manga_storage->wp_manga_upload_single_chapter()</code>.
+
+<h3>6. Cleanup</h3>
+
+1.  <strong>Logging</strong>: Execution result logged to <code>ums_info.log</code> (if enabled).
+2.  <strong>State Update</strong>: Updates <code>last_run</code> timestamp in the rule array in <code>wp_options</code>.
+3.  <strong>Unlock</strong>: Removes ID from <code>ums_running_list</code>.
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Ultimate Manga Scraper</h3>
+                    <p>Institutional-grade WordPress plugin for manga and web novel content aggregation.</p>
+                    <p class="license">Licensed under LUCA Free License v1.0</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="getting-started.html">Getting Started</a></li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper/issues" target="_blank">Issue Tracker</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="license.html">License</a></li>
+                        <li><a href="security.html#disclosure">Security Disclosure</a></li>
+                        <li><a href="notice.html">Third-Party Notices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 NIKOL. Licensed under LUCA Free License v1.0.</p>
+                <p>Built with <i class="fas fa-heart"></i> for the manga community</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script src="js/main.js"></script>
+</body>
+</html>

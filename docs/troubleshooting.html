@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Common issues and solutions">
+    <title>Troubleshooting - Ultimate Manga Scraper Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-book-reader"></i>
+                <span>Ultimate Manga Scraper</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="api-reference.html">API Reference</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Troubleshooting</h1>
+            <p>Common issues and solutions</p>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="content-page">
+        <div class="container">
+            <div class="content">
+                <h2>Troubleshooting Guide</h2>
+
+<h3>Common Issues</h3>
+
+<h4>1. "Plugin requires Madara Theme" Error</h4>
+<ul>
+<li><strong>Cause</strong>: The plugin checks for the active theme name or parent theme.</li>
+<li><strong>Solution</strong>: Ensure you have the <strong>Madara</strong> theme installed and active. If you are using a child theme, ensure the <code>Template</code> in <code>style.css</code> is <code>madara</code>.</li>
+</ul>
+
+<h4>2. Scraping Fails (No Content)</h4>
+<ul>
+<li><strong>Cause</strong>: Target site layout changed, Cloudflare protection, or IP ban.</li>
+<li><strong>Solution</strong>:</li>
+</ul>
+<p>    *   <strong>Check Logs</strong>: Go to <strong>Activity & Logging</strong>.</p>
+<p>    *   <strong>Cloudflare</strong>: Enable "My Server Is Using CloudFlare Caching" in Main Settings.</p>
+<p>    *   <strong>Headless</strong>: Switch the rule to use "Puppeteer" or "PhantomJS".</p>
+<p>    *   <strong>Proxy</strong>: Configure a proxy in Main Settings if your server IP is blocked.</p>
+
+<h4>3. Images Not Loading (Broken Images)</h4>
+<ul>
+<li><strong>Cause</strong>: Hotlink protection by source site or failed download.</li>
+<li><strong>Solution</strong>:</li>
+</ul>
+<p>    *   Check <code>wp-content/uploads/manga/</code> to see if files exist.</p>
+<p>    *   If 0 bytes or missing, the download failed. Use a Proxy.</p>
+<p>    *   If files exist but don't show, check file permissions (<code>chmod 644</code>).</p>
+
+<h4>4. "Maximum Execution Time Exceeded"</h4>
+<ul>
+<li><strong>Cause</strong>: PHP script timed out while downloading many images.</li>
+<li><strong>Solution</strong>:</li>
+</ul>
+<p>    *   Increase <code>max_execution_time</code> in <code>php.ini</code>.</p>
+<p>    *   Increase "Rule Timeout" in Main Settings.</p>
+<p>    *   Reduce "Max Chapters" per run in the Rule settings.</p>
+
+<h4>5. Translation Not Working</h4>
+<ul>
+<li><strong>Cause</strong>: API Key invalid or Quota exceeded.</li>
+<li><strong>Solution</strong>:</li>
+</ul>
+<p>    *   Verify your Google/DeepL/Bing API keys.</p>
+<p>    *   Check if "Google Translate (Free)" is being blocked (Google rate limits this aggressively).</p>
+
+<h4>6. Cron Jobs Not Running</h4>
+<ul>
+<li><strong>Cause</strong>: WP-Cron relying on site traffic.</li>
+<li><strong>Solution</strong>: Set up a real system cron (see <code>DEPLOYMENT.md</code>).</li>
+</ul>
+
+<h4>7. PhantomJS/Puppeteer Errors</h4>
+<ul>
+<li><strong>Cause</strong>: Binaries not executable or missing dependencies (libfontconfig, etc.).</li>
+<li><strong>Solution</strong>:</li>
+</ul>
+<p>    *   SSH into server.</p>
+<p>    *   Try running the command manually: <code>phantomjs --version</code> or <code>node --version</code>.</p>
+<p>    *   Ensure <code>shell_exec</code> is enabled in PHP.</p>
+
+<h3>Debugging</h3>
+
+To enable verbose logs:
+1.  Go to <strong>Main Settings</strong>.
+2.  Check <strong>Enable Detailed Logging</strong>.
+3.  Save.
+4.  Run a rule.
+5.  Check <code>wp-content/ums_info.log</code>.
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Ultimate Manga Scraper</h3>
+                    <p>Institutional-grade WordPress plugin for manga and web novel content aggregation.</p>
+                    <p class="license">Licensed under LUCA Free License v1.0</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="getting-started.html">Getting Started</a></li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper/issues" target="_blank">Issue Tracker</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="license.html">License</a></li>
+                        <li><a href="security.html#disclosure">Security Disclosure</a></li>
+                        <li><a href="notice.html">Third-Party Notices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 NIKOL. Licensed under LUCA Free License v1.0.</p>
+                <p>Built with <i class="fas fa-heart"></i> for the manga community</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script src="js/main.js"></script>
+</body>
+</html>

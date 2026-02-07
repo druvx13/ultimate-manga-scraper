@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ultimate Web Novel & Manga Scraper - Comprehensive WordPress plugin for automated manga and web novel content aggregation">
+    <meta name="keywords" content="manga scraper, web novel, wordpress, madara, automation">
+    <meta name="author" content="NIKOL">
+    <title>Ultimate Web Novel & Manga Scraper - Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-book-reader"></i>
+                <span>Ultimate Manga Scraper</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="api-reference.html">API Reference</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Ultimate Web Novel & Manga Scraper</h1>
+                <p class="hero-subtitle">
+                    Automate your manga and web novel content aggregation with this powerful WordPress plugin
+                </p>
+                <div class="hero-buttons">
+                    <a href="getting-started.html" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i> Get Started
+                    </a>
+                    <a href="https://github.com/druvx13/ultimate-manga-scraper" class="btn btn-secondary" target="_blank">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                </div>
+                <div class="version-badge">
+                    <i class="fas fa-tag"></i> Version 2.0.3
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Multi-Source Scraping</h3>
+                    <p>Built-in support for FanFox, WuxiaWorld, NovLove, and any Madara-based manga/novel sites.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Headless Browser Support</h3>
+                    <p>Render JavaScript-heavy sites using PhantomJS, Puppeteer, or HeadlessBrowserAPI.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3>Auto Translation</h3>
+                    <p>Translate content on-the-fly using Google Translate, DeepL, or Microsoft Translator.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Cloudflare Bypass</h3>
+                    <p>Built-in mechanisms to handle anti-bot protection and Cloudflare challenges.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Automated Scheduling</h3>
+                    <p>Cron-based automation for continuous content updates without manual intervention.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <h3>Image Management</h3>
+                    <p>Download, resize, and store chapter images locally or on cloud storage (S3, Imgur, Flickr).</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>Proxy Support</h3>
+                    <p>Rotate proxies to bypass IP bans and rate limits on target sites.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-wordpress"></i>
+                    </div>
+                    <h3>Madara Integration</h3>
+                    <p>Seamlessly integrates with Madara theme's custom post types and storage system.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section class="quick-start">
+        <div class="container">
+            <h2 class="section-title">Quick Start</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Install Plugin</h3>
+                    <p>Upload and activate the plugin in your WordPress admin panel with Madara theme active.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Configure Settings</h3>
+                    <p>Navigate to Main Settings and enable the plugin. Configure API keys if using translation.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Create Rules</h3>
+                    <p>Add scraping rules with target URLs, schedules, and processing options.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Start Scraping</h3>
+                    <p>Run rules manually or let cron automation handle continuous content updates.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Links -->
+    <section class="documentation-links">
+        <div class="container">
+            <h2 class="section-title">Documentation</h2>
+            <div class="doc-grid">
+                <a href="getting-started.html" class="doc-link">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Getting Started</h3>
+                    <p>Quick setup guide and first scraping rule</p>
+                </a>
+                <a href="configuration.html" class="doc-link">
+                    <i class="fas fa-cog"></i>
+                    <h3>Configuration</h3>
+                    <p>Detailed settings and rule parameters</p>
+                </a>
+                <a href="api-reference.html" class="doc-link">
+                    <i class="fas fa-code"></i>
+                    <h3>API Reference</h3>
+                    <p>Hooks, filters, functions, and REST API</p>
+                </a>
+                <a href="architecture.html" class="doc-link">
+                    <i class="fas fa-sitemap"></i>
+                    <h3>Architecture</h3>
+                    <p>System design and code structure</p>
+                </a>
+                <a href="troubleshooting.html" class="doc-link">
+                    <i class="fas fa-wrench"></i>
+                    <h3>Troubleshooting</h3>
+                    <p>Common issues and solutions</p>
+                </a>
+                <a href="faq.html" class="doc-link">
+                    <i class="fas fa-question-circle"></i>
+                    <h3>FAQ</h3>
+                    <p>Frequently asked questions</p>
+                </a>
+                <a href="security.html" class="doc-link">
+                    <i class="fas fa-lock"></i>
+                    <h3>Security</h3>
+                    <p>Security considerations and best practices</p>
+                </a>
+                <a href="deployment.html" class="doc-link">
+                    <i class="fas fa-server"></i>
+                    <h3>Deployment</h3>
+                    <p>Installation and production setup</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Requirements Section -->
+    <section class="requirements">
+        <div class="container">
+            <h2 class="section-title">System Requirements</h2>
+            <div class="requirements-grid">
+                <div class="requirement">
+                    <i class="fab fa-wordpress"></i>
+                    <h3>WordPress</h3>
+                    <p>Version 5.0+</p>
+                </div>
+                <div class="requirement">
+                    <i class="fab fa-php"></i>
+                    <h3>PHP</h3>
+                    <p>Version 7.2+ (7.4+ recommended)</p>
+                </div>
+                <div class="requirement">
+                    <i class="fas fa-palette"></i>
+                    <h3>Madara Theme</h3>
+                    <p>Active installation required</p>
+                </div>
+                <div class="requirement">
+                    <i class="fas fa-database"></i>
+                    <h3>MySQL/MariaDB</h3>
+                    <p>WordPress compatible version</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to automate your manga site?</h2>
+            <p>Get started with Ultimate Web Novel & Manga Scraper today</p>
+            <a href="getting-started.html" class="btn btn-primary btn-large">
+                <i class="fas fa-rocket"></i> Get Started Now
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Ultimate Manga Scraper</h3>
+                    <p>Institutional-grade WordPress plugin for manga and web novel content aggregation.</p>
+                    <p class="license">Licensed under LUCA Free License v1.0</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="getting-started.html">Getting Started</a></li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/druvx13/ultimate-manga-scraper/issues" target="_blank">Issue Tracker</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="license.html">License</a></li>
+                        <li><a href="security.html#disclosure">Security Disclosure</a></li>
+                        <li><a href="notice.html">Third-Party Notices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 NIKOL. Licensed under LUCA Free License v1.0.</p>
+                <p>Built with <i class="fas fa-heart"></i> for the manga community</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
