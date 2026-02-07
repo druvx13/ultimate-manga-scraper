@@ -12325,7 +12325,7 @@ function ums_register_mysettings()
         $current_page = '';
     }
     $all_rules = array();
-    $last_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $last_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
     if(stristr($last_url, 'ums_items_panel') !== false)
     {
         $GLOBALS['wp_object_cache']->delete('ums_rules_list', 'options');

@@ -34,7 +34,7 @@
 <div class="wrap gs_popuptype_holder seo_pops">
     <h2><?php echo esc_html__("Generic Web Novels Scraper (Any Madara Theme Website)", 'ultimate-manga-scraper');?></h2>
 <div>
-<form id="myForm" method="post" action="<?php echo (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";?>">
+<form id="myForm" method="post" action="<?php echo esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));?>">
       <?php
          wp_nonce_field('ums_save_rules', '_umsr_nonce');
          
@@ -572,7 +572,7 @@
          </div>
          <hr/>
          <?php
-            $next_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $next_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
             if(stristr($next_url, 'ums_page=') === false)
             {
                 if(stristr($next_url, '?') === false)
@@ -647,7 +647,7 @@
                     }
                 }
             }
-            $prev_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $prev_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
             if(stristr($prev_url, 'ums_page=') === false)
             {
                 if(stristr($prev_url, '?') === false)
@@ -694,7 +694,7 @@
                     }
                 }
             }
-            $first_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $first_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
             if(stristr($first_url, 'ums_page=') === false)
             {
                 if(stristr($first_url, '?') === false)
@@ -732,7 +732,7 @@
                     }
                 }
             }
-            $last_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $last_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
             if(stristr($last_url, 'ums_page=') === false)
             {
                 if(stristr($last_url, '?') === false)
@@ -923,7 +923,7 @@
            {
                $max_pages = 1;
            }
-           $last_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+           $last_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
            if(stristr($last_url, 'ums_page=') === false)
            {
                if(stristr($last_url, '?') === false)
@@ -971,7 +971,7 @@
            {
                $max_pages = 1;
            }
-           $last_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+           $last_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
            if(stristr($last_url, 'ums_page=') === false)
            {
                if(stristr($last_url, '?') === false)
