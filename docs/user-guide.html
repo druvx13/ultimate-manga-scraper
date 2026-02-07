@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete documentation for the Ultimate Web Novel & Manga Scraper WordPress plugin">
+    <title>User Guide - Ultimate Web Novel & Manga Scraper</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 Documentation</h2>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search documentation..." class="search-input">
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-section">
+                    <h3>Getting Started</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="user-guide.html" class="active">User Guide</a></li>
+                        <li><a href="installation.html">Installation</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Configuration</h3>
+                    <ul>
+                        <li><a href="configuration.html">Configuration Reference</a></li>
+                        <li><a href="deployment.html">Deployment Guide</a></li>
+                        <li><a href="performance.html">Performance Tuning</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Developer Resources</h3>
+                    <ul>
+                        <li><a href="architecture.html">Architecture</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="data-flow.html">Data Flow</a></li>
+                        <li><a href="directory-structure.html">Directory Structure</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Support & Security</h3>
+                    <ul>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="changelog.html">Changelog</a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank" class="github-link">
+                    View on GitHub →
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>User Guide</h1>
+                <p class="subtitle">Ultimate Web Novel & Manga Scraper Documentation</p>
+            </header>
+            
+            <div class="content">
+                <h1>User Guide</h1>
+                <section></section><section><h2>Getting Started</h2>
+                <p>Welcome to the <strong>Ultimate Web Novel &amp; Manga Scraper</strong> user guide. This document will walk you through setting up and using the plugin to automate your manga and web novel content aggregation.</p>
+                <section></section><section><h2>Prerequisites</h2>
+                <p>Before you begin, ensure you have:</p>
+                <ol>
+                <li><strong>WordPress Installation</strong> (Version 5.0 or higher)</li>
+                <li><strong>Madara Theme</strong> (Active and properly configured)</li>
+                <li><strong>Madara Core Plugin</strong> (Required dependency)</li>
+                <li><strong>PHP 7.4+</strong> with required extensions (cURL, DOM, mbstring)</li>
+                </ol>
+                <section></section><section><h2>Initial Setup</h2>
+                <h3>Step 1: Installation</h3>
+                <ol>
+                <li>Download the plugin ZIP file or clone the repository</li>
+                <li>Upload to <code>/wp-content/plugins/ultimate-manga-scraper/</code></li>
+                <li>Navigate to <strong>WordPress Admin → Plugins</strong></li>
+                <li>Click <strong>Activate</strong> next to &quot;Ultimate Web Novel &amp; Manga Scraper&quot;</li>
+                </ol>
+                <p>You should see a new menu item: <strong>Ultimate Web Novel &amp; Manga Scraper</strong></p>
+                <h3>Step 2: Basic Configuration</h3>
+                <ol>
+                <li>Go to <strong>Ultimate Web Novel &amp; Manga Scraper → Main Settings</strong></li>
+                <li>Enable the <strong>Main Switch</strong> (turn it ON)</li>
+                <li>Configure basic settings:<ul>
+                <li><strong>Enable Logging</strong>: ON (for troubleshooting)</li>
+                <li><strong>Auto Clear Logs</strong>: Weekly (recommended)</li>
+                <li><strong>Manga Storage</strong>: Local (default)</li>
+                </ul>
+                </li>
+                <li>Click <strong>Save Settings</strong></li>
+                </ol>
+                <h3>Step 3: Test Installation</h3>
+                <ol>
+                <li>Navigate to <strong>Manga Scraper - FanFox</strong> (or any scraper tab)</li>
+                <li>Add a test rule (see &quot;Creating Your First Rule&quot; below)</li>
+                <li>Click <strong>Run This Rule Now</strong></li>
+                <li>Check <strong>Activity &amp; Logging</strong> tab for results</li>
+                </ol>
+                <section></section><section><h2>Creating Your First Rule</h2>
+                <h3>MangaFox Example</h3>
+                <p>Let&#39;s create a rule to scrape a manga from MangaFox:</p>
+                <ol>
+                <li><p>Go to <strong>Manga Scraper - FanFox</strong></p>
+                </li>
+                <li><p>Click <strong>Add New</strong> or find the blank rule form</p>
+                </li>
+                <li><p>Fill in the details:</p>
+                <p><strong>Basic Information:</strong></p>
+                <ul>
+                <li><strong>Manga URL</strong>: <code>https://fanfox.net/manga/one_piece/</code></li>
+                <li><strong>Schedule</strong>: <code>24</code> (hours between runs)</li>
+                <li><strong>Active</strong>: ✓ (checked)</li>
+                <li><strong>Max Chapters</strong>: <code>5</code> (for testing)</li>
+                </ul>
+                <p><strong>Content Settings:</strong></p>
+                <ul>
+                <li><strong>Status</strong>: <code>publish</code></li>
+                <li><strong>Author</strong>: Select your admin user</li>
+                <li><strong>Create Tags</strong>: ✓ (checked)</li>
+                <li><strong>Auto Categories</strong>: ✓ (checked)</li>
+                </ul>
+                <p><strong>Advanced Settings:</strong></p>
+                <ul>
+                <li><strong>Use PhantomJS</strong>: ☐ (unchecked for now)</li>
+                <li><strong>Translation</strong>: <code>Disabled</code> (for testing)</li>
+                </ul>
+                </li>
+                <li><p>Click <strong>Save Settings</strong></p>
+                </li>
+                </ol>
+                <h3>Running Your First Rule</h3>
+                <ol>
+                <li>Find your newly created rule in the list</li>
+                <li>Click <strong>▶ Run This Rule Now</strong> button</li>
+                <li>Wait for execution (may take 1-5 minutes)</li>
+                <li>Check the <strong>Activity &amp; Logging</strong> tab for status</li>
+                </ol>
+                <p><strong>Expected Results:</strong></p>
+                <ul>
+                <li>A new manga post created in <strong>Manga → All Manga</strong></li>
+                <li>Cover image downloaded and set as featured image</li>
+                <li>First 5 chapters imported with images</li>
+                <li>Genres/tags automatically created and assigned</li>
+                </ul>
+                <section></section><section><h2>Understanding Scrapers</h2>
+                <p>The plugin supports multiple scraper types:</p>
+                <h3>1. Manga Scraper - FanFox</h3>
+                <p><strong>Purpose:</strong> Scrape manga from MangaFox.net</p>
+                <p><strong>Supported Sites:</strong></p>
+                <ul>
+                <li>fanfox.net</li>
+                <li>mangafox.la (legacy)</li>
+                </ul>
+                <p><strong>Features:</strong></p>
+                <ul>
+                <li>Automatic chapter detection</li>
+                <li>Image extraction</li>
+                <li>Genre/author parsing</li>
+                <li>Status tracking</li>
+                </ul>
+                <h3>2. Novel Scraper - NovLove</h3>
+                <p><strong>Purpose:</strong> Scrape web novels from NovLove.com</p>
+                <p><strong>Output:</strong> Text-based chapters (not images)</p>
+                <h3>3. Text Scraper - WuxiaWorld</h3>
+                <p><strong>Purpose:</strong> Scrape novels from WuxiaWorld sites</p>
+                <p><strong>Features:</strong></p>
+                <ul>
+                <li>Text content extraction</li>
+                <li>Chapter ordering</li>
+                <li>Author metadata</li>
+                </ul>
+                <h3>4. Madara Generic Scraper</h3>
+                <p><strong>Purpose:</strong> Scrape from ANY Madara-based site</p>
+                <p><strong>How it works:</strong></p>
+                <ul>
+                <li>Uses the Madara theme&#39;s AJAX API</li>
+                <li>Can clone content from other Madara sites</li>
+                <li>Most powerful and flexible option</li>
+                </ul>
+                <h3>5. Madara Enhancements</h3>
+                <p><strong>Purpose:</strong> Visual manga browser and import tool</p>
+                <p><strong>Features:</strong></p>
+                <ul>
+                <li>Search manga on source Madara sites</li>
+                <li>Preview manga before importing</li>
+                <li>Bulk import multiple manga</li>
+                </ul>
+                <section></section><section><h2>Advanced Features</h2>
+                <h3>Translation</h3>
+                <p>Automatically translate manga/novel content to another language.</p>
+                <p><strong>Setup:</strong></p>
+                <ol>
+                <li><p>Go to <strong>Main Settings</strong></p>
+                </li>
+                <li><p>Scroll to <strong>Translation API Keys</strong></p>
+                </li>
+                <li><p>Enter your API key:</p>
+                <ul>
+                <li><strong>Google Trans Auth</strong>: For Google Translate API</li>
+                <li><strong>Bing Auth</strong>: For Microsoft Translator</li>
+                <li><strong>DeepL Auth</strong>: For DeepL API</li>
+                </ul>
+                </li>
+                <li><p>In your rule settings:</p>
+                <ul>
+                <li><strong>Translation</strong>: Select target language (e.g., &quot;English (Google Translate)&quot;)</li>
+                <li><strong>Translation Source</strong>: Choose API (<code>google_api</code>, <code>deepl</code>, <code>bing</code>)</li>
+                </ul>
+                </li>
+                </ol>
+                <p><strong>Free Translation:</strong></p>
+                <ul>
+                <li>Set <strong>Translation</strong> to a language</li>
+                <li>Set <strong>Translation Source</strong> to <code>google</code> (not <code>google_api</code>)</li>
+                <li>Note: Free translation is slower and less reliable</li>
+                </ul>
+                <h3>Headless Browser Scraping</h3>
+                <p>Some sites use JavaScript to load content. For these, use headless browsers.</p>
+                <h4>PhantomJS Setup</h4>
+                <ol>
+                <li>Download PhantomJS binary for your OS</li>
+                <li>Upload to server (e.g., <code>/usr/local/bin/phantomjs</code>)</li>
+                <li>Make it executable: <code>chmod +x /usr/local/bin/phantomjs</code></li>
+                <li>In <strong>Main Settings → Headless Browser Settings</strong>:<ul>
+                <li><strong>PhantomJS Path</strong>: <code>/usr/local/bin/phantomjs</code></li>
+                </ul>
+                </li>
+                <li>In rule settings:<ul>
+                <li><strong>Use PhantomJS</strong>: ✓ (checked)</li>
+                </ul>
+                </li>
+                </ol>
+                <h4>Puppeteer Setup</h4>
+                <ol>
+                <li>Install Node.js on your server</li>
+                <li>Navigate to plugin directory:<pre><code class="language-bash">cd wp-content/plugins/ultimate-manga-scraper/res/puppeteer/
+                npm install
+                </code></pre>
+                </li>
+                <li>In <strong>Main Settings</strong>:<ul>
+                <li><strong>Puppeteer Enabled</strong>: ✓ (checked)</li>
+                </ul>
+                </li>
+                <li>In rule settings:<ul>
+                <li><strong>Use Puppeteer</strong>: ✓ (checked)</li>
+                </ul>
+                </li>
+                </ol>
+                <h3>Proxy Configuration</h3>
+                <p>Use proxies to avoid IP bans or access geo-restricted content.</p>
+                <p><strong>Setup:</strong></p>
+                <ol>
+                <li>Go to <strong>Main Settings → Proxy Settings</strong></li>
+                <li><strong>Proxy URL</strong>: Enter proxy address<ul>
+                <li>Format: <code>ip:port</code></li>
+                <li>Example: <code>123.45.67.89:8080</code></li>
+                <li>Multiple proxies: <code>proxy1.com:8080,proxy2.com:8080</code></li>
+                </ul>
+                </li>
+                <li><strong>Proxy Auth</strong> (if required): <code>username:password</code></li>
+                </ol>
+                <p><strong>Testing:</strong></p>
+                <ul>
+                <li>Check <strong>Activity &amp; Logging</strong> for &quot;Using proxy: ...&quot; messages</li>
+                </ul>
+                <h3>Cloudflare Bypass</h3>
+                <p>If target sites use Cloudflare protection:</p>
+                <ol>
+                <li>In <strong>Main Settings</strong>:<ul>
+                <li><strong>My Server Is Using CloudFlare Caching</strong>: ✓ (if applicable)</li>
+                </ul>
+                </li>
+                <li>In rule settings:<ul>
+                <li><strong>Use PhantomJS</strong> or <strong>Use Puppeteer</strong>: ✓</li>
+                </ul>
+                </li>
+                <li>Consider using <strong>HeadlessBrowserAPI</strong> (commercial service):<ul>
+                <li>Get API key from provider</li>
+                <li>Enter in <strong>Main Settings → HeadlessBrowserAPI Key</strong></li>
+                </ul>
+                </li>
+                </ol>
+                <h3>Image Storage Options</h3>
+                <p>Control where manga images are stored:</p>
+                <p><strong>Local Storage</strong> (default):</p>
+                <ul>
+                <li>Path: <code>wp-content/uploads/manga/</code></li>
+                <li>No additional setup required</li>
+                </ul>
+                <p><strong>Amazon S3</strong>:</p>
+                <ol>
+                <li>Configure Madara Core with S3 credentials</li>
+                <li>In <strong>Main Settings → Manga Storage</strong>: Select <code>amazon_s3</code></li>
+                </ol>
+                <p><strong>Imgur</strong>:</p>
+                <ol>
+                <li>Get Imgur API key</li>
+                <li>Configure in Madara settings</li>
+                <li>Select <code>imgur</code> in plugin settings</li>
+                </ol>
+                <p><strong>Flickr</strong>:</p>
+                <ol>
+                <li>Get Flickr API key</li>
+                <li>Configure in Madara settings</li>
+                <li>Select <code>flickr</code> in plugin settings</li>
+                </ol>
+                <section></section><section><h2>Scheduling and Automation</h2>
+                <h3>Using WP-Cron</h3>
+                <p>By default, rules run using WordPress Cron:</p>
+                <ul>
+                <li>Cron checks rules every hour (or based on WP traffic)</li>
+                <li>Rules execute if <code>schedule</code> hours have passed since <code>last_run</code></li>
+                </ul>
+                <p><strong>Limitation:</strong> WP-Cron only runs when someone visits your site</p>
+                <h3>Using System Cron (Recommended)</h3>
+                <p>For reliable, high-volume scraping:</p>
+                <ol>
+                <li><p>Edit <code>wp-config.php</code>:</p>
+                <pre><code class="language-php">define(&#39;DISABLE_WP_CRON&#39;, true);
+                </code></pre>
+                </li>
+                <li><p>Add system cron job (run every minute):</p>
+                <pre><code class="language-bash">* * * * * wget -q -O - https://yoursite.com/wp-cron.php?doing_wp_cron &gt;/dev/null 2&gt;&amp;1
+                </code></pre>
+                <p>Or using WP-CLI:</p>
+                <pre><code class="language-bash">* * * * * cd /path/to/wordpress &amp;&amp; wp cron event run --due-now &gt;/dev/null 2&gt;&amp;1
+                </code></pre>
+                </li>
+                </ol>
+                <section></section><section><h2>Common Tasks</h2>
+                <h3>Updating Existing Manga</h3>
+                <p>The plugin automatically detects existing manga:</p>
+                <ol>
+                <li>If manga URL already exists, it <strong>updates</strong> instead of creating new</li>
+                <li>Only new chapters are imported</li>
+                <li>Existing chapters are skipped</li>
+                </ol>
+                <p><strong>Forced Update:</strong></p>
+                <ul>
+                <li>Delete the manga from WordPress</li>
+                <li>Run the rule again to re-import everything</li>
+                </ul>
+                <h3>Importing Specific Chapters</h3>
+                <p>Use the <strong>Chapter Range</strong> feature:</p>
+                <ol>
+                <li>In rule settings:<ul>
+                <li><strong>Start Chapter</strong>: <code>10</code></li>
+                <li><strong>End Chapter</strong>: <code>20</code></li>
+                </ul>
+                </li>
+                <li>Only chapters 10-20 will be imported</li>
+                </ol>
+                <h3>Bulk Import from Madara Sites</h3>
+                <p>Use <strong>Madara Enhancements</strong>:</p>
+                <ol>
+                <li>Go to <strong>Madara Enhancements</strong> tab</li>
+                <li>Enter source site URL (e.g., <code>https://manhuaus.com</code>)</li>
+                <li>Click <strong>Search</strong></li>
+                <li>Browse manga, select desired titles</li>
+                <li>Click <strong>Import Selected</strong></li>
+                </ol>
+                <section></section><section><h2>Monitoring and Troubleshooting</h2>
+                <h3>Activity &amp; Logging Tab</h3>
+                <p>Real-time view of scraper activity:</p>
+                <ul>
+                <li><strong>Green ✓</strong>: Success</li>
+                <li><strong>Red ✗</strong>: Failed</li>
+                <li><strong>Yellow ⚠</strong>: Warning</li>
+                </ul>
+                <p><strong>Log Information:</strong></p>
+                <ul>
+                <li>Timestamp</li>
+                <li>Rule ID</li>
+                <li>Status message</li>
+                <li>Error details (if any)</li>
+                </ul>
+                <h3>Log File</h3>
+                <p>For detailed debugging:</p>
+                <ol>
+                <li>Enable <strong>Detailed Logging</strong> in Main Settings</li>
+                <li>Access log file: <code>wp-content/ums_info.log</code></li>
+                <li>Download via FTP/SSH</li>
+                </ol>
+                <p><strong>Log Analysis:</strong></p>
+                <pre><code>[2024-02-07 10:30:45] Starting rule #5
+                [2024-02-07 10:30:46] Fetching: https://fanfox.net/manga/one_piece/
+                [2024-02-07 10:30:48] Found 1200 chapters
+                [2024-02-07 10:30:50] Importing chapter 1: &quot;Romance Dawn&quot;
+                [2024-02-07 10:31:00] Chapter 1 imported successfully
+                </code></pre>
+                <h3>Common Issues</h3>
+                <h4>&quot;No chapters found&quot;</h4>
+                <p><strong>Causes:</strong></p>
+                <ul>
+                <li>Site structure changed</li>
+                <li>Cloudflare blocking</li>
+                <li>Network issues</li>
+                </ul>
+                <p><strong>Solutions:</strong></p>
+                <ol>
+                <li>Enable PhantomJS/Puppeteer</li>
+                <li>Use a proxy</li>
+                <li>Check <strong>Activity &amp; Logging</strong> for specific errors</li>
+                </ol>
+                <h4>&quot;Images not loading&quot;</h4>
+                <p><strong>Causes:</strong></p>
+                <ul>
+                <li>Hotlink protection</li>
+                <li>Download timeout</li>
+                <li>Permission issues</li>
+                </ul>
+                <p><strong>Solutions:</strong></p>
+                <ol>
+                <li>Check <code>wp-content/uploads/manga/</code> directory exists</li>
+                <li>Verify folder permissions (755)</li>
+                <li>Try using a proxy</li>
+                <li>Increase timeout in settings</li>
+                </ol>
+                <h4>&quot;Maximum execution time&quot;</h4>
+                <p><strong>Causes:</strong></p>
+                <ul>
+                <li>Too many chapters per run</li>
+                <li>Slow network</li>
+                <li>Large images</li>
+                </ul>
+                <p><strong>Solutions:</strong></p>
+                <ol>
+                <li>Reduce <strong>Max Chapters</strong> to 1-5</li>
+                <li>Increase PHP <code>max_execution_time</code></li>
+                <li>Increase <strong>Rule Timeout</strong> in settings</li>
+                </ol>
+                <p>For more issues, see <a href="TROUBLESHOOTING.md">TROUBLESHOOTING.md</a></p>
+                <section></section><section><h2>Best Practices</h2>
+                <h3>Performance Optimization</h3>
+                <ol>
+                <li><strong>Start Small</strong>: Test with 1-5 chapters first</li>
+                <li><strong>Stagger Rules</strong>: Don&#39;t run all rules simultaneously</li>
+                <li><strong>Use Caching</strong>: Enable object caching (Redis/Memcached)</li>
+                <li><strong>Optimize Images</strong>: Enable image compression in Madara settings</li>
+                </ol>
+                <h3>Legal Compliance</h3>
+                <p><strong>Important:</strong> You are responsible for copyright compliance.</p>
+                <ul>
+                <li>Only scrape content you have rights to use</li>
+                <li>Respect robots.txt files</li>
+                <li>Consider using API integrations when available</li>
+                <li>Add proper attribution to original sources</li>
+                </ul>
+                <h3>Server Resources</h3>
+                <p>Monitor your server:</p>
+                <ul>
+                <li><strong>CPU</strong>: Headless browsers are CPU-intensive</li>
+                <li><strong>RAM</strong>: Each PhantomJS instance uses ~200MB</li>
+                <li><strong>Disk</strong>: Images can consume significant storage</li>
+                <li><strong>Bandwidth</strong>: Large manga series require substantial bandwidth</li>
+                </ul>
+                <p><strong>Recommendations:</strong></p>
+                <ul>
+                <li>VPS with at least 2GB RAM</li>
+                <li>20GB+ storage for images</li>
+                <li>Unmetered or high bandwidth plan</li>
+                </ul>
+                <h3>Rate Limiting</h3>
+                <p>Avoid IP bans:</p>
+                <ol>
+                <li>Set <strong>Request Timeout</strong> to 2-5 seconds</li>
+                <li>Limit <strong>Max Chapters</strong> per run to 10-20</li>
+                <li>Spread rule schedules across different times</li>
+                <li>Use proxy rotation for high-volume scraping</li>
+                </ol>
+                <section></section><section><h2>Tips and Tricks</h2>
+                <h3>Finding Manga URLs</h3>
+                <p><strong>MangaFox:</strong></p>
+                <ul>
+                <li>URL format: <code>https://fanfox.net/manga/manga_name/</code></li>
+                <li>Find by browsing the site</li>
+                </ul>
+                <p><strong>Madara Sites:</strong></p>
+                <ul>
+                <li>URL format: <code>https://site.com/manga/manga-name/</code></li>
+                <li>Use the Madara Enhancements browser</li>
+                </ul>
+                <h3>Testing New Sites</h3>
+                <p>Before committing to scraping a new site:</p>
+                <ol>
+                <li>View page source to understand structure</li>
+                <li>Check if Cloudflare is used (look for <code>cf-ray</code> header)</li>
+                <li>Test with 1 chapter manually</li>
+                <li>Enable detailed logging</li>
+                <li>Review log for issues</li>
+                </ol>
+                <h3>Organizing Content</h3>
+                <p>Use WordPress categories and tags:</p>
+                <ol>
+                <li>Enable <strong>Auto Categories</strong> in rule settings</li>
+                <li>Map genres to WordPress categories</li>
+                <li>Use custom taxonomies for additional organization</li>
+                </ol>
+                <h3>Backup Strategy</h3>
+                <p>Regular backups are essential:</p>
+                <ol>
+                <li><strong>Database</strong>: Backup WordPress database regularly</li>
+                <li><strong>Images</strong>: Backup <code>wp-content/uploads/manga/</code></li>
+                <li><strong>Configuration</strong>: Export plugin settings</li>
+                </ol>
+                <p>Consider using WordPress backup plugins or server-level snapshots.</p>
+                <section></section><section><h2>Getting Help</h2>
+                <h3>Resources</h3>
+                <ul>
+                <li><strong>Documentation</strong>: See <a href="DOCUMENTATION_INDEX.md">DOCUMENTATION_INDEX.md</a></li>
+                <li><strong>Architecture</strong>: See <a href="ARCHITECTURE.md">ARCHITECTURE.md</a> for technical details</li>
+                <li><strong>Troubleshooting</strong>: See <a href="TROUBLESHOOTING.md">TROUBLESHOOTING.md</a></li>
+                <li><strong>Security</strong>: See <a href="SECURITY.md">SECURITY.md</a></li>
+                </ul>
+                <h3>Support</h3>
+                <ul>
+                <li>Check logs first (<code>ums_info.log</code>)</li>
+                <li>Enable detailed logging for better diagnostics</li>
+                <li>Provide log excerpts when seeking help</li>
+                <li>Include WordPress version, PHP version, and plugin version</li>
+                </ul>
+                <section><h2>Next Steps</h2>
+                <p>Now that you&#39;re familiar with the basics:</p>
+                <ol>
+                <li>Create rules for your favorite manga series</li>
+                <li>Experiment with translation features</li>
+                <li>Optimize your cron schedule</li>
+                <li>Monitor server resources</li>
+                <li>Set up automated backups</li>
+                </ol>
+                <p>Happy scraping! 📚</p>
+                </section>
+            </div>
+            
+            <footer class="page-footer">
+                <p>&copy; 2024 Ultimate Web Novel & Manga Scraper - Released into the Public Domain</p>
+                <p>
+                    <a href="https://github.com/druvx13/ultimate-manga-scraper">GitHub</a> •
+                    <a href="security.html#disclosure">Report Security Issue</a> •
+                    <a href="changelog.html">Changelog</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

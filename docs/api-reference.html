@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete documentation for the Ultimate Web Novel & Manga Scraper WordPress plugin">
+    <title>API Reference - Ultimate Web Novel & Manga Scraper</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 Documentation</h2>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search documentation..." class="search-input">
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-section">
+                    <h3>Getting Started</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="user-guide.html">User Guide</a></li>
+                        <li><a href="installation.html">Installation</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Configuration</h3>
+                    <ul>
+                        <li><a href="configuration.html">Configuration Reference</a></li>
+                        <li><a href="deployment.html">Deployment Guide</a></li>
+                        <li><a href="performance.html">Performance Tuning</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Developer Resources</h3>
+                    <ul>
+                        <li><a href="architecture.html">Architecture</a></li>
+                        <li><a href="api-reference.html" class="active">API Reference</a></li>
+                        <li><a href="data-flow.html">Data Flow</a></li>
+                        <li><a href="directory-structure.html">Directory Structure</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Support & Security</h3>
+                    <ul>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="changelog.html">Changelog</a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank" class="github-link">
+                    View on GitHub →
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>API Reference</h1>
+                <p class="subtitle">Ultimate Web Novel & Manga Scraper Documentation</p>
+            </header>
+            
+            <div class="content">
+                <h1>API Reference</h1>
+                <section></section><section><h2>Overview</h2>
+                <p>This document provides a technical reference for developers working with or extending the <strong>Ultimate Web Novel &amp; Manga Scraper</strong> plugin. It details key functions, hooks, filters, and classes.</p>
+                <section></section><section><h2>Core Functions</h2>
+                <h3>Scraping Engine</h3>
+                <h4><code>ums_get_web_page($url, $use_proxy = false, $custom_cookies = array(), $timeout = 0, $phantom = false)</code></h4>
+                <p>Fetches a web page using various methods (cURL, PhantomJS, Puppeteer).</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                <li><code>$url</code> (string): The URL to fetch</li>
+                <li><code>$use_proxy</code> (bool): Whether to use configured proxy</li>
+                <li><code>$custom_cookies</code> (array): Custom cookies to send with request</li>
+                <li><code>$timeout</code> (int): Request timeout in seconds</li>
+                <li><code>$phantom</code> (bool): Force use of headless browser</li>
+                </ul>
+                <p><strong>Returns:</strong> (string) HTML content or false on failure</p>
+                <p><strong>Example:</strong></p>
+                <pre><code class="language-php">$html = ums_get_web_page(&#39;https://example.com/manga/chapter-1&#39;);
+                if ($html) {
+                    // Process HTML
+                }
+                </code></pre>
+                <h4><code>ums_run_rule($id, $type)</code></h4>
+                <p>Executes a specific scraping rule.</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                <li><code>$id</code> (int): Rule ID from the rules array</li>
+                <li><code>$type</code> (string): Type of rule (&#39;manga&#39;, &#39;novel&#39;, &#39;madara&#39;, etc.)</li>
+                </ul>
+                <p><strong>Returns:</strong> void</p>
+                <h3>Content Processing</h3>
+                <h4><code>ums_sanitize_html_content($html)</code></h4>
+                <p>Sanitizes scraped HTML content by removing dangerous tags and scripts.</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                <li><code>$html</code> (string): Raw HTML content</li>
+                </ul>
+                <p><strong>Returns:</strong> (string) Sanitized HTML</p>
+                <p><strong>Removed Tags:</strong></p>
+                <ul>
+                <li><code>&lt;script&gt;</code>, <code>&lt;iframe&gt;</code>, <code>&lt;object&gt;</code>, <code>&lt;embed&gt;</code>, <code>&lt;form&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;style&gt;</code>, <code>&lt;link&gt;</code>, <code>&lt;meta&gt;</code></li>
+                </ul>
+                <h4><code>ums_repairHTML($str)</code></h4>
+                <p>Repairs and tidies HTML content.</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                <li><code>$str</code> (string): HTML string</li>
+                </ul>
+                <p><strong>Returns:</strong> (string) Cleaned HTML</p>
+                <h4><code>ums_strip_links($content)</code></h4>
+                <p>Removes all hyperlinks from content while preserving text.</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                <li><code>$content</code> (string): HTML content</li>
+                </ul>
+                <p><strong>Returns:</strong> (string) Content without links</p>
+                <h3>Translation Functions</h3>
+                <h4><code>ums_translate($text, $from_lang, $to_lang, $source = &#39;google&#39;)</code></h4>
+                <p>Translates text using configured translation service.</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                <li><code>$text</code> (string): Text to translate</li>
+                <li><code>$from_lang</code> (string): Source language code (e.g., &#39;en&#39;, &#39;ja&#39;)</li>
+                <li><code>$to_lang</code> (string): Target language code</li>
+                <li><code>$source</code> (string): Translation service (&#39;google&#39;, &#39;deepl&#39;, &#39;bing&#39;)</li>
+                </ul>
+                <p><strong>Returns:</strong> (string) Translated text or original on failure</p>
+                <p><strong>Supported Services:</strong></p>
+                <ul>
+                <li><strong>Google Translate</strong>: Free (web scraping) or API</li>
+                <li><strong>DeepL</strong>: API only</li>
+                <li><strong>Microsoft Translator</strong>: API only</li>
+                </ul>
+                <h4><code>ums_google_translate($text, $to)</code></h4>
+                <p>Google Translate implementation (free version).</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                <li><code>$text</code> (string): Text to translate</li>
+                <li><code>$to</code> (string): Target language code</li>
+                </ul>
+                <p><strong>Returns:</strong> (string) Translated text</p>
+                <h3>Image Handling</h3>
+                <h4><code>ums_extractMangaImages($html, $rule_id)</code></h4>
+                <p>Extracts manga image URLs from chapter HTML.</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                <li><code>$html</code> (string): Chapter HTML content</li>
+                <li><code>$rule_id</code> (int): Rule ID for site-specific extraction logic</li>
+                </ul>
+                <p><strong>Returns:</strong> (array) Array of image URLs</p>
+                <h4><code>ums_download_image($url, $save_path, $use_proxy = false)</code></h4>
+                <p>Downloads an image from URL to local path.</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                <li><code>$url</code> (string): Image URL</li>
+                <li><code>$save_path</code> (string): Local file path to save</li>
+                <li><code>$use_proxy</code> (bool): Use proxy for download</li>
+                </ul>
+                <p><strong>Returns:</strong> (bool) Success status</p>
+                <section></section><section><h2>WordPress Hooks</h2>
+                <h3>Actions</h3>
+                <h4><code>umsaction</code></h4>
+                <p>Main cron hook that triggers scraping execution.</p>
+                <p><strong>Usage:</strong></p>
+                <pre><code class="language-php">add_action(&#39;umsaction&#39;, &#39;ums_cron&#39;);
+                </code></pre>
+                <h4><code>ums_after_chapter_import</code></h4>
+                <p>Fired after a chapter is successfully imported.</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                <li><code>$chapter_id</code> (int): WordPress post ID of the chapter</li>
+                <li><code>$manga_id</code> (int): Parent manga post ID</li>
+                <li><code>$rule_id</code> (int): Rule that imported this chapter</li>
+                </ul>
+                <p><strong>Usage:</strong></p>
+                <pre><code class="language-php">add_action(&#39;ums_after_chapter_import&#39;, function($chapter_id, $manga_id, $rule_id) {
+                    // Custom logic after chapter import
+                }, 10, 3);
+                </code></pre>
+                <h3>Filters</h3>
+                <h4><code>ums_chapter_content</code></h4>
+                <p>Filters chapter content before saving to database.</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                <li><code>$content</code> (string): Chapter HTML content</li>
+                <li><code>$chapter_data</code> (array): Chapter metadata</li>
+                </ul>
+                <p><strong>Usage:</strong></p>
+                <pre><code class="language-php">add_filter(&#39;ums_chapter_content&#39;, function($content, $chapter_data) {
+                    // Modify content
+                    return $content;
+                }, 10, 2);
+                </code></pre>
+                <h4><code>ums_manga_metadata</code></h4>
+                <p>Filters manga metadata before creating/updating post.</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                <li><code>$metadata</code> (array): Manga data (title, author, genres, etc.)</li>
+                </ul>
+                <p><strong>Usage:</strong></p>
+                <pre><code class="language-php">add_filter(&#39;ums_manga_metadata&#39;, function($metadata) {
+                    // Modify metadata
+                    return $metadata;
+                });
+                </code></pre>
+                <section></section><section><h2>AJAX Actions</h2>
+                <h3>Admin AJAX Endpoints</h3>
+                <p>All admin AJAX actions require <code>manage_options</code> capability.</p>
+                <h4><code>wp_ajax_ums_my_action_callback</code></h4>
+                <p>Manual rule execution trigger.</p>
+                <p><strong>Request Parameters:</strong></p>
+                <ul>
+                <li><code>id</code> (int): Rule ID</li>
+                <li><code>type</code> (string): Rule type</li>
+                </ul>
+                <p><strong>Response:</strong></p>
+                <pre><code class="language-json">{
+                    &quot;status&quot;: &quot;success&quot;,
+                    &quot;message&quot;: &quot;Rule executed successfully&quot;
+                }
+                </code></pre>
+                <h4><code>wp_ajax_madara_load_more</code></h4>
+                <p>Loads manga from Madara-based source sites.</p>
+                <p><strong>Request Parameters:</strong></p>
+                <ul>
+                <li><code>source_url</code> (string): Source site URL</li>
+                <li><code>page</code> (int): Page number</li>
+                <li><code>search</code> (string): Search query</li>
+                </ul>
+                <p><strong>Response:</strong></p>
+                <pre><code class="language-json">{
+                    &quot;success&quot;: true,
+                    &quot;data&quot;: {
+                        &quot;manga&quot;: [...],
+                        &quot;has_more&quot;: true
+                    }
+                }
+                </code></pre>
+                <section></section><section><h2>Database Schema</h2>
+                <h3>Options Table</h3>
+                <p>Configuration stored in <code>wp_options</code>:</p>
+                <div class="table-wrapper"><table>
+                <thead>
+                <tr>
+                <th>Option Key</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                <td><code>ums_Main_Settings</code></td>
+                <td>serialized array</td>
+                <td>Global plugin settings</td>
+                </tr>
+                <tr>
+                <td><code>ums_rules_list</code></td>
+                <td>serialized array</td>
+                <td>MangaFox scraping rules</td>
+                </tr>
+                <tr>
+                <td><code>ums_novel_list</code></td>
+                <td>serialized array</td>
+                <td>Novel scraping rules</td>
+                </tr>
+                <tr>
+                <td><code>ums_text_list</code></td>
+                <td>serialized array</td>
+                <td>WuxiaWorld scraping rules</td>
+                </tr>
+                <tr>
+                <td><code>ums_manga_generic_list</code></td>
+                <td>serialized array</td>
+                <td>Generic manga rules</td>
+                </tr>
+                <tr>
+                <td><code>ums_madara_list</code></td>
+                <td>serialized array</td>
+                <td>Madara site rules</td>
+                </tr>
+                <tr>
+                <td><code>ums_running_list</code></td>
+                <td>serialized array</td>
+                <td>Currently executing rule IDs</td>
+                </tr>
+                </tbody></table></div>
+                <h3>Post Meta</h3>
+                <p>Chapter and manga data stored in <code>wp_postmeta</code>:</p>
+                <div class="table-wrapper"><table>
+                <thead>
+                <tr>
+                <th>Meta Key</th>
+                <th>Description</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                <td><code>_manga_import_slug</code></td>
+                <td>Original source slug for deduplication</td>
+                </tr>
+                <tr>
+                <td><code>_wp_manga_chapter_type</code></td>
+                <td>Chapter type (manga/text)</td>
+                </tr>
+                <tr>
+                <td><code>_wp_manga_volume</code></td>
+                <td>Volume number</td>
+                </tr>
+                <tr>
+                <td><code>_wp_manga_chapter_index</code></td>
+                <td>Chapter index/number</td>
+                </tr>
+                </tbody></table></div>
+                <section></section><section><h2>Classes</h2>
+                <h3><code>WP_MANGA_STORAGE</code> (Madara Core)</h3>
+                <p>External class provided by Madara theme.</p>
+                <p><strong>Key Methods:</strong></p>
+                <ul>
+                <li><code>wp_manga_upload_single_chapter($manga_id, $chapter_data, $images)</code>: Uploads chapter with images</li>
+                <li><code>get_chapter_by_slug($manga_id, $slug)</code>: Retrieves chapter by slug</li>
+                </ul>
+                <h3>Custom Classes (in <code>includes/</code>)</h3>
+                <h4><code>Madara_Fetcher</code></h4>
+                <p>Handles fetching manga data from Madara-based sites via AJAX.</p>
+                <p><strong>Methods:</strong></p>
+                <ul>
+                <li><code>fetch_manga_list($url, $page)</code>: Fetches manga listing</li>
+                <li><code>search_manga($url, $query)</code>: Searches manga on source site</li>
+                </ul>
+                <h4><code>Madara_Handler</code></h4>
+                <p>Processes and imports manga from Madara sources.</p>
+                <p><strong>Methods:</strong></p>
+                <ul>
+                <li><code>import_manga($source_url, $manga_slug)</code>: Imports a manga from source</li>
+                <li><code>sync_chapters($manga_id, $source_url)</code>: Syncs chapters with source</li>
+                </ul>
+                <section></section><section><h2>Constants</h2>
+                <h3>Plugin Constants</h3>
+                <pre><code class="language-php">// Plugin version
+                define(&#39;UMS_VERSION&#39;, &#39;2.0.3&#39;);
+
+                // Plugin directory path
+                define(&#39;UMS_PLUGIN_DIR&#39;, plugin_dir_path(__FILE__));
+
+                // Plugin URL
+                define(&#39;UMS_PLUGIN_URL&#39;, plugin_dir_url(__FILE__));
+                </code></pre>
+                <section></section><section><h2>Error Codes</h2>
+                <div class="table-wrapper"><table>
+                <thead>
+                <tr>
+                <th>Code</th>
+                <th>Description</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                <td><code>UMS_ERROR_NETWORK</code></td>
+                <td>Network/connection error</td>
+                </tr>
+                <tr>
+                <td><code>UMS_ERROR_PARSE</code></td>
+                <td>HTML parsing failed</td>
+                </tr>
+                <tr>
+                <td><code>UMS_ERROR_CLOUDFLARE</code></td>
+                <td>Cloudflare protection detected</td>
+                </tr>
+                <tr>
+                <td><code>UMS_ERROR_TIMEOUT</code></td>
+                <td>Request timeout</td>
+                </tr>
+                <tr>
+                <td><code>UMS_ERROR_AUTH</code></td>
+                <td>Authentication failed (API)</td>
+                </tr>
+                </tbody></table></div>
+                <section></section><section><h2>Best Practices</h2>
+                <h3>Custom Scrapers</h3>
+                <p>When adding support for a new manga source:</p>
+                <ol>
+                <li>Add source detection logic in <code>ums_run_rule()</code></li>
+                <li>Implement site-specific parsing in <code>ums_extractMangaImages()</code></li>
+                <li>Handle site-specific cookies/headers</li>
+                <li>Test with multiple manga from the source</li>
+                <li>Document any special requirements</li>
+                </ol>
+                <h3>Performance</h3>
+                <ul>
+                <li>Use caching for repeated requests</li>
+                <li>Batch image downloads when possible</li>
+                <li>Implement rate limiting to avoid IP bans</li>
+                <li>Use headless browsers only when necessary</li>
+                </ul>
+                <h3>Security</h3>
+                <ul>
+                <li>Always sanitize scraped content</li>
+                <li>Validate URLs before fetching</li>
+                <li>Use nonces for all AJAX actions</li>
+                <li>Check user capabilities before operations</li>
+                </ul>
+                <section></section><section><h2>Extending the Plugin</h2>
+                <h3>Adding a New Translation Service</h3>
+                <pre><code class="language-php">function ums_custom_translate($text, $to_lang) {
+                    // Your translation logic
+                    return $translated_text;
+                }
+
+                add_filter(&#39;ums_translate_service&#39;, function($text, $to_lang, $service) {
+                    if ($service === &#39;custom&#39;) {
+                        return ums_custom_translate($text, $to_lang);
+                    }
+                    return $text;
+                }, 10, 3);
+                </code></pre>
+                <h3>Custom Storage Backend</h3>
+                <pre><code class="language-php">add_filter(&#39;ums_image_storage&#39;, function($local_path, $image_url, $manga_id) {
+                    // Upload to custom CDN
+                    $cdn_url = upload_to_cdn($local_path);
+                    return $cdn_url;
+                }, 10, 3);
+                </code></pre>
+                <section><h2>Logging</h2>
+                <h3>Log Levels</h3>
+                <ul>
+                <li><strong>INFO</strong>: General execution flow</li>
+                <li><strong>WARNING</strong>: Non-critical issues</li>
+                <li><strong>ERROR</strong>: Failures that prevent operation</li>
+                </ul>
+                <h3>Log Format</h3>
+                <pre><code>[2024-02-07 10:30:45] [INFO] Rule #5: Starting execution
+                [2024-02-07 10:30:46] [ERROR] Failed to fetch URL: Connection timeout
+                </code></pre>
+                <h3>Accessing Logs</h3>
+                <p>Logs are stored in: <code>wp-content/ums_info.log</code></p>
+                <p>Enable detailed logging in Main Settings for verbose output.</p>
+                </section>
+            </div>
+            
+            <footer class="page-footer">
+                <p>&copy; 2024 Ultimate Web Novel & Manga Scraper - Released into the Public Domain</p>
+                <p>
+                    <a href="https://github.com/druvx13/ultimate-manga-scraper">GitHub</a> •
+                    <a href="security.html#disclosure">Report Security Issue</a> •
+                    <a href="changelog.html">Changelog</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

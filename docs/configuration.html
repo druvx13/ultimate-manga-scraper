@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete documentation for the Ultimate Web Novel & Manga Scraper WordPress plugin">
+    <title>Configuration Reference - Ultimate Web Novel & Manga Scraper</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 Documentation</h2>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search documentation..." class="search-input">
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-section">
+                    <h3>Getting Started</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="user-guide.html">User Guide</a></li>
+                        <li><a href="installation.html">Installation</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Configuration</h3>
+                    <ul>
+                        <li><a href="configuration.html" class="active">Configuration Reference</a></li>
+                        <li><a href="deployment.html">Deployment Guide</a></li>
+                        <li><a href="performance.html">Performance Tuning</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Developer Resources</h3>
+                    <ul>
+                        <li><a href="architecture.html">Architecture</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="data-flow.html">Data Flow</a></li>
+                        <li><a href="directory-structure.html">Directory Structure</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Support & Security</h3>
+                    <ul>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="changelog.html">Changelog</a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank" class="github-link">
+                    View on GitHub →
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Configuration Reference</h1>
+                <p class="subtitle">Ultimate Web Novel & Manga Scraper Documentation</p>
+            </header>
+            
+            <div class="content">
+                <h1>Configuration Reference</h1>
+                <p>This document details the configuration options available in the <strong>Ultimate Web Novel &amp; Manga Scraper</strong>. Configuration is managed via the WordPress Admin Dashboard.</p>
+                <section></section><section><h2>Main Settings</h2>
+                <p><em>Menu: Ultimate Web Novel &amp; Manga Scraper -&gt; Main Settings</em></p>
+                <h3>General Options</h3>
+                <ul>
+                <li><strong>Main Switch (<code>ums_enabled</code>)</strong>: Master toggle. Must be <code>on</code> for any scraping to occur.</li>
+                <li><strong>Logging (<code>enable_logging</code>)</strong>: Enables basic logging to <code>wp-content/ums_info.log</code>.</li>
+                <li><strong>Detailed Logging (<code>enable_detailed_logging</code>)</strong>: Verbose logging for debugging.</li>
+                <li><strong>Auto Clear Logs (<code>auto_clear_logs</code>)</strong>: Frequency to wipe the log file (e.g., Daily, Weekly).</li>
+                </ul>
+                <h3>Scraper Settings</h3>
+                <ul>
+                <li><strong>CloudFlare Caching</strong>: Enable if the host server is behind Cloudflare to mitigate execution time limits.</li>
+                <li><strong>Disable Rerun (<code>disable_rerun</code>)</strong>: Prevents the scraper from retrying failed rules immediately.</li>
+                <li><strong>Manga Storage (<code>manga_storage</code>)</strong>:<ul>
+                <li><code>local</code>: Store images on the web server.</li>
+                <li><code>amazon_s3</code>: Store images on S3 (requires Madara S3 setup).</li>
+                <li><code>imgur</code>: Upload to Imgur.</li>
+                <li><code>flickr</code>: Upload to Flickr.</li>
+                </ul>
+                </li>
+                <li><strong>Timeouts</strong>:<ul>
+                <li><code>request_timeout</code>: Delay (seconds) between HTTP requests.</li>
+                <li><code>rule_timeout</code>: Max execution time (seconds) for a single rule.</li>
+                </ul>
+                </li>
+                </ul>
+                <h3>Headless Browser Settings</h3>
+                <ul>
+                <li><strong>PhantomJS Path</strong>: Absolute path to the <code>phantomjs</code> executable.</li>
+                <li><strong>PhantomJS Timeout</strong>: Max wait time for page rendering.</li>
+                <li><strong>HeadlessBrowserAPI Key</strong>: API key for the third-party scraping service (optional).</li>
+                </ul>
+                <h3>Proxy Settings</h3>
+                <ul>
+                <li><strong>Proxy URL</strong>: Format <code>ip:port</code> or comma-separated list.</li>
+                <li><strong>Proxy Auth</strong>: Format <code>user:pass</code>.</li>
+                </ul>
+                <h3>Translation API Keys</h3>
+                <ul>
+                <li><strong>Google Trans Auth</strong>: Key for Google Translate API.</li>
+                <li><strong>Bing Auth</strong>: Key for Microsoft Translator.</li>
+                <li><strong>DeepL Auth</strong>: Key for DeepL API.</li>
+                </ul>
+                <section></section><section><h2>Rule Configuration</h2>
+                <p><em>Menu: Scraper Rules (e.g., Manga Scraper - FanFox)</em></p>
+                <p>Each rule consists of the following parameters:</p>
+                <div class="table-wrapper"><table>
+                <thead>
+                <tr>
+                <th align="left">Parameter</th>
+                <th align="left">Description</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                <td align="left"><strong>Manga URL</strong></td>
+                <td align="left">The direct link to the manga&#39;s Table of Contents (TOC) page.</td>
+                </tr>
+                <tr>
+                <td align="left"><strong>Schedule</strong></td>
+                <td align="left">How often to run (Hours).</td>
+                </tr>
+                <tr>
+                <td align="left"><strong>Active</strong></td>
+                <td align="left">Enable/Disable this specific rule.</td>
+                </tr>
+                <tr>
+                <td align="left"><strong>Max Chapters</strong></td>
+                <td align="left">Maximum number of chapters to scrape per run.</td>
+                </tr>
+                <tr>
+                <td align="left"><strong>Status</strong></td>
+                <td align="left">Post status for created manga (Publish, Draft, Pending).</td>
+                </tr>
+                <tr>
+                <td align="left"><strong>Author</strong></td>
+                <td align="left">WordPress user to assign as author.</td>
+                </tr>
+                <tr>
+                <td align="left"><strong>Create Tags</strong></td>
+                <td align="left">Whether to import original tags.</td>
+                </tr>
+                <tr>
+                <td align="left"><strong>Default Category</strong></td>
+                <td align="left">Fallback category if none found.</td>
+                </tr>
+                <tr>
+                <td align="left"><strong>Auto Categories</strong></td>
+                <td align="left">Create categories from source genres.</td>
+                </tr>
+                <tr>
+                <td align="left"><strong>Use PhantomJS</strong></td>
+                <td align="left">Force headless browser for this rule.</td>
+                </tr>
+                <tr>
+                <td align="left"><strong>Reverse Chapters</strong></td>
+                <td align="left">Scrape oldest chapters first (useful for backfilling).</td>
+                </tr>
+                <tr>
+                <td align="left"><strong>Translation</strong></td>
+                <td align="left">Target language for translation (or Disabled).</td>
+                </tr>
+                <tr>
+                <td align="left"><strong>Translation Source</strong></td>
+                <td align="left">API to use (Google, Bing, DeepL).</td>
+                </tr>
+                </tbody></table></div>
+                <section><h2>Database Options</h2>
+                <p><em>Configuration stored in <code>wp_options</code> table.</em></p>
+                <div class="table-wrapper"><table>
+                <thead>
+                <tr>
+                <th align="left">Option Name</th>
+                <th align="left">Description</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                <td align="left"><code>ums_Main_Settings</code></td>
+                <td align="left">Serialized array of global settings.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ums_rules_list</code></td>
+                <td align="left">Serialized array of FanFox scraping rules.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ums_novel_list</code></td>
+                <td align="left">Serialized array of NovLove scraping rules.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ums_text_list</code></td>
+                <td align="left">Serialized array of WuxiaWorld scraping rules.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ums_manga_generic_list</code></td>
+                <td align="left">Serialized array of Madara-based scraping rules.</td>
+                </tr>
+                <tr>
+                <td align="left"><code>ums_running_list</code></td>
+                <td align="left">Array of currently executing rule IDs (Lock file).</td>
+                </tr>
+                </tbody></table></div>
+                </section>
+            </div>
+            
+            <footer class="page-footer">
+                <p>&copy; 2024 Ultimate Web Novel & Manga Scraper - Released into the Public Domain</p>
+                <p>
+                    <a href="https://github.com/druvx13/ultimate-manga-scraper">GitHub</a> •
+                    <a href="security.html#disclosure">Report Security Issue</a> •
+                    <a href="changelog.html">Changelog</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

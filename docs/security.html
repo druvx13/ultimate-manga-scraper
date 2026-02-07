@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete documentation for the Ultimate Web Novel & Manga Scraper WordPress plugin">
+    <title>Security - Ultimate Web Novel & Manga Scraper</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 Documentation</h2>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search documentation..." class="search-input">
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-section">
+                    <h3>Getting Started</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="user-guide.html">User Guide</a></li>
+                        <li><a href="installation.html">Installation</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Configuration</h3>
+                    <ul>
+                        <li><a href="configuration.html">Configuration Reference</a></li>
+                        <li><a href="deployment.html">Deployment Guide</a></li>
+                        <li><a href="performance.html">Performance Tuning</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Developer Resources</h3>
+                    <ul>
+                        <li><a href="architecture.html">Architecture</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="data-flow.html">Data Flow</a></li>
+                        <li><a href="directory-structure.html">Directory Structure</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Support & Security</h3>
+                    <ul>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                        <li><a href="security.html" class="active">Security</a></li>
+                        <li><a href="changelog.html">Changelog</a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank" class="github-link">
+                    View on GitHub →
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Security</h1>
+                <p class="subtitle">Ultimate Web Novel & Manga Scraper Documentation</p>
+            </header>
+            
+            <div class="content">
+                <h1>Security Analysis</h1>
+                <p>This document outlines the security mechanisms, assumptions, and potential risks associated with the <strong>Ultimate Web Novel &amp; Manga Scraper</strong>.</p>
+                <section></section><section><h2>Authentication &amp; Authorization</h2>
+                <ul>
+                <li><strong>Role Requirements</strong>: All admin AJAX actions and settings pages require the <code>manage_options</code> capability (Administrator).</li>
+                <li><strong>Nonce Verification</strong>:<ul>
+                <li>AJAX actions (e.g., <code>ums_activation</code>, <code>madara_load_more</code>) are protected by WordPress Nonces (<code>activation-secret-nonce</code>, <code>madara_enhancements_nonce</code>).</li>
+                <li><strong>Note</strong>: Some older AJAX actions in <code>ultimate-manga-scraper.php</code> (like <code>ums_my_action_callback</code>) check <code>current_user_can(&#39;edit_posts&#39;)</code> but rely on <code>manage_options</code> for the UI.</li>
+                </ul>
+                </li>
+                </ul>
+                <section></section><section><h2>Input Validation</h2>
+                <ul>
+                <li><strong>Settings</strong>: Most inputs are sanitized via <code>sanitize_text_field</code> or cast to integers before saving.</li>
+                <li><strong>URLs</strong>: Scraper targets are generally trusted as they are entered by the Administrator. However, the plugin performs basic checks (e.g., <code>parse_url</code>).</li>
+                <li><strong>HTML Content</strong>: Scraped content goes through <code>ums_sanitize_html_content()</code> which removes dangerous tags:<ul>
+                <li><code>script</code>, <code>iframe</code>, <code>object</code>, <code>embed</code>, <code>style</code>, <code>form</code>, etc.</li>
+                <li><strong>Warning</strong>: This sanitization is regex and DOM-based. While robust for general scraping, it should not be considered a military-grade WAF against targeted XSS payloads embedded in source sites.</li>
+                </ul>
+                </li>
+                </ul>
+                <section></section><section><h2>System Interaction Risks</h2>
+                <h3>Remote Code Execution (RCE) via Headless Browsers</h3>
+                <p>The plugin allows the execution of system binaries (<code>phantomjs</code>, <code>node</code>) via <code>shell_exec</code>.</p>
+                <ul>
+                <li><strong>Risk</strong>: If an attacker gains access to the WordPress Admin, they could potentially manipulate the <code>PhantomJS Path</code> setting to execute arbitrary commands.</li>
+                <li><strong>Mitigation</strong>: The <code>PhantomJS Path</code> setting is not strictly validated against a whitelist of executables. <strong>Server Administrators should disable <code>shell_exec</code></strong> if headless scraping is not required, or strictly control file permissions.</li>
+                </ul>
+                <h3>Server-Side Request Forgery (SSRF)</h3>
+                <p>By definition, this is a web scraper. It fetches content from URLs provided by the admin.</p>
+                <ul>
+                <li><strong>Risk</strong>: An admin (or compromised admin account) could set a rule to scrape <code>http://localhost:8080</code> or other internal network resources.</li>
+                <li><strong>Mitigation</strong>: The plugin does not implement an allowlist/blocklist for IP ranges. It relies on the trust level of the Administrator.</li>
+                </ul>
+                <section></section><section><h2>File System Access</h2>
+                <p>The plugin writes files to <code>wp-content/uploads/</code> and <code>wp-content/plugins/ultimate-manga-scraper/</code>.</p>
+                <ul>
+                <li><strong>Logging</strong>: Logs are written to <code>wp-content/ums_info.log</code>. This file is publicly accessible if the web server configuration does not block <code>.log</code> files.<ul>
+                <li><strong>Recommendation</strong>: Configure <code>.htaccess</code> or Nginx rules to deny access to <code>*.log</code> files in <code>wp-content/</code>.</li>
+                </ul>
+                </li>
+                </ul>
+                <section></section><section><h2>Data Privacy</h2>
+                <ul>
+                <li><strong>Cookies</strong>: The scraper may send cookies to target sites (<code>isAdult=1</code>).</li>
+                <li><strong>User Data</strong>: The plugin does not collect end-user data, but it does impersonate users (User-Agent rotation) when scraping.</li>
+                </ul>
+                <section><h2>Security Recommendations for Administrators</h2>
+                <ol>
+                <li><strong>Block Log Access</strong>: Deny web access to <code>ums_info.log</code>.</li>
+                <li><strong>Restrict Capabilities</strong>: Ensure only trusted admins have <code>manage_options</code>.</li>
+                <li><strong>Disable <code>shell_exec</code></strong>: If not using PhantomJS/Puppeteer.</li>
+                <li><strong>Firewall</strong>: Restrict outbound connections from the server to known manga domains if possible.</li>
+                </ol>
+                </section>
+            </div>
+            
+            <footer class="page-footer">
+                <p>&copy; 2024 Ultimate Web Novel & Manga Scraper - Released into the Public Domain</p>
+                <p>
+                    <a href="https://github.com/druvx13/ultimate-manga-scraper">GitHub</a> •
+                    <a href="security.html#disclosure">Report Security Issue</a> •
+                    <a href="changelog.html">Changelog</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

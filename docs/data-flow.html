@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete documentation for the Ultimate Web Novel & Manga Scraper WordPress plugin">
+    <title>Data Flow - Ultimate Web Novel & Manga Scraper</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 Documentation</h2>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search documentation..." class="search-input">
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-section">
+                    <h3>Getting Started</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="user-guide.html">User Guide</a></li>
+                        <li><a href="installation.html">Installation</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Configuration</h3>
+                    <ul>
+                        <li><a href="configuration.html">Configuration Reference</a></li>
+                        <li><a href="deployment.html">Deployment Guide</a></li>
+                        <li><a href="performance.html">Performance Tuning</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Developer Resources</h3>
+                    <ul>
+                        <li><a href="architecture.html">Architecture</a></li>
+                        <li><a href="api-reference.html">API Reference</a></li>
+                        <li><a href="data-flow.html" class="active">Data Flow</a></li>
+                        <li><a href="directory-structure.html">Directory Structure</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">
+                    <h3>Support & Security</h3>
+                    <ul>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                        <li><a href="security.html">Security</a></li>
+                        <li><a href="changelog.html">Changelog</a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <a href="https://github.com/druvx13/ultimate-manga-scraper" target="_blank" class="github-link">
+                    View on GitHub →
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Data Flow</h1>
+                <p class="subtitle">Ultimate Web Novel & Manga Scraper Documentation</p>
+            </header>
+            
+            <div class="content">
+                <h1>Data Flow</h1>
+                <p>This document details the lifecycle of data within the <strong>Ultimate Web Novel &amp; Manga Scraper</strong>, from configuration to persistent storage.</p>
+                <section></section><section><h2>1. Rule Creation (Input)</h2>
+                <p><strong>Actor</strong>: Administrator
+                <strong>Interface</strong>: WordPress Admin (<code>ums_rules_list.php</code>, <code>ums_novel_list.php</code>)</p>
+                <ol>
+                <li>User inputs target URL (e.g., FanFox manga URL).</li>
+                <li>User configures parameters:<ul>
+                <li>Schedule (e.g., &quot;Every hour&quot;).</li>
+                <li>Chapter limits.</li>
+                <li>Translation settings.</li>
+                <li>Status mapping.</li>
+                </ul>
+                </li>
+                <li><strong>Storage</strong>: Rule is saved as a serialized array in <code>wp_options</code>.<ul>
+                <li>Key: <code>ums_rules_list</code> (Manga), <code>ums_novel_list</code> (Novels).</li>
+                <li>Format: <code>array( id =&gt; array( url, schedule, active, last_run, ... ) )</code>.</li>
+                </ul>
+                </li>
+                </ol>
+                <section></section><section><h2>2. Cron Execution (Trigger)</h2>
+                <p><strong>Trigger</strong>: WP-Cron (<code>umsaction</code> hook).</p>
+                <ol>
+                <li><strong>Loader</strong>: <code>ums_cron()</code> fetches rule arrays from <code>wp_options</code>.</li>
+                <li><strong>Evaluator</strong>: Iterates through each rule.<ul>
+                <li>Calculates <code>next_run = last_run + schedule</code>.</li>
+                <li>If <code>now &gt;= next_run</code>, proceeds.</li>
+                </ul>
+                </li>
+                <li><strong>Dispatcher</strong>: Calls <code>ums_run_rule($id, $type)</code>.</li>
+                </ol>
+                <section></section><section><h2>3. Scraping Process (Ingestion)</h2>
+                <p><strong>Function</strong>: <code>ums_run_rule()</code></p>
+                <ol>
+                <li><strong>Locking</strong>: Checks <code>ums_running_list</code> to ensure the rule isn&#39;t already running.</li>
+                <li><strong>Fetching (Phase 1: Listing)</strong>:<ul>
+                <li>Fetches the main Manga/Novel TOC page.</li>
+                <li>Strategy: <code>ums_get_web_page()</code> -&gt; attempts cURL -&gt; falls back to PhantomJS/Puppeteer if configured or if Cloudflare is detected.</li>
+                </ul>
+                </li>
+                <li><strong>Parsing</strong>:<ul>
+                <li>DOM Parser extracts: Title, Cover Image, Author, Genre, Status, Chapter List.</li>
+                <li>Checks if Manga already exists in DB (by Title or <code>_manga_import_slug</code>).</li>
+                </ul>
+                </li>
+                <li><strong>Creation (Parent Post)</strong>:<ul>
+                <li>If new, calls <code>wp_insert_post()</code> (<code>post_type = &#39;wp-manga&#39;</code>).</li>
+                <li>Downloads Cover Image -&gt; <code>wp_insert_attachment()</code> -&gt; Sets as Featured Image.</li>
+                <li>Sets Taxonomies (<code>wp-manga-genre</code>, etc.).</li>
+                </ul>
+                </li>
+                <li><strong>Fetching (Phase 2: Chapters)</strong>:<ul>
+                <li>Iterates through detected chapters.</li>
+                <li>Checks against existing chapters in DB (<code>wp_manga_chapter-&gt;get_chapter_by_slug</code>).</li>
+                <li>If new:<ul>
+                <li>Fetches Chapter Page.</li>
+                <li><strong>Manga</strong>: Extracts image URLs (<code>ums_extractMangaImages</code>).</li>
+                <li><strong>Novel</strong>: Extracts text content (<code>ums_repairHTML</code>, <code>ums_strip_links</code>).</li>
+                </ul>
+                </li>
+                </ul>
+                </li>
+                </ol>
+                <section></section><section><h2>4. Processing &amp; Transformation</h2>
+                <ol>
+                <li><strong>Translation (Optional)</strong>:<ul>
+                <li>If enabled, content (Novel text or Manga Title) is sent to <code>ums_translate()</code>.</li>
+                <li>Calls external API (Google/DeepL/Bing).</li>
+                </ul>
+                </li>
+                <li><strong>Text Spinning (Optional)</strong>:<ul>
+                <li>If enabled, replaces words with synonyms from <code>synonyms.dat</code>.</li>
+                </ul>
+                </li>
+                </ol>
+                <section></section><section><h2>5. Storage (Persistence)</h2>
+                <p><strong>Manga Images</strong>:</p>
+                <ol>
+                <li>Downloads image binary.</li>
+                <li><strong>Path</strong>: <code>wp-content/uploads/manga/{manga_id}/{chapter_slug}/</code>.</li>
+                <li><strong>File System</strong>: Uses <code>WP_Filesystem</code> to write files.</li>
+                </ol>
+                <p><strong>Database</strong>:</p>
+                <ol>
+                <li><strong>Madara Tables</strong>:<ul>
+                <li>Typically stores chapter metadata in custom tables (depending on Madara version) or custom post types.</li>
+                <li>The plugin uses <code>WP_MANGA_STORAGE</code> global class to abstract this.</li>
+                <li>Calls <code>$wp_manga_storage-&gt;wp_manga_upload_single_chapter()</code>.</li>
+                </ul>
+                </li>
+                </ol>
+                <section><h2>6. Cleanup</h2>
+                <ol>
+                <li><strong>Logging</strong>: Execution result logged to <code>ums_info.log</code> (if enabled).</li>
+                <li><strong>State Update</strong>: Updates <code>last_run</code> timestamp in the rule array in <code>wp_options</code>.</li>
+                <li><strong>Unlock</strong>: Removes ID from <code>ums_running_list</code>.</li>
+                </ol>
+                </section>
+            </div>
+            
+            <footer class="page-footer">
+                <p>&copy; 2024 Ultimate Web Novel & Manga Scraper - Released into the Public Domain</p>
+                <p>
+                    <a href="https://github.com/druvx13/ultimate-manga-scraper">GitHub</a> •
+                    <a href="security.html#disclosure">Report Security Issue</a> •
+                    <a href="changelog.html">Changelog</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
