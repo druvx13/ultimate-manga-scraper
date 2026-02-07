@@ -6993,6 +6993,29 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                             }
                                         }
                                     }
+                                    // FanMTL / ReadWN specific selector - div.chapter-content
+                                    if(empty($content)) 
+                                    {
+                                        $articles = $xpath->query('//div[contains(@class, "chapter-content")]');
+                                        if($articles !== false && count($articles) > 0)
+                                        {
+                                            foreach($articles as $container) 
+                                            {
+                                                if(method_exists($container, 'saveHTML'))
+                                                {
+                                                    $content .= ' ' . $container->saveHTML();
+                                                }
+                                                elseif(isset($container->ownerDocument) && method_exists($container->ownerDocument, 'saveHTML'))
+                                                {
+                                                    $content .= ' ' . $container->ownerDocument->saveHTML($container);
+                                                }
+                                                elseif(isset($container->nodeValue))
+                                                {
+                                                    $content .= ' ' . $container->nodeValue;
+                                                }
+                                            }
+                                        }
+                                    }
                                     if(empty($content)) 
                                     {
                                         $articles = $xpath->query('//*[contains(@class, "cha-tit")]');
