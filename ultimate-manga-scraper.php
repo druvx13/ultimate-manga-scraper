@@ -1151,6 +1151,40 @@ function ums_cron()
             $zcont = $zcont + 1;
         }
     }
+    $GLOBALS['wp_object_cache']->delete('ums_fanmtl_list', 'options');
+    if (!get_option('ums_fanmtl_list')) {
+        $frules = array();
+    } else {
+        $frules = get_option('ums_fanmtl_list');
+    }
+    if (!empty($frules)) {
+        $fcont = 0;
+        foreach ($frules as $frequest => $fbundle[]) {
+            $fbundle_values   = array_values($fbundle);
+            $fmyValues        = $fbundle_values[$fcont];
+            $farray_my_values = array_values($fmyValues);for($fiji=0;$fiji<count($farray_my_values);++$fiji){if(is_string($farray_my_values[$fiji])){$farray_my_values[$fiji]=stripslashes($farray_my_values[$fiji]);}}
+            $fschedule        = isset($farray_my_values[1]) ? $farray_my_values[1] : '24';
+            $factive          = isset($farray_my_values[2]) ? $farray_my_values[2] : '0';
+            $flast_run        = isset($farray_my_values[3]) ? $farray_my_values[3] : ums_get_date_now();
+            if ($factive == '1') {
+                $fnow                = ums_get_date_now();
+                if($unlocker == '1')
+                {
+                    $fnextrun        = ums_add_minute($flast_run, $fschedule);
+                    $fums_hour_diff = (int) ums_minute_diff($fnow, $fnextrun);
+                }
+                else
+                {
+                    $fnextrun            = ums_add_hour($flast_run, $fschedule);
+                    $fums_hour_diff = (int) ums_hour_diff($fnow, $fnextrun);
+                }
+                if ($fums_hour_diff >= 0) {
+                    ums_run_rule($fcont, 6);
+                }
+            }
+            $fcont = $fcont + 1;
+        }
+    }
     $running = array();
     update_option('ums_running_list', $running);
 }
@@ -3731,6 +3765,73 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         $rules = get_option('ums_manga_generic_list');
                         $rules[$param][3] = ums_get_date_now();
                         update_option('ums_manga_generic_list', $rules, false);
+                    }
+                }
+            }
+            elseif($type == 6)
+            {
+                $GLOBALS['wp_object_cache']->delete('ums_fanmtl_list', 'options');
+                if (!get_option('ums_fanmtl_list')) {
+                    $rules = array();
+                } else {
+                    $rules = get_option('ums_fanmtl_list');
+                }
+                if (!empty($rules)) {
+                    foreach ($rules as $request => $bundle[]) {
+                        if ($cont == $param) {
+                            $bundle_values    = array_values($bundle);
+                            $myValues         = $bundle_values[$cont];
+                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
+                            $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
+                            $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
+                            $last_run         = isset($array_my_values[3]) ? $array_my_values[3] : '';
+                            $max              = isset($array_my_values[4]) ? $array_my_values[4] : '';
+                            $post_status      = isset($array_my_values[5]) ? $array_my_values[5] : '';
+                            $post_user_name   = isset($array_my_values[6]) ? $array_my_values[6] : '';
+                            $item_create_tag  = isset($array_my_values[7]) ? $array_my_values[7] : '';
+                            $default_category = isset($array_my_values[8]) ? $array_my_values[8] : '';
+                            $auto_categories  = isset($array_my_values[9]) ? $array_my_values[9] : '';
+                            $can_create_tag   = isset($array_my_values[10]) ? $array_my_values[10] : '';
+                            $use_phantom      = isset($array_my_values[11]) ? $array_my_values[11] : '';
+                            $reverse_chapters = isset($array_my_values[12]) ? $array_my_values[12] : '';
+                            $max_manga        = isset($array_my_values[13]) ? $array_my_values[13] : '';
+                            $chapter_warning  = isset($array_my_values[14]) ? $array_my_values[14] : '';
+                            $enable_comments  = isset($array_my_values[15]) ? $array_my_values[15] : '';
+                            $enable_pingback  = isset($array_my_values[16]) ? $array_my_values[16] : '';
+                            $get_date         = isset($array_my_values[17]) ? $array_my_values[17] : '';
+                            $rule_translate   = isset($array_my_values[18]) ? $array_my_values[18] : '';
+                            $no_translate_title= isset($array_my_values[19]) ? $array_my_values[19] : '';
+                            $chapter_slug     = isset($array_my_values[20]) ? $array_my_values[20] : '';
+                            $phantom_wait     = isset($array_my_values[21]) ? $array_my_values[21] : '';
+                            $strip_images     = isset($array_my_values[22]) ? $array_my_values[22] : '';
+                            $found            = 1;
+                            break;
+                        }
+                        $cont = $cont + 1;
+                    }
+                } else {
+                    ums_log_to_file('No rules found for ums_fanmtl_list!');
+                    if($auto == 1)
+                    {
+                        ums_clearFromList($param, $type);
+                    }
+                    return 'fail';
+                }
+                if ($found == 0) {
+                    ums_log_to_file($param . ' not found in ums_fanmtl_list!');
+                    if($auto == 1)
+                    {
+                        ums_clearFromList($param, $type);
+                    }
+                    return 'fail';
+                } else {
+                    if($rerun_count == 0)
+                    {
+                        $GLOBALS['wp_object_cache']->delete('ums_fanmtl_list', 'options');
+                        $rules = get_option('ums_fanmtl_list');
+                        $rules[$param][3] = ums_get_date_now();
+                        update_option('ums_fanmtl_list', $rules, false);
                     }
                 }
             }
