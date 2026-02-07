@@ -35,6 +35,23 @@ echo "<h2>Environment Check</h2>";
 echo "<pre>";
 echo "PHP Version: " . PHP_VERSION . "\n";
 echo "WordPress Directory: " . getcwd() . "\n";
+echo "Memory Limit: " . ini_get('memory_limit') . "\n";
+echo "Max Execution Time: " . ini_get('max_execution_time') . "s\n";
+
+// Check for disabled functions
+$disabled = ini_get('disable_functions');
+if (!empty($disabled)) {
+    $disabled_array = array_map('trim', explode(',', $disabled));
+    echo "Disabled Functions: " . count($disabled_array) . " functions disabled\n";
+    if (in_array('exec', $disabled_array)) {
+        echo "  - exec() is DISABLED\n";
+    }
+    if (in_array('shell_exec', $disabled_array)) {
+        echo "  - shell_exec() is DISABLED\n";
+    }
+} else {
+    echo "Disabled Functions: None\n";
+}
 echo "</pre>";
 
 // Load WordPress
@@ -65,15 +82,22 @@ echo "<span class='success'>✓ Plugin file found</span>\n";
 echo "Location: $plugin_file\n";
 echo "</pre>";
 
-// Syntax check
+// Syntax check - skip if exec() is disabled
 echo "<h2>PHP Syntax Check</h2>";
 echo "<pre>";
-exec("php -l " . escapeshellarg($plugin_file) . " 2>&1", $syntax_output, $syntax_code);
-if ($syntax_code === 0) {
-    echo "<span class='success'>✓ No syntax errors detected</span>\n";
+
+// Check if exec is available
+if (function_exists('exec')) {
+    @exec("php -l " . escapeshellarg($plugin_file) . " 2>&1", $syntax_output, $syntax_code);
+    if ($syntax_code === 0) {
+        echo "<span class='success'>✓ No syntax errors detected</span>\n";
+    } else {
+        echo "<span class='error'>❌ Syntax errors found:</span>\n";
+        echo implode("\n", $syntax_output);
+    }
 } else {
-    echo "<span class='error'>❌ Syntax errors found:</span>\n";
-    echo implode("\n", $syntax_output);
+    echo "<span class='warning'>⚠ exec() function is disabled on this server</span>\n";
+    echo "Skipping command-line syntax check, will test by loading plugin...\n";
 }
 echo "</pre>";
 
