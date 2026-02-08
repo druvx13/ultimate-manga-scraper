@@ -955,7 +955,9 @@ function ums_cron()
         foreach ($rules as $request => $bundle[]) {
             $bundle_values   = array_values($bundle);
             $myValues        = $bundle_values[$cont];
-            $array_my_values = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+            $array_my_values = array_values($myValues);
+            $count = count($array_my_values);
+            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
             $schedule        = isset($array_my_values[1]) ? $array_my_values[1] : '24';
             $active          = isset($array_my_values[2]) ? $array_my_values[2] : '0';
             $last_run        = isset($array_my_values[3]) ? $array_my_values[3] : ums_get_date_now();
@@ -2502,10 +2504,7 @@ function ums_fetch_chapters( $volume, $post_id, $itemx, $storage = 'local', $man
 }
 function ums_manga_url_filter( $url ){
 
-    $url = str_replace( 'https://', '', $url );
-    $url = str_replace( 'http://', '', $url );
-    $url = str_replace( '//', '', $url );
-    $url = str_replace( 'http:', '', $url );
+    $url = preg_replace('#^https?://|^//|^https?:#', '', $url);
 
     return "http://{$url}";
 }
@@ -3323,18 +3322,15 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
             $strip_images     = '';
             if($type == 0)
             {
-                $GLOBALS['wp_object_cache']->delete('ums_rules_list', 'options');
-                if (!get_option('ums_rules_list')) {
-                    $rules = array();
-                } else {
-                    $rules = get_option('ums_rules_list');
-                }
+                $rules = get_option('ums_rules_list', array());
                 if (!empty($rules)) {
                     foreach ($rules as $request => $bundle[]) {
                         if ($cont == $param) {
                             $bundle_values    = array_values($bundle);
                             $myValues         = $bundle_values[$cont];
-                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $array_my_values  = array_values($myValues);
+                            $count = count($array_my_values);
+                            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
                             $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
                             $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
                             $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
@@ -3401,18 +3397,15 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
             }
             elseif($type == 1)
             {
-                $GLOBALS['wp_object_cache']->delete('ums_text_list', 'options');
-                if (!get_option('ums_text_list')) {
-                    $rules = array();
-                } else {
-                    $rules = get_option('ums_text_list');
-                }
+                $rules = get_option('ums_text_list', array());
                 if (!empty($rules)) {
                     foreach ($rules as $request => $bundle[]) {
                         if ($cont == $param) {
                             $bundle_values    = array_values($bundle);
                             $myValues         = $bundle_values[$cont];
-                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $array_my_values  = array_values($myValues);
+                            $count = count($array_my_values);
+                            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
                             $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
                             $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
                             $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
@@ -3468,18 +3461,15 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
             }
             elseif($type == 2)
             {
-                $GLOBALS['wp_object_cache']->delete('ums_novel_list', 'options');
-                if (!get_option('ums_novel_list')) {
-                    $rules = array();
-                } else {
-                    $rules = get_option('ums_novel_list');
-                }
+                $rules = get_option('ums_novel_list', array());
                 if (!empty($rules)) {
                     foreach ($rules as $request => $bundle[]) {
                         if ($cont == $param) {
                             $bundle_values    = array_values($bundle);
                             $myValues         = $bundle_values[$cont];
-                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $array_my_values  = array_values($myValues);
+                            $count = count($array_my_values);
+                            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
                             $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
                             $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
                             $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
@@ -3535,18 +3525,15 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
             }
             elseif($type == 3)
             {
-                $GLOBALS['wp_object_cache']->delete('ums_vipnovel_list', 'options');
-                if (!get_option('ums_vipnovel_list')) {
-                    $rules = array();
-                } else {
-                    $rules = get_option('ums_vipnovel_list');
-                }
+                $rules = get_option('ums_vipnovel_list', array());
                 if (!empty($rules)) {
                     foreach ($rules as $request => $bundle[]) {
                         if ($cont == $param) {
                             $bundle_values    = array_values($bundle);
                             $myValues         = $bundle_values[$cont];
-                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $array_my_values  = array_values($myValues);
+                            $count = count($array_my_values);
+                            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
                             $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
                             $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
                             $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
@@ -3602,18 +3589,15 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
             }
             elseif($type == 4)
             {
-                $GLOBALS['wp_object_cache']->delete('ums_novel_generic_list', 'options');
-                if (!get_option('ums_novel_generic_list')) {
-                    $rules = array();
-                } else {
-                    $rules = get_option('ums_novel_generic_list');
-                }
+                $rules = get_option('ums_novel_generic_list', array());
                 if (!empty($rules)) {
                     foreach ($rules as $request => $bundle[]) {
                         if ($cont == $param) {
                             $bundle_values    = array_values($bundle);
                             $myValues         = $bundle_values[$cont];
-                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $array_my_values  = array_values($myValues);
+                            $count = count($array_my_values);
+                            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
                             $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
                             $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
                             $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
@@ -3670,18 +3654,15 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
             }
             elseif($type == 5)
             {
-                $GLOBALS['wp_object_cache']->delete('ums_manga_generic_list', 'options');
-                if (!get_option('ums_manga_generic_list')) {
-                    $rules = array();
-                } else {
-                    $rules = get_option('ums_manga_generic_list');
-                }
+                $rules = get_option('ums_manga_generic_list', array());
                 if (!empty($rules)) {
                     foreach ($rules as $request => $bundle[]) {
                         if ($cont == $param) {
                             $bundle_values    = array_values($bundle);
                             $myValues         = $bundle_values[$cont];
-                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $array_my_values  = array_values($myValues);
+                            $count = count($array_my_values);
+                            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
                             $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
                             $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
                             $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
