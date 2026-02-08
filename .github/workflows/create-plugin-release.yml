@@ -23,6 +23,9 @@ jobs:
     name: Create Plugin Release
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: write  # Required to push commits and create releases
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
