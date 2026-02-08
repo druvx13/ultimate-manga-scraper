@@ -991,7 +991,7 @@ function ums_cron()
         foreach ($xrules as $xrequest => $xbundle[]) {
             $xbundle_values   = array_values($xbundle);
             $xmyValues        = $xbundle_values[$xcont];
-            $xarray_my_values = array_values($xmyValues);for($xiji=0;$xiji<count($xarray_my_values);++$xiji){if(is_string($xarray_my_values[$xiji])){$xarray_my_values[$xiji]=stripslashes($xarray_my_values[$xiji]);}}
+            $xarray_my_values = array_values($xmyValues);for($xiji=0,$xcount=count($xarray_my_values);$xiji<$xcount;++$xiji){if(is_string($xarray_my_values[$xiji])){$xarray_my_values[$xiji]=stripslashes($xarray_my_values[$xiji]);}}
             $xschedule        = isset($xarray_my_values[1]) ? $xarray_my_values[1] : '24';
             $xactive          = isset($xarray_my_values[2]) ? $xarray_my_values[2] : '0';
             $xlast_run        = isset($xarray_my_values[3]) ? $xarray_my_values[3] : ums_get_date_now();
@@ -1025,7 +1025,7 @@ function ums_cron()
         foreach ($xrules as $xrequest => $xbundle[]) {
             $xbundle_values   = array_values($xbundle);
             $xmyValues        = $xbundle_values[$xcont];
-            $xarray_my_values = array_values($xmyValues);for($xiji=0;$xiji<count($xarray_my_values);++$xiji){if(is_string($xarray_my_values[$xiji])){$xarray_my_values[$xiji]=stripslashes($xarray_my_values[$xiji]);}}
+            $xarray_my_values = array_values($xmyValues);for($xiji=0,$xcount=count($xarray_my_values);$xiji<$xcount;++$xiji){if(is_string($xarray_my_values[$xiji])){$xarray_my_values[$xiji]=stripslashes($xarray_my_values[$xiji]);}}
             $xschedule        = isset($xarray_my_values[1]) ? $xarray_my_values[1] : '24';
             $xactive          = isset($xarray_my_values[2]) ? $xarray_my_values[2] : '0';
             $xlast_run        = isset($xarray_my_values[3]) ? $xarray_my_values[3] : ums_get_date_now();
@@ -1059,7 +1059,7 @@ function ums_cron()
         foreach ($xrules as $xrequest => $xbundle[]) {
             $xbundle_values   = array_values($xbundle);
             $xmyValues        = $xbundle_values[$xcont];
-            $xarray_my_values = array_values($xmyValues);for($xiji=0;$xiji<count($xarray_my_values);++$xiji){if(is_string($xarray_my_values[$xiji])){$xarray_my_values[$xiji]=stripslashes($xarray_my_values[$xiji]);}}
+            $xarray_my_values = array_values($xmyValues);for($xiji=0,$xcount=count($xarray_my_values);$xiji<$xcount;++$xiji){if(is_string($xarray_my_values[$xiji])){$xarray_my_values[$xiji]=stripslashes($xarray_my_values[$xiji]);}}
             $xschedule        = isset($xarray_my_values[1]) ? $xarray_my_values[1] : '24';
             $xactive          = isset($xarray_my_values[2]) ? $xarray_my_values[2] : '0';
             $xlast_run        = isset($xarray_my_values[3]) ? $xarray_my_values[3] : ums_get_date_now();
@@ -2460,11 +2460,12 @@ function ums_fetch_chapters( $volume, $post_id, $itemx, $storage = 'local', $man
         if( !empty( $vol_created_chaps ) ){
 
             $vol_created_chaps = array_column( $vol_created_chaps, 'chapter_name' );
+            $vol_created_chaps_map = array_flip($vol_created_chaps);
             
             if(isset($volume['chapters']))
             {
                 foreach( $volume['chapters'] as $index => $chapter ){							
-                    if( in_array( $chapter['name'], $vol_created_chaps ) === false ){
+                    if( !isset($vol_created_chaps_map[$chapter['name']]) ){
                         $cur_chap_index = $index;
                         break;
                     }
@@ -11998,15 +11999,16 @@ function ums_generate_random_email()
 {
     $tlds = array("com", "net", "gov", "org", "edu", "biz", "info");
     $char = "0123456789abcdefghijklmnopqrstuvwxyz";
+    $char_len = strlen($char) - 1;
     $ulen = mt_rand(5, 10);
     $dlen = mt_rand(7, 17);
     $a = "";
     for ($i = 1; $i <= $ulen; $i++) {
-        $a .= substr($char, mt_rand(0, strlen($char)), 1);
+        $a .= substr($char, mt_rand(0, $char_len), 1);
     }
     $a .= "@";
     for ($i = 1; $i <= $dlen; $i++) {
-        $a .= substr($char, mt_rand(0, strlen($char)), 1);
+        $a .= substr($char, mt_rand(0, $char_len), 1);
     }
     $a .= ".";
     $a .= $tlds[mt_rand(0, (sizeof($tlds)-1))];
