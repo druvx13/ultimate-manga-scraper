@@ -955,10 +955,12 @@ function ums_cron()
         foreach ($rules as $request => $bundle[]) {
             $bundle_values   = array_values($bundle);
             $myValues        = $bundle_values[$cont];
-            $array_my_values = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
-            $schedule        = isset($array_my_values[1]) ? $array_my_values[1] : '24';
-            $active          = isset($array_my_values[2]) ? $array_my_values[2] : '0';
-            $last_run        = isset($array_my_values[3]) ? $array_my_values[3] : ums_get_date_now();
+            $array_my_values = array_values($myValues);
+            $count = count($array_my_values);
+            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+            $schedule        = $array_my_values[1] ?? '24';
+            $active          = $array_my_values[2] ?? '0';
+            $last_run        = $array_my_values[3] ?? ums_get_date_now();
             if ($active == '1') {
                 $now                = ums_get_date_now();
                 if($unlocker == '1')
@@ -989,7 +991,7 @@ function ums_cron()
         foreach ($xrules as $xrequest => $xbundle[]) {
             $xbundle_values   = array_values($xbundle);
             $xmyValues        = $xbundle_values[$xcont];
-            $xarray_my_values = array_values($xmyValues);for($xiji=0;$xiji<count($xarray_my_values);++$xiji){if(is_string($xarray_my_values[$xiji])){$xarray_my_values[$xiji]=stripslashes($xarray_my_values[$xiji]);}}
+            $xarray_my_values = array_values($xmyValues);for($xiji=0,$xcount=count($xarray_my_values);$xiji<$xcount;++$xiji){if(is_string($xarray_my_values[$xiji])){$xarray_my_values[$xiji]=stripslashes($xarray_my_values[$xiji]);}}
             $xschedule        = isset($xarray_my_values[1]) ? $xarray_my_values[1] : '24';
             $xactive          = isset($xarray_my_values[2]) ? $xarray_my_values[2] : '0';
             $xlast_run        = isset($xarray_my_values[3]) ? $xarray_my_values[3] : ums_get_date_now();
@@ -1023,7 +1025,7 @@ function ums_cron()
         foreach ($xrules as $xrequest => $xbundle[]) {
             $xbundle_values   = array_values($xbundle);
             $xmyValues        = $xbundle_values[$xcont];
-            $xarray_my_values = array_values($xmyValues);for($xiji=0;$xiji<count($xarray_my_values);++$xiji){if(is_string($xarray_my_values[$xiji])){$xarray_my_values[$xiji]=stripslashes($xarray_my_values[$xiji]);}}
+            $xarray_my_values = array_values($xmyValues);for($xiji=0,$xcount=count($xarray_my_values);$xiji<$xcount;++$xiji){if(is_string($xarray_my_values[$xiji])){$xarray_my_values[$xiji]=stripslashes($xarray_my_values[$xiji]);}}
             $xschedule        = isset($xarray_my_values[1]) ? $xarray_my_values[1] : '24';
             $xactive          = isset($xarray_my_values[2]) ? $xarray_my_values[2] : '0';
             $xlast_run        = isset($xarray_my_values[3]) ? $xarray_my_values[3] : ums_get_date_now();
@@ -1057,7 +1059,7 @@ function ums_cron()
         foreach ($xrules as $xrequest => $xbundle[]) {
             $xbundle_values   = array_values($xbundle);
             $xmyValues        = $xbundle_values[$xcont];
-            $xarray_my_values = array_values($xmyValues);for($xiji=0;$xiji<count($xarray_my_values);++$xiji){if(is_string($xarray_my_values[$xiji])){$xarray_my_values[$xiji]=stripslashes($xarray_my_values[$xiji]);}}
+            $xarray_my_values = array_values($xmyValues);for($xiji=0,$xcount=count($xarray_my_values);$xiji<$xcount;++$xiji){if(is_string($xarray_my_values[$xiji])){$xarray_my_values[$xiji]=stripslashes($xarray_my_values[$xiji]);}}
             $xschedule        = isset($xarray_my_values[1]) ? $xarray_my_values[1] : '24';
             $xactive          = isset($xarray_my_values[2]) ? $xarray_my_values[2] : '0';
             $xlast_run        = isset($xarray_my_values[3]) ? $xarray_my_values[3] : ums_get_date_now();
@@ -2458,11 +2460,12 @@ function ums_fetch_chapters( $volume, $post_id, $itemx, $storage = 'local', $man
         if( !empty( $vol_created_chaps ) ){
 
             $vol_created_chaps = array_column( $vol_created_chaps, 'chapter_name' );
+            $vol_created_chaps_map = array_flip($vol_created_chaps);
             
             if(isset($volume['chapters']))
             {
                 foreach( $volume['chapters'] as $index => $chapter ){							
-                    if( in_array( $chapter['name'], $vol_created_chaps ) === false ){
+                    if( !isset($vol_created_chaps_map[$chapter['name']]) ){
                         $cur_chap_index = $index;
                         break;
                     }
@@ -2502,10 +2505,7 @@ function ums_fetch_chapters( $volume, $post_id, $itemx, $storage = 'local', $man
 }
 function ums_manga_url_filter( $url ){
 
-    $url = str_replace( 'https://', '', $url );
-    $url = str_replace( 'http://', '', $url );
-    $url = str_replace( '//', '', $url );
-    $url = str_replace( 'http:', '', $url );
+    $url = preg_replace('#^https?://|^//|^https?:#', '', $url);
 
     return "http://{$url}";
 }
@@ -2559,8 +2559,7 @@ function ums_get_chapter_images( $url )
             return $images_url;
         }
     }			
-    $base_url = str_replace( '1.html', '', $url );
-    $base_url = str_replace( '1.htm', '', $base_url );
+    $base_url = preg_replace('/1\.html?$/', '', $url);
     $base_url = ums_manga_url_filter( $base_url );
     for( $i = 1; $i <= $total_pages; $i++ ){
         $data_url = $base_url . 'chapterfun.ashx?cid=' . $chapterid . '&page=' . $i . '&key=' . ($i == 1 ? '' : $dm5_key);
@@ -2989,8 +2988,7 @@ function ums_fetch_single_chapter_generic( $ums_chapter_images, $volume_id, $pos
         $wp_filesystem->copy( dirname(__FILE__) . "/images/image-placeholder.jpg", "{$extract}/image-placeholder.jpg" );
     }
     $ch_name = str_replace($manga_name, '', $itemx['title']);
-    $ch_name = trim(trim($ch_name, '- '));
-    $ch_name = trim($ch_name);
+    $ch_name = trim($ch_name, '- ');
     $chapter_args = array(
         'post_id'             => $post_id,
         'volume_id'           => $volume_id,
@@ -3323,52 +3321,49 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
             $strip_images     = '';
             if($type == 0)
             {
-                $GLOBALS['wp_object_cache']->delete('ums_rules_list', 'options');
-                if (!get_option('ums_rules_list')) {
-                    $rules = array();
-                } else {
-                    $rules = get_option('ums_rules_list');
-                }
+                $rules = get_option('ums_rules_list', array());
                 if (!empty($rules)) {
                     foreach ($rules as $request => $bundle[]) {
                         if ($cont == $param) {
                             $bundle_values    = array_values($bundle);
                             $myValues         = $bundle_values[$cont];
-                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
-                            $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
-                            $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
-                            $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
-                            $last_run         = isset($array_my_values[3]) ? $array_my_values[3] : '';
-                            $max              = isset($array_my_values[4]) ? $array_my_values[4] : '';
-                            $post_status      = isset($array_my_values[5]) ? $array_my_values[5] : '';
-                            $post_user_name   = isset($array_my_values[6]) ? $array_my_values[6] : '';
-                            $item_create_tag  = isset($array_my_values[7]) ? $array_my_values[7] : '';
-                            $default_category = isset($array_my_values[8]) ? $array_my_values[8] : '';
-                            $auto_categories  = isset($array_my_values[9]) ? $array_my_values[9] : '';
-                            $can_create_tag   = isset($array_my_values[10]) ? $array_my_values[10] : '';
-                            $use_phantom      = isset($array_my_values[11]) ? $array_my_values[11] : '';
-                            $reverse_chapters = isset($array_my_values[12]) ? $array_my_values[12] : '';
-                            $result_type      = isset($array_my_values[13]) ? $array_my_values[13] : '';
-                            $manga_author     = isset($array_my_values[14]) ? $array_my_values[14] : '';
-                            $manga_artist     = isset($array_my_values[15]) ? $array_my_values[15] : '';
-                            $manga_genres     = isset($array_my_values[16]) ? $array_my_values[16] : '';
-                            $manga_exgenres   = isset($array_my_values[17]) ? $array_my_values[17] : '';
-                            $manga_year_before= isset($array_my_values[18]) ? $array_my_values[18] : '';
-                            $manga_year_after = isset($array_my_values[19]) ? $array_my_values[19] : '';
-                            $manga_min_rating = isset($array_my_values[20]) ? $array_my_values[20] : '';
-                            $manga_completed  = isset($array_my_values[21]) ? $array_my_values[21] : '';
-                            $manga_sorting    = isset($array_my_values[22]) ? $array_my_values[22] : '';
-                            $manga_direction  = isset($array_my_values[23]) ? $array_my_values[23] : '';
-                            $max_manga        = isset($array_my_values[24]) ? $array_my_values[24] : '';
-                            $continue_search  = isset($array_my_values[25]) ? $array_my_values[25] : '';
-                            $chapter_warning  = isset($array_my_values[26]) ? $array_my_values[26] : '';
-                            $enable_comments  = isset($array_my_values[27]) ? $array_my_values[27] : '';
-                            $enable_pingback  = isset($array_my_values[28]) ? $array_my_values[28] : '';
-                            $get_date         = isset($array_my_values[29]) ? $array_my_values[29] : '';
-                            $phantom_wait     = isset($array_my_values[30]) ? $array_my_values[30] : '';
-                            $rule_translate   = isset($array_my_values[31]) ? $array_my_values[31] : '';
-                            $no_translate_title = isset($array_my_values[32]) ? $array_my_values[32] : '';
-                            $skip_last       = isset($array_my_values[33]) ? $array_my_values[33] : '';
+                            $array_my_values  = array_values($myValues);
+                            $count = count($array_my_values);
+                            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $manga_name       = $array_my_values[0] ?? '';
+                            $schedule         = $array_my_values[1] ?? '';
+                            $active           = $array_my_values[2] ?? '';
+                            $last_run         = $array_my_values[3] ?? '';
+                            $max              = $array_my_values[4] ?? '';
+                            $post_status      = $array_my_values[5] ?? '';
+                            $post_user_name   = $array_my_values[6] ?? '';
+                            $item_create_tag  = $array_my_values[7] ?? '';
+                            $default_category = $array_my_values[8] ?? '';
+                            $auto_categories  = $array_my_values[9] ?? '';
+                            $can_create_tag   = $array_my_values[10] ?? '';
+                            $use_phantom      = $array_my_values[11] ?? '';
+                            $reverse_chapters = $array_my_values[12] ?? '';
+                            $result_type      = $array_my_values[13] ?? '';
+                            $manga_author     = $array_my_values[14] ?? '';
+                            $manga_artist     = $array_my_values[15] ?? '';
+                            $manga_genres     = $array_my_values[16] ?? '';
+                            $manga_exgenres   = $array_my_values[17] ?? '';
+                            $manga_year_before= $array_my_values[18] ?? '';
+                            $manga_year_after = $array_my_values[19] ?? '';
+                            $manga_min_rating = $array_my_values[20] ?? '';
+                            $manga_completed  = $array_my_values[21] ?? '';
+                            $manga_sorting    = $array_my_values[22] ?? '';
+                            $manga_direction  = $array_my_values[23] ?? '';
+                            $max_manga        = $array_my_values[24] ?? '';
+                            $continue_search  = $array_my_values[25] ?? '';
+                            $chapter_warning  = $array_my_values[26] ?? '';
+                            $enable_comments  = $array_my_values[27] ?? '';
+                            $enable_pingback  = $array_my_values[28] ?? '';
+                            $get_date         = $array_my_values[29] ?? '';
+                            $phantom_wait     = $array_my_values[30] ?? '';
+                            $rule_translate   = $array_my_values[31] ?? '';
+                            $no_translate_title = $array_my_values[32] ?? '';
+                            $skip_last       = $array_my_values[33] ?? '';
                             $found            = 1;
                             break;
                         }
@@ -3401,41 +3396,38 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
             }
             elseif($type == 1)
             {
-                $GLOBALS['wp_object_cache']->delete('ums_text_list', 'options');
-                if (!get_option('ums_text_list')) {
-                    $rules = array();
-                } else {
-                    $rules = get_option('ums_text_list');
-                }
+                $rules = get_option('ums_text_list', array());
                 if (!empty($rules)) {
                     foreach ($rules as $request => $bundle[]) {
                         if ($cont == $param) {
                             $bundle_values    = array_values($bundle);
                             $myValues         = $bundle_values[$cont];
-                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
-                            $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
-                            $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
-                            $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
-                            $last_run         = isset($array_my_values[3]) ? $array_my_values[3] : '';
-                            $max              = isset($array_my_values[4]) ? $array_my_values[4] : '';
-                            $post_status      = isset($array_my_values[5]) ? $array_my_values[5] : '';
-                            $post_user_name   = isset($array_my_values[6]) ? $array_my_values[6] : '';
-                            $item_create_tag  = isset($array_my_values[7]) ? $array_my_values[7] : '';
-                            $default_category = isset($array_my_values[8]) ? $array_my_values[8] : '';
-                            $auto_categories  = isset($array_my_values[9]) ? $array_my_values[9] : '';
-                            $can_create_tag   = isset($array_my_values[10]) ? $array_my_values[10] : '';
-                            $use_phantom      = isset($array_my_values[11]) ? $array_my_values[11] : '';
-                            $reverse_chapters = isset($array_my_values[12]) ? $array_my_values[12] : '';
-                            $max_manga        = isset($array_my_values[13]) ? $array_my_values[13] : '';
-                            $chapter_warning  = isset($array_my_values[14]) ? $array_my_values[14] : '';
-                            $enable_comments  = isset($array_my_values[15]) ? $array_my_values[15] : '';
-                            $enable_pingback  = isset($array_my_values[16]) ? $array_my_values[16] : '';
-                            $get_date         = isset($array_my_values[17]) ? $array_my_values[17] : '';
-                            $rule_translate   = isset($array_my_values[18]) ? $array_my_values[18] : '';
-                            $no_translate_title= isset($array_my_values[19]) ? $array_my_values[19] : '';
-                            $chapter_slug     = isset($array_my_values[20]) ? $array_my_values[20] : '';
-                            $phantom_wait     = isset($array_my_values[21]) ? $array_my_values[21] : '';
-                            $strip_images     = isset($array_my_values[22]) ? $array_my_values[22] : '';
+                            $array_my_values  = array_values($myValues);
+                            $count = count($array_my_values);
+                            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $manga_name       = $array_my_values[0] ?? '';
+                            $schedule         = $array_my_values[1] ?? '';
+                            $active           = $array_my_values[2] ?? '';
+                            $last_run         = $array_my_values[3] ?? '';
+                            $max              = $array_my_values[4] ?? '';
+                            $post_status      = $array_my_values[5] ?? '';
+                            $post_user_name   = $array_my_values[6] ?? '';
+                            $item_create_tag  = $array_my_values[7] ?? '';
+                            $default_category = $array_my_values[8] ?? '';
+                            $auto_categories  = $array_my_values[9] ?? '';
+                            $can_create_tag   = $array_my_values[10] ?? '';
+                            $use_phantom      = $array_my_values[11] ?? '';
+                            $reverse_chapters = $array_my_values[12] ?? '';
+                            $max_manga        = $array_my_values[13] ?? '';
+                            $chapter_warning  = $array_my_values[14] ?? '';
+                            $enable_comments  = $array_my_values[15] ?? '';
+                            $enable_pingback  = $array_my_values[16] ?? '';
+                            $get_date         = $array_my_values[17] ?? '';
+                            $rule_translate   = $array_my_values[18] ?? '';
+                            $no_translate_title= $array_my_values[19] ?? '';
+                            $chapter_slug     = $array_my_values[20] ?? '';
+                            $phantom_wait     = $array_my_values[21] ?? '';
+                            $strip_images     = $array_my_values[22] ?? '';
                             $found            = 1;
                             break;
                         }
@@ -3468,41 +3460,38 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
             }
             elseif($type == 2)
             {
-                $GLOBALS['wp_object_cache']->delete('ums_novel_list', 'options');
-                if (!get_option('ums_novel_list')) {
-                    $rules = array();
-                } else {
-                    $rules = get_option('ums_novel_list');
-                }
+                $rules = get_option('ums_novel_list', array());
                 if (!empty($rules)) {
                     foreach ($rules as $request => $bundle[]) {
                         if ($cont == $param) {
                             $bundle_values    = array_values($bundle);
                             $myValues         = $bundle_values[$cont];
-                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
-                            $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
-                            $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
-                            $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
-                            $last_run         = isset($array_my_values[3]) ? $array_my_values[3] : '';
-                            $max              = isset($array_my_values[4]) ? $array_my_values[4] : '';
-                            $post_status      = isset($array_my_values[5]) ? $array_my_values[5] : '';
-                            $post_user_name   = isset($array_my_values[6]) ? $array_my_values[6] : '';
-                            $item_create_tag  = isset($array_my_values[7]) ? $array_my_values[7] : '';
-                            $default_category = isset($array_my_values[8]) ? $array_my_values[8] : '';
-                            $auto_categories  = isset($array_my_values[9]) ? $array_my_values[9] : '';
-                            $can_create_tag   = isset($array_my_values[10]) ? $array_my_values[10] : '';
-                            $use_phantom      = isset($array_my_values[11]) ? $array_my_values[11] : '';
-                            $reverse_chapters = isset($array_my_values[12]) ? $array_my_values[12] : '';
-                            $max_manga        = isset($array_my_values[13]) ? $array_my_values[13] : '';
-                            $chapter_warning  = isset($array_my_values[14]) ? $array_my_values[14] : '';
-                            $enable_comments  = isset($array_my_values[15]) ? $array_my_values[15] : '';
-                            $enable_pingback  = isset($array_my_values[16]) ? $array_my_values[16] : '';
-                            $get_date         = isset($array_my_values[17]) ? $array_my_values[17] : '';
-                            $rule_translate   = isset($array_my_values[18]) ? $array_my_values[18] : '';
-                            $no_translate_title= isset($array_my_values[19]) ? $array_my_values[19] : '';
-                            $chapter_slug     = isset($array_my_values[20]) ? $array_my_values[20] : '';
-                            $phantom_wait     = isset($array_my_values[21]) ? $array_my_values[21] : '';
-                            $strip_images     = isset($array_my_values[22]) ? $array_my_values[22] : '';
+                            $array_my_values  = array_values($myValues);
+                            $count = count($array_my_values);
+                            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $manga_name       = $array_my_values[0] ?? '';
+                            $schedule         = $array_my_values[1] ?? '';
+                            $active           = $array_my_values[2] ?? '';
+                            $last_run         = $array_my_values[3] ?? '';
+                            $max              = $array_my_values[4] ?? '';
+                            $post_status      = $array_my_values[5] ?? '';
+                            $post_user_name   = $array_my_values[6] ?? '';
+                            $item_create_tag  = $array_my_values[7] ?? '';
+                            $default_category = $array_my_values[8] ?? '';
+                            $auto_categories  = $array_my_values[9] ?? '';
+                            $can_create_tag   = $array_my_values[10] ?? '';
+                            $use_phantom      = $array_my_values[11] ?? '';
+                            $reverse_chapters = $array_my_values[12] ?? '';
+                            $max_manga        = $array_my_values[13] ?? '';
+                            $chapter_warning  = $array_my_values[14] ?? '';
+                            $enable_comments  = $array_my_values[15] ?? '';
+                            $enable_pingback  = $array_my_values[16] ?? '';
+                            $get_date         = $array_my_values[17] ?? '';
+                            $rule_translate   = $array_my_values[18] ?? '';
+                            $no_translate_title= $array_my_values[19] ?? '';
+                            $chapter_slug     = $array_my_values[20] ?? '';
+                            $phantom_wait     = $array_my_values[21] ?? '';
+                            $strip_images     = $array_my_values[22] ?? '';
                             $found            = 1;
                             break;
                         }
@@ -3535,41 +3524,38 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
             }
             elseif($type == 3)
             {
-                $GLOBALS['wp_object_cache']->delete('ums_vipnovel_list', 'options');
-                if (!get_option('ums_vipnovel_list')) {
-                    $rules = array();
-                } else {
-                    $rules = get_option('ums_vipnovel_list');
-                }
+                $rules = get_option('ums_vipnovel_list', array());
                 if (!empty($rules)) {
                     foreach ($rules as $request => $bundle[]) {
                         if ($cont == $param) {
                             $bundle_values    = array_values($bundle);
                             $myValues         = $bundle_values[$cont];
-                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
-                            $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
-                            $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
-                            $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
-                            $last_run         = isset($array_my_values[3]) ? $array_my_values[3] : '';
-                            $max              = isset($array_my_values[4]) ? $array_my_values[4] : '';
-                            $post_status      = isset($array_my_values[5]) ? $array_my_values[5] : '';
-                            $post_user_name   = isset($array_my_values[6]) ? $array_my_values[6] : '';
-                            $item_create_tag  = isset($array_my_values[7]) ? $array_my_values[7] : '';
-                            $default_category = isset($array_my_values[8]) ? $array_my_values[8] : '';
-                            $auto_categories  = isset($array_my_values[9]) ? $array_my_values[9] : '';
-                            $can_create_tag   = isset($array_my_values[10]) ? $array_my_values[10] : '';
-                            $use_phantom      = isset($array_my_values[11]) ? $array_my_values[11] : '';
-                            $reverse_chapters = isset($array_my_values[12]) ? $array_my_values[12] : '';
-                            $max_manga        = isset($array_my_values[13]) ? $array_my_values[13] : '';
-                            $chapter_warning  = isset($array_my_values[14]) ? $array_my_values[14] : '';
-                            $enable_comments  = isset($array_my_values[15]) ? $array_my_values[15] : '';
-                            $enable_pingback  = isset($array_my_values[16]) ? $array_my_values[16] : '';
-                            $get_date         = isset($array_my_values[17]) ? $array_my_values[17] : '';
-                            $rule_translate   = isset($array_my_values[18]) ? $array_my_values[18] : '';
-                            $no_translate_title= isset($array_my_values[19]) ? $array_my_values[19] : '';
-                            $chapter_slug     = isset($array_my_values[20]) ? $array_my_values[20] : '';
-                            $phantom_wait     = isset($array_my_values[21]) ? $array_my_values[21] : '';
-                            $strip_images     = isset($array_my_values[22]) ? $array_my_values[22] : '';
+                            $array_my_values  = array_values($myValues);
+                            $count = count($array_my_values);
+                            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $manga_name       = $array_my_values[0] ?? '';
+                            $schedule         = $array_my_values[1] ?? '';
+                            $active           = $array_my_values[2] ?? '';
+                            $last_run         = $array_my_values[3] ?? '';
+                            $max              = $array_my_values[4] ?? '';
+                            $post_status      = $array_my_values[5] ?? '';
+                            $post_user_name   = $array_my_values[6] ?? '';
+                            $item_create_tag  = $array_my_values[7] ?? '';
+                            $default_category = $array_my_values[8] ?? '';
+                            $auto_categories  = $array_my_values[9] ?? '';
+                            $can_create_tag   = $array_my_values[10] ?? '';
+                            $use_phantom      = $array_my_values[11] ?? '';
+                            $reverse_chapters = $array_my_values[12] ?? '';
+                            $max_manga        = $array_my_values[13] ?? '';
+                            $chapter_warning  = $array_my_values[14] ?? '';
+                            $enable_comments  = $array_my_values[15] ?? '';
+                            $enable_pingback  = $array_my_values[16] ?? '';
+                            $get_date         = $array_my_values[17] ?? '';
+                            $rule_translate   = $array_my_values[18] ?? '';
+                            $no_translate_title= $array_my_values[19] ?? '';
+                            $chapter_slug     = $array_my_values[20] ?? '';
+                            $phantom_wait     = $array_my_values[21] ?? '';
+                            $strip_images     = $array_my_values[22] ?? '';
                             $found            = 1;
                             break;
                         }
@@ -3602,42 +3588,39 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
             }
             elseif($type == 4)
             {
-                $GLOBALS['wp_object_cache']->delete('ums_novel_generic_list', 'options');
-                if (!get_option('ums_novel_generic_list')) {
-                    $rules = array();
-                } else {
-                    $rules = get_option('ums_novel_generic_list');
-                }
+                $rules = get_option('ums_novel_generic_list', array());
                 if (!empty($rules)) {
                     foreach ($rules as $request => $bundle[]) {
                         if ($cont == $param) {
                             $bundle_values    = array_values($bundle);
                             $myValues         = $bundle_values[$cont];
-                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
-                            $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
-                            $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
-                            $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
-                            $last_run         = isset($array_my_values[3]) ? $array_my_values[3] : '';
-                            $max              = isset($array_my_values[4]) ? $array_my_values[4] : '';
-                            $post_status      = isset($array_my_values[5]) ? $array_my_values[5] : '';
-                            $post_user_name   = isset($array_my_values[6]) ? $array_my_values[6] : '';
-                            $item_create_tag  = isset($array_my_values[7]) ? $array_my_values[7] : '';
-                            $default_category = isset($array_my_values[8]) ? $array_my_values[8] : '';
-                            $auto_categories  = isset($array_my_values[9]) ? $array_my_values[9] : '';
-                            $can_create_tag   = isset($array_my_values[10]) ? $array_my_values[10] : '';
-                            $use_phantom      = isset($array_my_values[11]) ? $array_my_values[11] : '';
-                            $reverse_chapters = isset($array_my_values[12]) ? $array_my_values[12] : '';
-                            $max_manga        = isset($array_my_values[13]) ? $array_my_values[13] : '';
-                            $chapter_warning  = isset($array_my_values[14]) ? $array_my_values[14] : '';
-                            $enable_comments  = isset($array_my_values[15]) ? $array_my_values[15] : '';
-                            $enable_pingback  = isset($array_my_values[16]) ? $array_my_values[16] : '';
-                            $get_date         = isset($array_my_values[17]) ? $array_my_values[17] : '';
-                            $rule_translate   = isset($array_my_values[18]) ? $array_my_values[18] : '';
-                            $no_translate_title= isset($array_my_values[19]) ? $array_my_values[19] : '';
-                            $chapter_slug     = isset($array_my_values[20]) ? $array_my_values[20] : '';
-                            $phantom_wait     = isset($array_my_values[21]) ? $array_my_values[21] : '';
-                            $always_first     = isset($array_my_values[22]) ? $array_my_values[22] : '';
-                            $strip_images     = isset($array_my_values[23]) ? $array_my_values[23] : '';
+                            $array_my_values  = array_values($myValues);
+                            $count = count($array_my_values);
+                            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $manga_name       = $array_my_values[0] ?? '';
+                            $schedule         = $array_my_values[1] ?? '';
+                            $active           = $array_my_values[2] ?? '';
+                            $last_run         = $array_my_values[3] ?? '';
+                            $max              = $array_my_values[4] ?? '';
+                            $post_status      = $array_my_values[5] ?? '';
+                            $post_user_name   = $array_my_values[6] ?? '';
+                            $item_create_tag  = $array_my_values[7] ?? '';
+                            $default_category = $array_my_values[8] ?? '';
+                            $auto_categories  = $array_my_values[9] ?? '';
+                            $can_create_tag   = $array_my_values[10] ?? '';
+                            $use_phantom      = $array_my_values[11] ?? '';
+                            $reverse_chapters = $array_my_values[12] ?? '';
+                            $max_manga        = $array_my_values[13] ?? '';
+                            $chapter_warning  = $array_my_values[14] ?? '';
+                            $enable_comments  = $array_my_values[15] ?? '';
+                            $enable_pingback  = $array_my_values[16] ?? '';
+                            $get_date         = $array_my_values[17] ?? '';
+                            $rule_translate   = $array_my_values[18] ?? '';
+                            $no_translate_title= $array_my_values[19] ?? '';
+                            $chapter_slug     = $array_my_values[20] ?? '';
+                            $phantom_wait     = $array_my_values[21] ?? '';
+                            $always_first     = $array_my_values[22] ?? '';
+                            $strip_images     = $array_my_values[23] ?? '';
                             $found            = 1;
                             break;
                         }
@@ -3670,37 +3653,34 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
             }
             elseif($type == 5)
             {
-                $GLOBALS['wp_object_cache']->delete('ums_manga_generic_list', 'options');
-                if (!get_option('ums_manga_generic_list')) {
-                    $rules = array();
-                } else {
-                    $rules = get_option('ums_manga_generic_list');
-                }
+                $rules = get_option('ums_manga_generic_list', array());
                 if (!empty($rules)) {
                     foreach ($rules as $request => $bundle[]) {
                         if ($cont == $param) {
                             $bundle_values    = array_values($bundle);
                             $myValues         = $bundle_values[$cont];
-                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
-                            $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
-                            $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
-                            $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
-                            $last_run         = isset($array_my_values[3]) ? $array_my_values[3] : '';
-                            $max              = isset($array_my_values[4]) ? $array_my_values[4] : '';
-                            $post_status      = isset($array_my_values[5]) ? $array_my_values[5] : '';
-                            $post_user_name   = isset($array_my_values[6]) ? $array_my_values[6] : '';
-                            $item_create_tag  = isset($array_my_values[7]) ? $array_my_values[7] : '';
-                            $default_category = isset($array_my_values[8]) ? $array_my_values[8] : '';
-                            $auto_categories  = isset($array_my_values[9]) ? $array_my_values[9] : '';
-                            $can_create_tag   = isset($array_my_values[10]) ? $array_my_values[10] : '';
-                            $use_phantom      = isset($array_my_values[11]) ? $array_my_values[11] : '';
-                            $max_manga        = isset($array_my_values[12]) ? $array_my_values[12] : '';
-                            $chapter_warning  = isset($array_my_values[13]) ? $array_my_values[13] : '';
-                            $enable_comments  = isset($array_my_values[14]) ? $array_my_values[14] : '';
-                            $enable_pingback  = isset($array_my_values[15]) ? $array_my_values[15] : '';
-                            $get_date         = isset($array_my_values[16]) ? $array_my_values[16] : '';
-                            $rule_translate   = isset($array_my_values[17]) ? $array_my_values[17] : '';
-                            $no_translate_title= isset($array_my_values[18]) ? $array_my_values[18] : '';
+                            $array_my_values  = array_values($myValues);
+                            $count = count($array_my_values);
+                            for($iji=0;$iji<$count;++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $manga_name       = $array_my_values[0] ?? '';
+                            $schedule         = $array_my_values[1] ?? '';
+                            $active           = $array_my_values[2] ?? '';
+                            $last_run         = $array_my_values[3] ?? '';
+                            $max              = $array_my_values[4] ?? '';
+                            $post_status      = $array_my_values[5] ?? '';
+                            $post_user_name   = $array_my_values[6] ?? '';
+                            $item_create_tag  = $array_my_values[7] ?? '';
+                            $default_category = $array_my_values[8] ?? '';
+                            $auto_categories  = $array_my_values[9] ?? '';
+                            $can_create_tag   = $array_my_values[10] ?? '';
+                            $use_phantom      = $array_my_values[11] ?? '';
+                            $max_manga        = $array_my_values[12] ?? '';
+                            $chapter_warning  = $array_my_values[13] ?? '';
+                            $enable_comments  = $array_my_values[14] ?? '';
+                            $enable_pingback  = $array_my_values[15] ?? '';
+                            $get_date         = $array_my_values[16] ?? '';
+                            $rule_translate   = $array_my_values[17] ?? '';
+                            $no_translate_title= $array_my_values[18] ?? '';
                             $found            = 1;
                             break;
                         }
@@ -5277,7 +5257,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter is already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -5586,7 +5566,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, we will skip: ' . $chapter_2['chapter_name']);
                                         continue; 
@@ -5625,7 +5605,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -5927,7 +5907,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, skipping it: ' . $chapter_2['chapter_name']);
                                         continue; 
@@ -6914,7 +6894,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $ntitle );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter is already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -7181,7 +7161,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $ntitle );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, we will skip: ' . $chapter_2['chapter_name']);
                                         preg_match_all('#title="[^"]*?"[\s\n]*href="([^"]*?)"[\s\n]*?class="btn btn-success"[\s\n]*id="next_chap">#i', $page_html, $titli);
@@ -8112,7 +8092,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter is already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -8406,7 +8386,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, we will skip: ' . $chapter_2['chapter_name']);
                                         continue; 
@@ -8445,7 +8425,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -8729,7 +8709,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, skipping it: ' . $chapter_2['chapter_name']);
                                         continue; 
@@ -9656,7 +9636,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter is already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -9915,7 +9895,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, we will skip: ' . $chapter_2['chapter_name']);
                                         continue; 
@@ -9960,7 +9940,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -10209,7 +10189,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, skipping it: ' . $chapter_2['chapter_name']);
                                         continue; 
@@ -10933,7 +10913,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                 }
                                 $slugified_name = $wp_manga_storage->slugify( $cname );
                                 $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                 {
                                     preg_match_all('#<a\s*href="([^"]*?)"\s*class="btn next_page"#i', $page_html, $zurli);
                                     if(isset($zurli[1][0]))
@@ -12019,15 +11999,16 @@ function ums_generate_random_email()
 {
     $tlds = array("com", "net", "gov", "org", "edu", "biz", "info");
     $char = "0123456789abcdefghijklmnopqrstuvwxyz";
+    $char_len = strlen($char) - 1;
     $ulen = mt_rand(5, 10);
     $dlen = mt_rand(7, 17);
     $a = "";
     for ($i = 1; $i <= $ulen; $i++) {
-        $a .= substr($char, mt_rand(0, strlen($char)), 1);
+        $a .= substr($char, mt_rand(0, $char_len), 1);
     }
     $a .= "@";
     for ($i = 1; $i <= $dlen; $i++) {
-        $a .= substr($char, mt_rand(0, strlen($char)), 1);
+        $a .= substr($char, mt_rand(0, $char_len), 1);
     }
     $a .= ".";
     $a .= $tlds[mt_rand(0, (sizeof($tlds)-1))];

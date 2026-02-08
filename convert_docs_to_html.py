@@ -190,12 +190,43 @@ def markdown_to_html(md_content):
     
     html = '\n'.join(result)
     
-    # Fix markdown links to point to HTML files
-    html = re.sub(r'href="([^"]+)\.md"', r'href="\1.html"', html)
+    # Fix markdown links to point to HTML files - convert to lowercase and replace underscores
+    def fix_md_link(match):
+        link = match.group(1)
+        # Special case: README.md should link to documentation.html
+        if link.upper() == 'README':
+            return 'href="documentation.html"'
+        # Convert .md to .html, lowercase, and replace underscores with hyphens
+        html_link = link.lower().replace('_', '-')
+        return f'href="{html_link}.html"'
+    
+    html = re.sub(r'href="([^"#]+)\.md"', fix_md_link, html)
+    
+    # Fix links to files without extensions (like LICENSE, CONTRIBUTING, etc.)
+    def fix_noext_link(match):
+        link = match.group(1)
+        # Check if it's a file reference that should be .html (all caps usually means a doc file)
+        if link.isupper() or '_' in link:
+            html_link = link.lower().replace('_', '-')
+            return f'href="{html_link}.html"'
+        return f'href="{link}"'
+    
+    # Match href="SOMETHING" where SOMETHING has no extension and isn't a URL
+    html = re.sub(r'href="([A-Z_]+)"', fix_noext_link, html)
+    
+    # Also fix any remaining uppercase .html links
+    def fix_html_link(match):
+        link = match.group(1)
+        # Check if it's a local file link (not http/https)
+        if not link.startswith('http'):
+            link = link.lower().replace('_', '-')
+        return f'href="{link}"'
+    
+    html = re.sub(r'href="([^"]+\.html)"', fix_html_link, html)
     
     return html
 
-def convert_md_file(md_file, output_dir, title, description):
+def convert_md_file(md_file, output_dir, title, description, output_name=None):
     """Convert a single markdown file to HTML."""
     with open(md_file, 'r', encoding='utf-8') as f:
         md_content = f.read()
@@ -208,7 +239,18 @@ def convert_md_file(md_file, output_dir, title, description):
         content=html_content
     )
     
-    output_file = output_dir / f"{md_file.stem.lower().replace('_', '-')}.html"
+    # Determine output filename
+    if output_name:
+        # Use explicit output name if provided
+        output_filename = output_name
+    elif md_file.suffix == '.md':
+        # Auto-generate from .md files
+        output_filename = f"{md_file.stem.lower().replace('_', '-')}.html"
+    else:
+        # For files without .md extension (like LICENSE)
+        output_filename = f"{md_file.name.lower().replace('_', '-')}.html"
+    
+    output_file = output_dir / output_filename
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(html)
     
@@ -216,28 +258,42 @@ def convert_md_file(md_file, output_dir, title, description):
 
 def main():
     # Define documentation files to convert
+    # Format: (source_file, output_name, title, description)
+    # output_name can be None to use auto-generated name
     docs_to_convert = [
-        ('GETTING_STARTED.md', 'Getting Started', 'Quick setup guide for Ultimate Manga Scraper'),
-        ('README.md', 'Overview', 'Complete overview of Ultimate Manga Scraper'),
-        ('API_REFERENCE.md', 'API Reference', 'Complete API documentation with hooks, filters, and functions'),
-        ('FAQ.md', 'FAQ', 'Frequently asked questions'),
-        ('CONFIGURATION.md', 'Configuration', 'Detailed configuration reference'),
-        ('ARCHITECTURE.md', 'Architecture', 'System architecture and design'),
-        ('TROUBLESHOOTING.md', 'Troubleshooting', 'Common issues and solutions'),
-        ('SECURITY.md', 'Security', 'Security considerations and best practices'),
-        ('DEPLOYMENT.md', 'Deployment', 'Installation and deployment guide'),
-        ('DATA_FLOW.md', 'Data Flow', 'Data flow and processing pipeline'),
-        ('DIRECTORY_STRUCTURE.md', 'Directory Structure', 'Complete directory structure reference'),
+        ('GETTING_STARTED.md', None, 'Getting Started', 'Quick setup guide for Ultimate Manga Scraper'),
+        ('README.md', 'documentation.html', 'Overview', 'Complete overview of Ultimate Manga Scraper'),
+        ('API_REFERENCE.md', None, 'API Reference', 'Complete API documentation with hooks, filters, and functions'),
+        ('FAQ.md', None, 'FAQ', 'Frequently asked questions'),
+        ('CONFIGURATION.md', None, 'Configuration', 'Detailed configuration reference'),
+        ('ARCHITECTURE.md', None, 'Architecture', 'System architecture and design'),
+        ('TROUBLESHOOTING.md', None, 'Troubleshooting', 'Common issues and solutions'),
+        ('SECURITY.md', None, 'Security', 'Security considerations and best practices'),
+        ('SECURITY_DISCLOSURE.md', None, 'Security Disclosure', 'Security vulnerability disclosure policy'),
+        ('DEPLOYMENT.md', None, 'Deployment', 'Installation and deployment guide'),
+        ('DATA_FLOW.md', None, 'Data Flow', 'Data flow and processing pipeline'),
+        ('DIRECTORY_STRUCTURE.md', None, 'Directory Structure', 'Complete directory structure reference'),
+        ('DOCUMENTATION_INDEX.md', None, 'Documentation Index', 'Complete index of all documentation'),
+        ('CHANGELOG.md', None, 'Changelog', 'Version history and release notes'),
+        ('LICENSE', None, 'License', 'LUCA Free License v1.0 - DO WHAT THE FUCK YOU WANT TO'),
+        ('NOTICE.md', None, 'Third-Party Notices', 'Third-party licenses and attributions'),
     ]
     
     root_dir = Path('.')
     output_dir = root_dir / 'docs'
     output_dir.mkdir(exist_ok=True)
     
-    for md_file, title, description in docs_to_convert:
+    for item in docs_to_convert:
+        if len(item) == 4:
+            md_file, output_name, title, description = item
+        else:
+            # Old format compatibility
+            md_file, title, description = item
+            output_name = None
+            
         md_path = root_dir / md_file
         if md_path.exists():
-            convert_md_file(md_path, output_dir, title, description)
+            convert_md_file(md_path, output_dir, title, description, output_name)
         else:
             print(f"Warning: {md_file} not found, skipping...")
     
