@@ -44,6 +44,14 @@ jobs:
           echo "Updated plugin version:"
           grep "Version:" ultimate-manga-scraper.php | head -1
       
+      - name: Commit version update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ultimate-manga-scraper.php
+          git commit -m "Bump version to ${{ inputs.version }}" || echo "No changes to commit"
+          git push || echo "Nothing to push"
+      
       - name: Create plugin package
         run: |
           # Create a directory for the plugin
@@ -83,7 +91,7 @@ jobs:
           fi
       
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2.0.4
         with:
           tag_name: v${{ inputs.version }}
           name: ${{ inputs.release_name || format('Version {0}', inputs.version) }}
