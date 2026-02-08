@@ -2987,8 +2987,7 @@ function ums_fetch_single_chapter_generic( $ums_chapter_images, $volume_id, $pos
         $wp_filesystem->copy( dirname(__FILE__) . "/images/image-placeholder.jpg", "{$extract}/image-placeholder.jpg" );
     }
     $ch_name = str_replace($manga_name, '', $itemx['title']);
-    $ch_name = trim(trim($ch_name, '- '));
-    $ch_name = trim($ch_name);
+    $ch_name = trim($ch_name, '- ');
     $chapter_args = array(
         'post_id'             => $post_id,
         'volume_id'           => $volume_id,
@@ -5257,7 +5256,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter is already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -5566,7 +5565,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, we will skip: ' . $chapter_2['chapter_name']);
                                         continue; 
@@ -5605,7 +5604,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -5907,7 +5906,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, skipping it: ' . $chapter_2['chapter_name']);
                                         continue; 
@@ -6894,7 +6893,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $ntitle );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter is already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -7161,7 +7160,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $ntitle );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, we will skip: ' . $chapter_2['chapter_name']);
                                         preg_match_all('#title="[^"]*?"[\s\n]*href="([^"]*?)"[\s\n]*?class="btn btn-success"[\s\n]*id="next_chap">#i', $page_html, $titli);
@@ -8092,7 +8091,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter is already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -8386,7 +8385,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, we will skip: ' . $chapter_2['chapter_name']);
                                         continue; 
@@ -8425,7 +8424,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -8709,7 +8708,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, skipping it: ' . $chapter_2['chapter_name']);
                                         continue; 
@@ -9636,7 +9635,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter is already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -9895,7 +9894,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, we will skip: ' . $chapter_2['chapter_name']);
                                         continue; 
@@ -9940,7 +9939,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     }
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         if (isset($ums_Main_Settings['enable_detailed_logging'])) {
                                             ums_log_to_file('Chapter already published, skipping it: ' . $chapter_2['chapter_name']);
@@ -10189,7 +10188,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     );
                                     $slugified_name = $wp_manga_storage->slugify( $chaps['name'] );
                                     $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                    if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                    if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                     {
                                         ums_log_to_file('Chapter name already published, skipping it: ' . $chapter_2['chapter_name']);
                                         continue; 
@@ -10913,7 +10912,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                 }
                                 $slugified_name = $wp_manga_storage->slugify( $cname );
                                 $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
-                                if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                if($chapter_2 && strcasecmp($chapter_2['chapter_slug'], $slugified_name) === 0)
                                 {
                                     preg_match_all('#<a\s*href="([^"]*?)"\s*class="btn next_page"#i', $page_html, $zurli);
                                     if(isset($zurli[1][0]))
