@@ -741,6 +741,9 @@ function ums_register_my_custom_menu_page()
         $mangaxx = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (WuxiaWorld.site)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (WuxiaWorld.site)', 'ultimate-manga-scraper'), 'manage_options', 'ums_text_panel', 'ums_text_panel');
         add_action( 'load-' . $mangaxx, 'ums_load_admin_js' );
         add_action( 'load-' . $mangaxx, 'ums_load_all_admin_js' );
+        $mangafanmtl = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (FanMTL / ReadWN / Wuxia Sites)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (FanMTL / ReadWN / Wuxia Sites)', 'ultimate-manga-scraper'), 'manage_options', 'ums_fanmtl_panel', 'ums_fanmtl_panel');
+        add_action( 'load-' . $mangafanmtl, 'ums_load_admin_js' );
+        add_action( 'load-' . $mangafanmtl, 'ums_load_all_admin_js' );
         $enhancements = add_submenu_page('ums_admin_settings', esc_html__("Madara Enhancements", 'ultimate-manga-scraper'), esc_html__("Madara Enhancements", 'ultimate-manga-scraper'), 'manage_options', 'ums_enhancements', [ 'UMS_Madara_Handler', 'ums_enhancements' ]);
         add_action( 'load-' . $enhancements, 'ums_load_all_admin_js' );
         $logs = add_submenu_page('ums_admin_settings', esc_html__("Activity & Logging", 'ultimate-manga-scraper'), esc_html__("Activity & Logging", 'ultimate-manga-scraper'), 'manage_options', 'ums_logs', 'ums_logs');
@@ -1148,6 +1151,40 @@ function ums_cron()
                 }
             }
             $zcont = $zcont + 1;
+        }
+    }
+    $GLOBALS['wp_object_cache']->delete('ums_fanmtl_list', 'options');
+    if (!get_option('ums_fanmtl_list')) {
+        $frules = array();
+    } else {
+        $frules = get_option('ums_fanmtl_list');
+    }
+    if (!empty($frules)) {
+        $fcont = 0;
+        foreach ($frules as $frequest => $fbundle[]) {
+            $fbundle_values   = array_values($fbundle);
+            $fmyValues        = $fbundle_values[$fcont];
+            $farray_my_values = array_values($fmyValues);for($fiji=0;$fiji<count($farray_my_values);++$fiji){if(is_string($farray_my_values[$fiji])){$farray_my_values[$fiji]=stripslashes($farray_my_values[$fiji]);}}
+            $fschedule        = isset($farray_my_values[1]) ? $farray_my_values[1] : '24';
+            $factive          = isset($farray_my_values[2]) ? $farray_my_values[2] : '0';
+            $flast_run        = isset($farray_my_values[3]) ? $farray_my_values[3] : ums_get_date_now();
+            if ($factive == '1') {
+                $fnow                = ums_get_date_now();
+                if($unlocker == '1')
+                {
+                    $fnextrun        = ums_add_minute($flast_run, $fschedule);
+                    $fums_hour_diff = (int) ums_minute_diff($fnow, $fnextrun);
+                }
+                else
+                {
+                    $fnextrun            = ums_add_hour($flast_run, $fschedule);
+                    $fums_hour_diff = (int) ums_hour_diff($fnow, $fnextrun);
+                }
+                if ($fums_hour_diff >= 0) {
+                    ums_run_rule($fcont, 6);
+                }
+            }
+            $fcont = $fcont + 1;
         }
     }
     $running = array();
@@ -3711,6 +3748,73 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                     }
                 }
             }
+            elseif($type == 6)
+            {
+                $GLOBALS['wp_object_cache']->delete('ums_fanmtl_list', 'options');
+                if (!get_option('ums_fanmtl_list')) {
+                    $rules = array();
+                } else {
+                    $rules = get_option('ums_fanmtl_list');
+                }
+                if (!empty($rules)) {
+                    foreach ($rules as $request => $bundle[]) {
+                        if ($cont == $param) {
+                            $bundle_values    = array_values($bundle);
+                            $myValues         = $bundle_values[$cont];
+                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
+                            $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
+                            $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
+                            $last_run         = isset($array_my_values[3]) ? $array_my_values[3] : '';
+                            $max              = isset($array_my_values[4]) ? $array_my_values[4] : '';
+                            $post_status      = isset($array_my_values[5]) ? $array_my_values[5] : '';
+                            $post_user_name   = isset($array_my_values[6]) ? $array_my_values[6] : '';
+                            $item_create_tag  = isset($array_my_values[7]) ? $array_my_values[7] : '';
+                            $default_category = isset($array_my_values[8]) ? $array_my_values[8] : '';
+                            $auto_categories  = isset($array_my_values[9]) ? $array_my_values[9] : '';
+                            $can_create_tag   = isset($array_my_values[10]) ? $array_my_values[10] : '';
+                            $use_phantom      = isset($array_my_values[11]) ? $array_my_values[11] : '';
+                            $reverse_chapters = isset($array_my_values[12]) ? $array_my_values[12] : '';
+                            $max_manga        = isset($array_my_values[13]) ? $array_my_values[13] : '';
+                            $chapter_warning  = isset($array_my_values[14]) ? $array_my_values[14] : '';
+                            $enable_comments  = isset($array_my_values[15]) ? $array_my_values[15] : '';
+                            $enable_pingback  = isset($array_my_values[16]) ? $array_my_values[16] : '';
+                            $get_date         = isset($array_my_values[17]) ? $array_my_values[17] : '';
+                            $rule_translate   = isset($array_my_values[18]) ? $array_my_values[18] : '';
+                            $no_translate_title= isset($array_my_values[19]) ? $array_my_values[19] : '';
+                            $chapter_slug     = isset($array_my_values[20]) ? $array_my_values[20] : '';
+                            $phantom_wait     = isset($array_my_values[21]) ? $array_my_values[21] : '';
+                            $strip_images     = isset($array_my_values[22]) ? $array_my_values[22] : '';
+                            $found            = 1;
+                            break;
+                        }
+                        $cont = $cont + 1;
+                    }
+                } else {
+                    ums_log_to_file('No rules found for ums_fanmtl_list!');
+                    if($auto == 1)
+                    {
+                        ums_clearFromList($param, $type);
+                    }
+                    return 'fail';
+                }
+                if ($found == 0) {
+                    ums_log_to_file($param . ' not found in ums_fanmtl_list!');
+                    if($auto == 1)
+                    {
+                        ums_clearFromList($param, $type);
+                    }
+                    return 'fail';
+                } else {
+                    if($rerun_count == 0)
+                    {
+                        $GLOBALS['wp_object_cache']->delete('ums_fanmtl_list', 'options');
+                        $rules = get_option('ums_fanmtl_list');
+                        $rules[$param][3] = ums_get_date_now();
+                        update_option('ums_fanmtl_list', $rules, false);
+                    }
+                }
+            }
             else
             {
                 ums_log_to_file('Unrecognized rule type: ' . $type);
@@ -6085,13 +6189,29 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                             sleep($timeout);
                             require_once (dirname(__FILE__) . "/res/simple_html_dom.php"); 
                             $html = ums_str_get_html( $html_site );
-                            $tag = $html->find( '.title', 0 );
+                            
+                            // Detect if this is a FanMTL/ReadWN/Wuxia site
+                            $is_fanmtl = (stristr($current_manga, 'fanmtl') !== false || stristr($current_manga, 'fannovels') !== false || stristr($current_manga, 'fansmtl') !== false || stristr($current_manga, 'readwn') !== false || stristr($current_manga, 'novelmt') !== false || stristr($current_manga, 'novelmtl') !== false || stristr($current_manga, 'wuxiabee') !== false || stristr($current_manga, 'wuxiafox') !== false || stristr($current_manga, 'wuxiago') !== false || stristr($current_manga, 'wuxiahere') !== false || stristr($current_manga, 'wuxiahub') !== false || stristr($current_manga, 'wuxiamtl') !== false || stristr($current_manga, 'wuxiaone') !== false || stristr($current_manga, 'wuxiap') !== false || stristr($current_manga, 'wuxiapub') !== false || stristr($current_manga, 'wuxiaspot') !== false || stristr($current_manga, 'wuxiar') !== false || stristr($current_manga, 'wuxiau') !== false || stristr($current_manga, 'wuxiazone') !== false);
+                            
+                            $tag = null;
+                            if ($is_fanmtl) {
+                                // FanMTL/ReadWN uses: div.main-head h1
+                                $tag = $html->find('div.main-head h1', 0);
+                            }
+                            if (!$tag) {
+                                // Fallback to novlove selector
+                                $tag = $html->find('.title', 0);
+                            }
+                            
                             $name_str = '';
                             $my_slug = '';
                             $my_slug = str_replace( 'http://', '', $current_manga );
                             $my_slug = str_replace( 'https://', '', $my_slug );
                             $my_slug = str_replace( 'http:', '', $my_slug );
                             $my_slug = str_replace( 'novlove.com/novel/', '', $my_slug );
+                            // Also handle FanMTL URL structure
+                            $my_slug = str_replace( 'fanmtl.com/novel/', '', $my_slug );
+                            $my_slug = str_replace( 'readwn.com/novel/', '', $my_slug );
                             $my_slug = str_replace( '/', '', $my_slug );
                             $my_slug = str_replace( '.html', '', $my_slug );
                             $my_slug = str_replace( '.htm', '', $my_slug );
@@ -6142,22 +6262,35 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     ums_log_to_file('Request blocked, please use a proxy!');
                                     continue;
                                 }
-                                $desc = $html->find( '.desc-text' );
                                 $xd = '';
-                                if(is_array($desc))
-                                {
-                                    foreach($desc as $dd)
-                                    {
-                                        $xd = trim($dd->plaintext);
-                                        $xprefix = 'Description';
-                                        if (substr($xd, 0, strlen($xprefix)) == $xprefix) {
-                                            $xd = substr($xd, strlen($xprefix));
-                                        } 
-                                        $xprefix = 'Summary';
-                                        if (substr($xd, 0, strlen($xprefix)) == $xprefix) {
-                                            $xd = substr($xd, strlen($xprefix));
-                                        } 
+                                // Try FanMTL/ReadWN description selector first
+                                if ($is_fanmtl) {
+                                    $desc_elems = $html->find('.summary .content');
+                                    if (!empty($desc_elems)) {
+                                        foreach($desc_elems as $dd) {
+                                            $xd .= ' ' . trim($dd->innertext);
+                                        }
                                         $xd = trim($xd);
+                                    }
+                                }
+                                // Fallback to novlove selectors
+                                if (empty($xd)) {
+                                    $desc = $html->find( '.desc-text' );
+                                    if(is_array($desc))
+                                    {
+                                        foreach($desc as $dd)
+                                        {
+                                            $xd = trim($dd->plaintext);
+                                            $xprefix = 'Description';
+                                            if (substr($xd, 0, strlen($xprefix)) == $xprefix) {
+                                                $xd = substr($xd, strlen($xprefix));
+                                            }
+                                            $xprefix = 'Summary';
+                                            if (substr($xd, 0, strlen($xprefix)) == $xprefix) {
+                                                $xd = substr($xd, strlen($xprefix));
+                                            } 
+                                            $xd = trim($xd);
+                                        }
                                     }
                                 }
                                 if($xd == '')
@@ -6239,6 +6372,16 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                 $desc = str_ireplace('bronovel.com', $domainx, $desc);
                                 $desc = str_ireplace('bronovel', get_bloginfo('name'), $desc);
                                 $thumb = '';
+                                // Try FanMTL/ReadWN cover selector first
+                                if ($is_fanmtl && $thumb == '') {
+                                    $cover_elem = $html->find('figure.cover img', 0);
+                                    if ($cover_elem) {
+                                        $thumb = $cover_elem->src;
+                                        if (empty($thumb)) {
+                                            $thumb = $cover_elem->{'data-src'};
+                                        }
+                                    }
+                                }
                                 if($thumb == '')
                                 {
                                     preg_match_all('#<img class="lazy"(?:\s*title="[^"]*?"\s*)? (?:data-)?src="([^"]*?)"#is', $html_site, $xmathc);
@@ -6376,11 +6519,22 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                 }
                                 $xauthor = '';
                                 $author = '';
-                                preg_match_all('#<h3>Author:<\/h3>[\n\s]*<a[\n\s]*href="[^"]*?">([^<]*?)<\/a>#i', $html_site, $xmathc);
-                                if(isset($xmathc[1][0]))
-                                {
-                                    $author = trim($xmathc[1][0]);
-                                    $xauthor = trim($xmathc[1][0]);
+                                // Try FanMTL/ReadWN author selector first
+                                if ($is_fanmtl) {
+                                    $author_elem = $html->find('span[itemprop="author"]', 0);
+                                    if ($author_elem) {
+                                        $author = trim($author_elem->plaintext);
+                                        $xauthor = $author;
+                                    }
+                                }
+                                // Fallback to novlove selectors
+                                if(empty($author)) {
+                                    preg_match_all('#<h3>Author:<\/h3>[\n\s]*<a[\n\s]*href="[^"]*?">([^<]*?)<\/a>#i', $html_site, $xmathc);
+                                    if(isset($xmathc[1][0]))
+                                    {
+                                        $author = trim($xmathc[1][0]);
+                                        $xauthor = trim($xmathc[1][0]);
+                                    }
                                 }
                                 if(empty($author))
                                 {
@@ -6795,7 +6949,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                             $latest_scraped = get_post_meta( $existing_post_id, 'ums_latest_scraped', true );
                             if(!empty($latest_scraped))
                             {
-                                if(stristr($latest_scraped, 'novlove'))
+                                if(stristr($latest_scraped, 'novlove') || stristr($latest_scraped, 'fanmtl') || stristr($latest_scraped, 'fannovels') || stristr($latest_scraped, 'fansmtl') || stristr($latest_scraped, 'readwn') || stristr($latest_scraped, 'novelmt') || stristr($latest_scraped, 'novelmtl') || stristr($latest_scraped, 'wuxiabee') || stristr($latest_scraped, 'wuxiafox') || stristr($latest_scraped, 'wuxiago') || stristr($latest_scraped, 'wuxiahere') || stristr($latest_scraped, 'wuxiahub') || stristr($latest_scraped, 'wuxiamtl') || stristr($latest_scraped, 'wuxiaone') || stristr($latest_scraped, 'wuxiap') || stristr($latest_scraped, 'wuxiapub') || stristr($latest_scraped, 'wuxiaspot') || stristr($latest_scraped, 'wuxiar') || stristr($latest_scraped, 'wuxiau') || stristr($latest_scraped, 'wuxiazone'))
                                 {
                                     $first_chapter = $latest_scraped;
                                 }
@@ -6812,6 +6966,17 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     $href = $link->getAttribute('href');
                                     if ($href) {
                                         $chapterUrls[] = $href;
+                                    }
+                                }
+                                // FanMTL / ReadWN uses "chapter-list" instead of "list-chapter"
+                                if(empty($chapterUrls))
+                                {
+                                    $links = $xpath->query('//ul[contains(@class, "chapter-list")]//a');
+                                    foreach ($links as $link) {
+                                        $href = $link->getAttribute('href');
+                                        if ($href) {
+                                            $chapterUrls[] = $href;
+                                        }
                                     }
                                 }
                                 if($reverse == true)
@@ -6940,6 +7105,29 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                     if(empty($content)) 
                                     {
                                         $articles = $xpath->query('//*[contains(@class, "content-body")]');
+                                        if($articles !== false && count($articles) > 0)
+                                        {
+                                            foreach($articles as $container) 
+                                            {
+                                                if(method_exists($container, 'saveHTML'))
+                                                {
+                                                    $content .= ' ' . $container->saveHTML();
+                                                }
+                                                elseif(isset($container->ownerDocument) && method_exists($container->ownerDocument, 'saveHTML'))
+                                                {
+                                                    $content .= ' ' . $container->ownerDocument->saveHTML($container);
+                                                }
+                                                elseif(isset($container->nodeValue))
+                                                {
+                                                    $content .= ' ' . $container->nodeValue;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    // FanMTL / ReadWN specific selector - div.chapter-content
+                                    if(empty($content)) 
+                                    {
+                                        $articles = $xpath->query('//div[contains(@class, "chapter-content")]');
                                         if($articles !== false && count($articles) > 0)
                                         {
                                             foreach($articles as $container) 
@@ -12393,6 +12581,7 @@ function ums_admin_load_files()
 require(dirname(__FILE__) . "/res/ums-rules-list.php");
 require(dirname(__FILE__) . "/res/ums-text-list.php");
 require(dirname(__FILE__) . "/res/ums-novel-list.php");
+require(dirname(__FILE__) . "/res/ums-fanmtl-list.php");
 require(dirname(__FILE__) . "/res/ums-vipnovel-list.php");
 require(dirname(__FILE__) . "/res/ums-novel-generic-list.php");
 require(dirname(__FILE__) . "/res/ums-manga-generic-list.php");
