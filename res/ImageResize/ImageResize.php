@@ -90,7 +90,9 @@ class ImageResize
             global $wp_filesystem;
             if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                 include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-               wp_filesystem($creds);
+               if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                   ums_log_to_file('Failed to initialize WordPress filesystem');
+               }
             }
             if ($filename === null || empty($filename) || (substr($filename, 0, 7) !== 'data://' && !$wp_filesystem->is_file($filename))) {
                 throw new ImageResizeException('File does not exist');
@@ -297,7 +299,9 @@ class ImageResize
             global $wp_filesystem;
             if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                 include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                wp_filesystem($creds);
+                if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                    ums_log_to_file('Failed to initialize WordPress filesystem');
+                }
             }
             $wp_filesystem->chmod($filename, $permissions);
         }
@@ -324,7 +328,9 @@ imagedestroy($this->source_image);
         global $wp_filesystem;
         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-            wp_filesystem($creds);
+            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                ums_log_to_file('Failed to initialize WordPress filesystem');
+            }
         }
         $string = $wp_filesystem->get_contents($string_temp);
 

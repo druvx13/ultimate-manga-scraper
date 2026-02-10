@@ -48,7 +48,9 @@ function ums_file_get_html($url, $use_include_path = false, $context=null, $offs
 	global $wp_filesystem;
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-        wp_filesystem($creds);
+        if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+            ums_log_to_file('Failed to initialize WordPress filesystem');
+        }
     }
     $contents = $wp_filesystem->get_contents($url);
 	// Paperg - use our own mechanism for getting the contents as we want to control the timeout.
@@ -1352,7 +1354,9 @@ class ums_simple_html_dom
 			global $wp_filesystem;
             if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                 include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-               wp_filesystem($creds);
+               if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                   ums_log_to_file('Failed to initialize WordPress filesystem');
+               }
             }
 			if (preg_match("/^http:\/\//i",$str) || $wp_filesystem->is_file($str))
 			{
@@ -1437,7 +1441,9 @@ class ums_simple_html_dom
         global $wp_filesystem;
         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-            wp_filesystem($creds);
+            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                ums_log_to_file('Failed to initialize WordPress filesystem');
+            }
         }
         $doc = $wp_filesystem->get_contents($args[0]);
 		if($doc !== false) {
@@ -1478,7 +1484,9 @@ class ums_simple_html_dom
             global $wp_filesystem;
             if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                 include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                wp_filesystem($creds);
+                if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                    ums_log_to_file('Failed to initialize WordPress filesystem');
+                }
             }
             $wp_filesystem->put_contents($filepath, $ret);
         }

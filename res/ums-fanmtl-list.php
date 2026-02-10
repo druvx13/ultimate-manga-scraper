@@ -4,7 +4,7 @@
  * Licensed under LUCA Free License v1.0
  * DO WHAT THE FUCK YOU WANT TO.
  */
-   function ums_text_panel()
+   function ums_fanmtl_panel()
    {
         $theme = wp_get_theme();
         if ( 'Madara' != $theme->name && 'Madara' != $theme->parent_theme ) {
@@ -16,8 +16,8 @@
             return;
         }
         $ums_Main_Settings = get_option('ums_Main_Settings', false);
-        $GLOBALS['wp_object_cache']->delete('ums_text_list', 'options');
-        $all_rules = get_option('ums_text_list', array());
+        $GLOBALS['wp_object_cache']->delete('ums_fanmtl_list', 'options');
+        $all_rules = get_option('ums_fanmtl_list', array());
         if($all_rules === false)
         {
             $all_rules = array();
@@ -32,7 +32,7 @@
    ?>
 <div class="wp-header-end"></div>
 <div class="wrap gs_popuptype_holder seo_pops">
-    <h2><?php echo esc_html__("WuxiaWorld.site Novels Scraper", 'ultimate-manga-scraper');?></h2>
+    <h2><?php echo esc_html__("FanMTL Novels Scraper", 'ultimate-manga-scraper');?></h2>
 <div>
 <form id="myForm" method="post" action="<?php echo esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));?>">
       <?php
@@ -70,7 +70,7 @@
                            <div class="bws_help_box bws_help_box_right dashicons dashicons-editor-help cr_align_middle">
                               <div class="bws_hidden_help_text cr_min_260px">
                                  <?php
-                                    echo esc_html__("Add the URL of the Web Novel (or a comma separated list of Web Novel URLs) or a keyword search. Example Web Novel URL: https://wuxiaworld.site/novel/super-gene-webnovel-read/ - you can also add a comma separated list of similar URLs. If you want to query all web novels, you can enter here a * (star symbol).", 'ultimate-manga-scraper');
+                                    echo esc_html__("Add the URL of the Web Novel (or a comma separated list of Web Novel URLs) or a keyword search. Example Web Novel URL: https://fanmtl.com/novel/my-novel/ - you can also add a comma separated list of similar URLs. Supports fanmtl.com, readwn.com, wuxiabee.com and other ReadWN-based sites. If you want to query all web novels, you can enter here a * (star symbol).", 'ultimate-manga-scraper');
                                     ?>
                               </div>
                            </div>
@@ -158,7 +158,7 @@
                   </thead>
                   <tbody>
                   <?php
-                     echo ums_expand_rules_text($hu);
+                     echo ums_expand_rules_novel($hu);
                      if(isset($_GET['ums_page']))
                      {
                          $current_page = $_GET['ums_page'];
@@ -172,17 +172,17 @@
                      ?>
                   <tr>
                   <td class="cr_comm_td">-</td>
-                  <td class="cr_short_td"><input type="text" name="ums_text_list[location][]" placeholder="https://wuxiaworld.site/novel/..." value="" class="cr_width_full"/></td>
-                  <td class="cr_comm_td"><input type="number" step="1" min="1" name="ums_text_list[schedule][]" max="8765812" class="cr_width_60" placeholder="Select the rule schedule interval" value="<?php if(isset($ums_Main_Settings['default_schedule']) && $ums_Main_Settings['default_schedule'] != '') {echo esc_html($ums_Main_Settings['default_schedule']);}else{echo '24';} ?>"/></td>
-                  <td class="cr_comm_td"><input type="number" step="1" min="0" name="ums_text_list[max][]" placeholder="Select the max # of generated chapters" value="<?php if(isset($ums_Main_Settings['default_chapters']) && $ums_Main_Settings['default_chapters'] != '') {echo esc_html($ums_Main_Settings['default_chapters']);}else{echo '1';} ?>" class="cr_width_60"/></td>
-                  <td class="cr_status"><select id="submit_status" name="ums_text_list[submit_status][]" class="cr_width_70">
+                  <td class="cr_short_td"><input type="text" name="ums_fanmtl_list[location][]" placeholder="https://fanmtl.com/novel/..." value="" class="cr_width_full"/></td>
+                  <td class="cr_comm_td"><input type="number" step="1" min="1" name="ums_fanmtl_list[schedule][]" max="8765812" class="cr_width_60" placeholder="Select the rule schedule interval" value="<?php if(isset($ums_Main_Settings['default_schedule']) && $ums_Main_Settings['default_schedule'] != '') {echo esc_html($ums_Main_Settings['default_schedule']);}else{echo '24';} ?>"/></td>
+                  <td class="cr_comm_td"><input type="number" step="1" min="0" name="ums_fanmtl_list[max][]" placeholder="Select the max # of generated chapters" value="<?php if(isset($ums_Main_Settings['default_chapters']) && $ums_Main_Settings['default_chapters'] != '') {echo esc_html($ums_Main_Settings['default_chapters']);}else{echo '1';} ?>" class="cr_width_60"/></td>
+                  <td class="cr_status"><select id="submit_status" name="ums_fanmtl_list[submit_status][]" class="cr_width_70">
                   <option value="pending"><?php echo esc_html__("Pending -> Moderate", 'ultimate-manga-scraper');?></option>
                   <option value="draft"><?php echo esc_html__("Draft -> Moderate", 'ultimate-manga-scraper');?></option>
                   <option value="publish" selected><?php echo esc_html__("Published", 'ultimate-manga-scraper');?></option>
                   <option value="private"><?php echo esc_html__("Private", 'ultimate-manga-scraper');?></option>
                   <option value="trash"><?php echo esc_html__("Trash", 'ultimate-manga-scraper');?></option>
                   </select>  </td>
-                  <td class="cr_author"><select id="post_author" name="ums_text_list[post_author][]" class="cr_width_auto cr_max_width_150">
+                  <td class="cr_author"><select id="post_author" name="ums_fanmtl_list[post_author][]" class="cr_width_auto cr_max_width_150">
                   <?php
                      $blogusers = get_users( [ 'role__in' => [ 'contributor', 'author', 'editor', 'administrator' ] ] );
                      foreach ($blogusers as $user) {
@@ -215,7 +215,7 @@
                   </div>
                   <b><?php echo esc_html__("Reverse Scraping (Start With Oldest Chapters):", 'ultimate-manga-scraper');?></b>
                   </td><td>
-                  <input type="checkbox" id="reverse_chapters" name="ums_text_list[reverse_chapters][]" checked>
+                  <input type="checkbox" id="reverse_chapters" name="ums_fanmtl_list[reverse_chapters][]">
                   </div>
                     </td></tr>
                   <tr><td class="cr_min_width_200">
@@ -228,7 +228,7 @@
                   </div>
                   </div>
                   <b><?php echo esc_html__("Maximum Number Of Novels to Scrape:", 'ultimate-manga-scraper');?></b>
-                  </td><td><input type="number" min="1" name="ums_text_list[max_manga][]" value="<?php if(isset($ums_Main_Settings['default_manga']) && $ums_Main_Settings['default_manga'] != '') {echo esc_html($ums_Main_Settings['default_manga']);}else{echo '1';} ?>" placeholder="Maximum number of web novels to scrape" class="cr_width_full">
+                  </td><td><input type="number" min="1" name="ums_fanmtl_list[max_manga][]" value="<?php if(isset($ums_Main_Settings['default_manga']) && $ums_Main_Settings['default_manga'] != '') {echo esc_html($ums_Main_Settings['default_manga']);}else{echo '1';} ?>" placeholder="Maximum number of web novels to scrape" class="cr_width_full">
                   </div>
                   </td></tr>
 				  <tr><td class="cr_min_width_200">
@@ -242,7 +242,7 @@
                   </div>
                   <b><?php echo esc_html__("Additional Novel Genre:", 'ultimate-manga-scraper');?></b>
                   </td><td>
-                  <select id="default_category" name="ums_text_list[default_category][]" class="cr_width_full">
+                  <select id="default_category" name="ums_fanmtl_list[default_category][]" class="cr_width_full">
                   <option value="ums_no_category_12345678" selected><?php echo esc_html__("Do Not Add a Genre", 'ultimate-manga-scraper');?></option>
                   <?php
                      $categories = get_terms( 'wp-manga-genre', array( 'hide_empty' => false ) );
@@ -269,7 +269,7 @@
                   </div>
                   <b><?php echo esc_html__("Auto Add Genres:", 'ultimate-manga-scraper');?></b>
                   </td><td>
-                  <select class="cr_width_full" id="auto_categories" name="ums_text_list[auto_categories][]">
+                  <select class="cr_width_full" id="auto_categories" name="ums_fanmtl_list[auto_categories][]">
                   <option value="disabled"><?php echo esc_html__("Disabled", 'ultimate-manga-scraper');?></option>
                   <option value="genre" selected><?php echo esc_html__("Novel Genres", 'ultimate-manga-scraper');?></option>
                   </select>   
@@ -285,8 +285,8 @@
                   </div>
                   <b><?php echo esc_html__("Auto Add Novel Tags:", 'ultimate-manga-scraper');?></b>
                   </td><td>
-                  <select class="cr_width_full" id="auto_tags" name="ums_text_list[auto_tags][]">
-                  <option value="disabled" selected><?php echo esc_html__("Disabled", 'ultimate-manga-scraper');?></option>
+                  <select class="cr_width_full" id="auto_tags" name="ums_fanmtl_list[auto_tags][]">
+                  <option value="disabled"><?php echo esc_html__("Disabled", 'ultimate-manga-scraper');?></option>
                   <option value="genre"><?php echo esc_html__("Novel Genres", 'ultimate-manga-scraper');?></option>
                   <option value="tags" selected><?php echo esc_html__("Novel Tags", 'ultimate-manga-scraper');?></option>
                   </select> 
@@ -302,7 +302,7 @@
                   </div>
                   <b><?php echo esc_html__("Additional Novel Tags:", 'ultimate-manga-scraper');?></b>
                   </td><td>
-                  <input type="text" name="ums_text_list[default_tags][]" value="" placeholder="Please insert your additional web novel tags here" class="cr_width_full">
+                  <input type="text" name="ums_fanmtl_list[default_tags][]" value="" placeholder="Please insert your additional web novel tags here" class="cr_width_full">
                   </div>
                   </td></tr>
                   <tr>
@@ -320,10 +320,10 @@
                      </td>
                      <td>
                         <div>
-                           <select id="use_phantom" name="ums_text_list[use_phantom][]" class="cr_width_full">
-                            <option value="0"><?php echo esc_html__("WordPress (Default)", 'ultimate-manga-scraper');?></option>
+                           <select id="use_phantom" name="ums_fanmtl_list[use_phantom][]" class="cr_width_full">
+                            <option value="0"><?php echo esc_html__("WordPress", 'ultimate-manga-scraper');?></option>
                             <option value="1"><?php echo esc_html__("Use PhantomJS", 'ultimate-manga-scraper');?></option>          
-                            <option value="2" selected><?php echo esc_html__("Use Puppeteer", 'ultimate-manga-scraper');?></option>
+                            <option value="2" selected><?php echo esc_html__("Use Puppeteer (Default)", 'ultimate-manga-scraper');?></option>
                             <option value="4"<?php if (!isset($ums_Main_Settings['headlessbrowserapi_key']) || trim($ums_Main_Settings['headlessbrowserapi_key']) == ''){echo ' title="' . esc_html__("This option is disabled. To enable it, add a HeadlessBrowserAPI Key in the plugin's 'Main Settings' menu.", 'ultimate-manga-scraper') . '" disabled';}?>><?php echo esc_html__("Puppeteer (HeadlessBrowserAPI)", 'ultimate-manga-scraper');if (!isset($ums_Main_Settings['headlessbrowserapi_key']) || trim($ums_Main_Settings['headlessbrowserapi_key']) == ''){echo esc_html__(' - to enable, add a HeadlessBrowserAPI key in the plugin\'s \'Main Settings\'', 'ultimate-manga-scraper');}?></option>
                             <option value="5"<?php if (!isset($ums_Main_Settings['headlessbrowserapi_key']) || trim($ums_Main_Settings['headlessbrowserapi_key']) == ''){echo ' title="' . esc_html__("This option is disabled. To enable it, add a HeadlessBrowserAPI Key in the plugin's 'Main Settings' menu.", 'ultimate-manga-scraper') . '" disabled';}?>><?php echo esc_html__("Tor (HeadlessBrowserAPI)", 'ultimate-manga-scraper');if (!isset($ums_Main_Settings['headlessbrowserapi_key']) || trim($ums_Main_Settings['headlessbrowserapi_key']) == ''){echo esc_html__(' - to enable, add a HeadlessBrowserAPI key in the plugin\'s \'Main Settings\'', 'ultimate-manga-scraper');}?></option>
                             <option value="6"<?php if (!isset($ums_Main_Settings['headlessbrowserapi_key']) || trim($ums_Main_Settings['headlessbrowserapi_key']) == ''){echo ' title="' . esc_html__("This option is disabled. To enable it, add a HeadlessBrowserAPI Key in the plugin's 'Main Settings' menu.", 'ultimate-manga-scraper') . '" disabled';}?>><?php echo esc_html__("PhantomJS (HeadlessBrowserAPI)", 'ultimate-manga-scraper');if (!isset($ums_Main_Settings['headlessbrowserapi_key']) || trim($ums_Main_Settings['headlessbrowserapi_key']) == ''){echo esc_html__(' - to enable, add a HeadlessBrowserAPI key in the plugin\'s \'Main Settings\'', 'ultimate-manga-scraper');}?></option>
@@ -343,7 +343,7 @@
                         </td>
                         <td>
                         <div>
-                            <input type="number" min="0" step="1" id="phantom_wait" name="ums_text_list[phantom_wait][]" value="" placeholder="0" class="cr_width_full">                   
+                            <input type="number" min="0" step="1" id="phantom_wait" name="ums_fanmtl_list[phantom_wait][]" value="" placeholder="0" class="cr_width_full">                   
                         </div>
                         </td>
                     </tr>
@@ -360,7 +360,7 @@
                             <b><?php echo esc_html__("Enable Comments For Novel:", 'ultimate-manga-scraper');?></b>
                     </td>
                     <td>
-                    <input type="checkbox" id="enable_comments" name="ums_text_list[enable_comments][]" checked>
+                    <input type="checkbox" id="enable_comments" name="ums_fanmtl_list[enable_comments][]" checked>
                     </div>
                     </td>
                     </tr>
@@ -377,7 +377,7 @@
                             <b><?php echo esc_html__("Enable Pingback/Trackback:", 'ultimate-manga-scraper');?></b>
                     </td>
                     <td>
-                    <input type="checkbox" id="enable_pingback" name="ums_text_list[enable_pingback][]">
+                    <input type="checkbox" id="enable_pingback" name="ums_fanmtl_list[enable_pingback][]">
                     </div>
                     </td>
                     </tr>
@@ -394,7 +394,7 @@
                             <b><?php echo esc_html__("Get Publish Date From Novel:", 'ultimate-manga-scraper');?></b>
                     </td>
                     <td>
-                    <input type="checkbox" id="get_date" name="ums_text_list[get_date][]">
+                    <input type="checkbox" id="get_date" name="ums_fanmtl_list[get_date][]">
                     </div>
                     </td>
                     </tr>
@@ -409,7 +409,7 @@
                   </div>
                   <b><?php echo esc_html__("Global Chapter Warning Message:", 'ultimate-manga-scraper');?></b>
                   </td><td>
-                  <input type="text" name="ums_text_list[chapter_warning][]" value="" placeholder="Global Chapter Warning Message" class="cr_width_full">
+                  <input type="text" name="ums_fanmtl_list[chapter_warning][]" value="" placeholder="Global Chapter Warning Message" class="cr_width_full">
                   </div>
                     </td></tr>
                     <tr><td>
@@ -423,7 +423,7 @@
                   </div>
                   <b><?php echo esc_html__("First Chapter Slug:", 'ultimate-manga-scraper');?></b>
                   </td><td>
-                  <input type="text" name="ums_text_list[chapter_slug][]" value="" placeholder="chapter-1" class="cr_width_full">
+                  <input type="text" name="ums_fanmtl_list[chapter_slug][]" value="" placeholder="chapter-1" class="cr_width_full">
                   </div>
                     </td></tr>
                     <tr>
@@ -439,7 +439,7 @@
                             <b><?php echo esc_html__("Strip Images, Videos And Scripts From Chapters:", 'ultimate-manga-scraper');?></b>
                     </td>
                     <td>
-                    <input type="checkbox" id="strip_images" name="ums_text_list[strip_images][]" checked>
+                    <input type="checkbox" id="strip_images" name="ums_fanmtl_list[strip_images][]" checked>
                     </div>
                     </td>
                     </tr>
@@ -458,7 +458,7 @@
                             <b><?php echo esc_html__("Automatically Translate Content To:", 'ultimate-manga-scraper');?></b><br/><b><?php echo esc_html__("Info:", 'ultimate-manga-scraper');?></b> <?php echo esc_html__("for translation, the plugin also supports WPML.", 'ultimate-manga-scraper');?> <b><a href="https://wpml.org/?aid=238195&affiliate_key=ix3LsFyq0xKz" target="_blank"><?php echo esc_html__("Get WPML now!", 'ultimate-manga-scraper');?></a></b>
                     </td>
                     <td>
-                    <select class="cr_width_full" id="translate" name="ums_text_list[rule_translate][]" >
+                    <select class="cr_width_full" id="translate" name="ums_fanmtl_list[rule_translate][]" >
                     <?php
                         $i = 0;
                         foreach ($GLOBALS['language_names'] as $lang) {
@@ -498,14 +498,14 @@
                             <div class="bws_help_box bws_help_box_right dashicons dashicons-editor-help cr_align_middle">
                                 <div class="bws_hidden_help_text cr_min_260px">
                                 <?php
-                                    echo esc_html__("Do you want to not translate web novel titles", 'ultimate-manga-scraper');
+                                    echo esc_html__("Do you want to not translate web novel titles?", 'ultimate-manga-scraper');
                                     ?>
                                 </div>
                             </div>
                             <b><?php echo esc_html__("Do Not Translate Title:", 'ultimate-manga-scraper');?></b>
                     </td>
                     <td>
-                    <input type="checkbox" id="no_translate_title" name="ums_text_list[no_translate_title][]">
+                    <input type="checkbox" id="no_translate_title" name="ums_fanmtl_list[no_translate_title][]">
                     </div>
                     </td>
                     </tr>
@@ -520,8 +520,8 @@
                   </div> 
                   </td>
                   <td class="cr_comm_td"><span class="cr_gray20">X</span></td>
-                  <td class="cr_comm_td"><input type="checkbox" name="ums_text_list[active][]" value="1" checked />
-                  <input type="hidden" name="ums_text_list[last_run][]" value="1988-01-27 00:00:00"/></td>
+                  <td class="cr_comm_td"><input type="checkbox" name="ums_fanmtl_list[active][]" value="1" checked />
+                  <input type="hidden" name="ums_fanmtl_list[last_run][]" value="1988-01-27 00:00:00"/></td>
                   <td class="cr_comm_td"><div class="bws_help_box bws_help_box_right dashicons dashicons-editor-help cr_align_middle">
                   <div class="bws_hidden_help_text cr_min_260px">
                   <?php
@@ -545,7 +545,7 @@
                   </div>
                   </td>
                   </tr>
-                  <?php
+                  <?php 
                      }
                      ?>
                   </tbody>
@@ -751,7 +751,7 @@
             }
             if(isset($_GET['ums_page']) && is_numeric($_GET['ums_page']))
             {
-                $this_page = $_GET["ums_page"];
+                $this_page = intval($_GET["ums_page"]);
             }
             else
             {
@@ -777,7 +777,7 @@
                      <td><?php echo esc_html__("Success", 'ultimate-manga-scraper');?> - <b><?php echo esc_html__("New Novel Created", 'ultimate-manga-scraper');?></b></td>
                   </tr>
                   <tr>
-                     <td><img id="fail_img" src="<?php echo esc_url_raw(plugin_dir_url(dirname(__FILE__)) . 'images/failed.gif');?>" alt="Faield" title="status"></td>
+                     <td><img id="fail_img" src="<?php echo esc_url_raw(plugin_dir_url(dirname(__FILE__)) . 'images/failed.gif');?>" alt="Failed" title="status"></td>
                      <td><?php echo esc_html__("Failed", 'ultimate-manga-scraper');?> - <b><?php echo esc_html__("An Error Occurred.", 'ultimate-manga-scraper');?> <b><?php echo esc_html__("Please check 'Activity and Logging' plugin menu for details.", 'ultimate-manga-scraper');?></b></td>
                   </tr>
                   <tr>
@@ -801,23 +801,23 @@
 </div>
 <?php
    }
-   if (isset($_POST['ums_text_list'])) {
-       add_action('admin_init', 'ums_save_rules_text');
+   if (isset($_POST['ums_fanmtl_list'])) {
+       add_action('admin_init', 'ums_save_rules_novel');
    }
    
-   function ums_save_rules_text($data2)
+   function ums_save_rules_novel($data2)
    {
-       $init_rules_per_page = get_option('ums_posts_per_page', 10);
-       $rules_per_page = get_option('ums_posts_per_page', 10);
-       if(isset($_POST['posts_per_page']))
-       {
+        $init_rules_per_page = get_option('ums_posts_per_page', 10);
+        $rules_per_page = get_option('ums_posts_per_page', 10);
+        if(isset($_POST['posts_per_page']))
+        {
             $posts_per_page = intval($_POST['posts_per_page']);
             $posts_per_page = max(1, min($posts_per_page, 100)); // Clamp between 1 and 100
             update_option('ums_posts_per_page', $posts_per_page);
-       }
+        }
        check_admin_referer('ums_save_rules', '_umsr_nonce');
-       $data2 = $_POST['ums_text_list'];
-       $rules = get_option('ums_text_list', array());
+       $data2 = $_POST['ums_fanmtl_list'];
+       $rules = get_option('ums_fanmtl_list', array());
        if($rules === false)
        {
            $rules = array();
@@ -883,7 +883,7 @@
            }
            $rules = array_values(array_filter($rules));
        }
-       update_option('ums_text_list', $rules, false);
+       update_option('ums_fanmtl_list', $rules, false);
        $final_count = count($rules);
        if($final_count > $initial_count)
        {
@@ -988,7 +988,7 @@
            ums_redirect($last_url);
        }
    }
-   function ums_expand_rules_text($hu)
+   function ums_expand_rules_novel($hu)
    {
        $ums_Main_Settings = get_option('ums_Main_Settings', false);
        $categories = get_terms( 'wp-manga-genre', array( 'hide_empty' => false ) );
@@ -997,8 +997,8 @@
        } else {
            $running = get_option('ums_running_list');
        }
-       $GLOBALS['wp_object_cache']->delete('ums_text_list', 'options');
-       $rules  = get_option('ums_text_list');
+       $GLOBALS['wp_object_cache']->delete('ums_fanmtl_list', 'options');
+       $rules  = get_option('ums_fanmtl_list');
     if(!is_array($rules))
     {
        $rules = array();
@@ -1015,51 +1015,52 @@
                 $current_page = 1;
             }
             $unlocker = get_option('ums_minute_running_unlocked', false);
-            $posted_items = array();
-            $post_list = array();
-            $postsPerPage = 50000;
-            $paged = 0;
-            do
-            {
-                $postOffset = $paged * $postsPerPage;
-                $query = array(
-                    'post_status' => array(
-                        'publish',
-                        'draft',
-                        'pending',
-                        'trash',
-                        'private',
-                        'future'
-                    ),
-                    'post_type' => array(
-                        'any'
-                    ),
-                    'numberposts' => $postsPerPage,
-                    'meta_key' => 'ums_parent_rule',
-                    'fields' => 'ids',
-                    'offset'  => $postOffset
-                );
-                $got_me = get_posts($query);
-                $post_list = array_merge($post_list, $got_me);
-                $paged++;
-            }while(!empty($got_me));
-            wp_suspend_cache_addition(true);
-            foreach ($post_list as $post) {
-                $rule_id = get_post_meta($post, 'ums_parent_rule', true);
-                if ($rule_id != '') {
-                    $exp = explode('-', $rule_id);
-                    if(isset($exp[0]) && isset($exp[1]) && $exp[0] == '1')
-                    {
-                        $posted_items[] = $exp[1];
-                    }
-                }
-            }
-            $phantom = false;
-            wp_suspend_cache_addition(false);
-            $counted_vals = array_count_values($posted_items);
-            $unlocker = get_option('ums_minute_running_unlocked', false);
             $rules_per_page = get_option('ums_posts_per_page', 10);
-            foreach ($rules as $request => $bundle[]) {
+           $posted_items = array();
+           $post_list = array();
+           $postsPerPage = 50000;
+           $paged = 0;
+           do
+           {
+               $postOffset = $paged * $postsPerPage;
+               $query = array(
+                   'post_status' => array(
+                       'publish',
+                       'draft',
+                       'pending',
+                       'trash',
+                       'private',
+                       'future'
+                   ),
+                   'post_type' => array(
+                       'any'
+                   ),
+                   'numberposts' => $postsPerPage,
+                   'meta_key' => 'ums_parent_rule',
+                   'fields' => 'ids',
+                   'offset'  => $postOffset
+               );
+               $got_me = get_posts($query);
+               $post_list = array_merge($post_list, $got_me);
+               $paged++;
+           }while(!empty($got_me));
+           wp_suspend_cache_addition(true);
+           foreach ($post_list as $post) {
+               $rule_id = get_post_meta($post, 'ums_parent_rule', true);
+               if ($rule_id != '') {
+                   $exp = explode('-', $rule_id);
+                   if(isset($exp[0]) && isset($exp[1]) && $exp[0] == '6')
+                   {
+                       $posted_items[] = $exp[1];
+                   }
+               }
+           }
+           $phantom = false;
+           wp_suspend_cache_addition(false);
+           $counted_vals = array_count_values($posted_items);
+           $unlocker = get_option('ums_minute_running_unlocked', false);
+           $rules_per_page = get_option('ums_posts_per_page', 10);
+           foreach ($rules as $request => $bundle[]) {
                 if(($cont < ($current_page - 1) * $rules_per_page) || ($cont >= $current_page * $rules_per_page))
                 {
                     $cont++;
@@ -1099,10 +1100,10 @@
                wp_add_inline_script('ums-footer-script', 'createAdmin(' . esc_html($cont) . ');', 'after');
                $output .= '<tr>
                            <td class="cr_comm_td">' . esc_html($cont) . '</td>
-                           <td class="cr_short_td"><input type="text" step="1" name="ums_text_list[location][]" placeholder="https://wuxiaworld.site/novel/..." value="' . esc_attr($manga_name) . '" class="cr_width_full" required/></td>
-                           <td class="cr_comm_td"><input type="number" step="1" min="1" placeholder="# h" name="ums_text_list[schedule][]" max="8765812" value="' . esc_attr($schedule) . '" class="cr_width_60" required></td>
-                           <td class="cr_comm_td"><input type="number" step="1" min="0" placeholder="# max" name="ums_text_list[max][]"';$output .= ' value="' . esc_attr($max) . '"  class="cr_width_60" required></td>
-                           <td class="cr_status"><select id="submit_status" name="ums_text_list[submit_status][]" class="cr_width_70">
+                           <td class="cr_short_td"><input type="text" step="1" name="ums_fanmtl_list[location][]" placeholder="https://fanmtl.com/novel/..." value="' . esc_attr($manga_name) . '" class="cr_width_full" required/></td>
+                           <td class="cr_comm_td"><input type="number" step="1" min="1" placeholder="# h" name="ums_fanmtl_list[schedule][]" max="8765812" value="' . esc_attr($schedule) . '" class="cr_width_60" required></td>
+                           <td class="cr_comm_td"><input type="number" step="1" min="0" placeholder="# max" name="ums_fanmtl_list[max][]"';$output .= ' value="' . esc_attr($max) . '"  class="cr_width_60" required></td>
+                           <td class="cr_status"><select id="submit_status" name="ums_fanmtl_list[submit_status][]" class="cr_width_70">
                                      <option value="pending"';
                if ($status == 'pending') {
                    $output .= ' selected';
@@ -1129,7 +1130,7 @@
                }
                $output .= '>' . esc_html__("Trash", 'ultimate-manga-scraper') . '</option>
                        </select>  </td>
-                       <td class="cr_author"><select id="post_author" name="ums_text_list[post_author][]" class="cr_width_auto cr_max_width_150">';
+                       <td class="cr_author"><select id="post_author" name="ums_fanmtl_list[post_author][]" class="cr_width_auto cr_max_width_150">';
                $blogusers = get_users( [ 'role__in' => [ 'contributor', 'author', 'editor', 'administrator' ] ] );
                foreach ($blogusers as $user) {
                    $output .= '<option value="' . esc_html($user->ID) . '"';
@@ -1169,7 +1170,7 @@
                      <b>' . esc_html__("Reverse Scraping (Start With Oldest Chapters)", 'ultimate-manga-scraper') . ':</b>
                      
                      </td><td>
-                     <input type="checkbox" id="reverse_chapters" name="ums_text_list[reverse_chapters][]"';
+                     <input type="checkbox" id="reverse_chapters" name="ums_fanmtl_list[reverse_chapters][]"';
              if ($reverse_chapters == '1') {
                  $output .= ' checked';
              }
@@ -1186,7 +1187,7 @@
                        <b>' . esc_html__("Maximum Number Of Novel to Scrape", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <input class="cr_width_full" type="number" min="1" name="ums_text_list[max_manga][]"';$output .= ' value="' . esc_attr($max_manga) . '" placeholder="Maximum number of web novels to scrape" >
+                       <input class="cr_width_full" type="number" min="1" name="ums_fanmtl_list[max_manga][]"';$output .= ' value="' . esc_attr($max_manga) . '" placeholder="Maximum number of web novels to scrape" >
            </div>
            </td></tr>
          <tr><td colspan="2"><h3>' . esc_html__("Miscellaneous Options:", 'ultimate-manga-scraper') . '</h3></td></tr><tr><td class="cr_min_width_200">
@@ -1198,7 +1199,7 @@
                        <b>' . esc_html__("Additional Novel Genre", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <select class="cr_width_full" id="default_category" name="ums_text_list[default_category][]">
+                       <select class="cr_width_full" id="default_category" name="ums_fanmtl_list[default_category][]">
                        <option value="ums_no_category_12345678">' . esc_html__("Do Not Add a Genre", 'ultimate-manga-scraper') . '</option>';
                foreach ($categories as $category) {
                    $output .= '<option value="' . esc_attr($category->term_id) . '"';
@@ -1218,7 +1219,7 @@
                        <b>' . esc_html__("Auto Add Genres", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <select class="cr_width_full" id="auto_categories" name="ums_text_list[auto_categories][]">
+                       <select class="cr_width_full" id="auto_categories" name="ums_fanmtl_list[auto_categories][]">
                        <option value="disabled"';
                if ($auto_categories == 'disabled') {
                    $output .= ' selected';
@@ -1240,7 +1241,7 @@
                        <b>' . esc_html__("Auto Add Novel Tags", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <select class="cr_width_full" id="auto_tags" name="ums_text_list[auto_tags][]">
+                       <select class="cr_width_full" id="auto_tags" name="ums_fanmtl_list[auto_tags][]">
                        <option value="disabled"';
                if ($auto_tags == 'disabled') {
                    $output .= ' selected';
@@ -1267,7 +1268,7 @@
                        <b>' . esc_html__("Additional Novel Tags", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <input class="cr_width_full" type="text" name="ums_text_list[default_tags][]" value="' . esc_attr($default_tags) . '" placeholder="Please insert your additional web novel tags here" >
+                       <input class="cr_width_full" type="text" name="ums_fanmtl_list[default_tags][]" value="' . esc_attr($default_tags) . '" placeholder="Please insert your additional web novel tags here" >
                            
            </div>
            </td></tr><tr><td>
@@ -1304,12 +1305,12 @@
                        $output .= '</div>
                        </td><td>
                        <div>
-                       <select id="use_phantom" name="ums_text_list[use_phantom][]" class="cr_width_full">
+                       <select id="use_phantom" name="ums_fanmtl_list[use_phantom][]" class="cr_width_full">
                         <option value="0"';
            if ($use_phantom == '0' || $use_phantom == '') {
                $output .= ' selected';
            }
-           $output .= '>' . esc_html__("WordPress (Default)", 'ultimate-manga-scraper') . '</option>
+           $output .= '>' . esc_html__("WordPress", 'ultimate-manga-scraper') . '</option>
                         <option value="1"';
            if ($use_phantom == '1') {
                $output .= ' selected';
@@ -1319,7 +1320,7 @@
            if ($use_phantom == '2') {
                $output .= ' selected';
            }
-           $output .= '>' . esc_html__("Use Puppeteer", 'ultimate-manga-scraper') . '</option>
+           $output .= '>' . esc_html__("Use Puppeteer (Default)", 'ultimate-manga-scraper') . '</option>
                           <option value="4"';
            if ($use_phantom == '4') {
                $output .= ' selected';
@@ -1359,7 +1360,7 @@
                        </div>
                        </td><td>
                        <div>
-                       <input type="number" min="0" step="1" id="phantom_wait" name="ums_text_list[phantom_wait][]" value="' . esc_attr($phantom_wait) . '" placeholder="0" class="cr_width_full">                   
+                       <input type="number" min="0" step="1" id="phantom_wait" name="ums_fanmtl_list[phantom_wait][]" value="' . esc_attr($phantom_wait) . '" placeholder="0" class="cr_width_full">                   
            </div>
            </td></tr><tr><td>
            <div>
@@ -1370,7 +1371,7 @@
                        <b>' . esc_html__("Enable Comments For Novel", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <input type="checkbox" id="enable_comments" name="ums_text_list[enable_comments][]"';
+                       <input type="checkbox" id="enable_comments" name="ums_fanmtl_list[enable_comments][]"';
                if ($enable_comments == '1') {
                    $output .= ' checked';
                }
@@ -1386,7 +1387,7 @@
                        <b>' . esc_html__("Enable Pingback/Trackback", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <input type="checkbox" id="enable_pingback" name="ums_text_list[enable_pingback][]"';
+                       <input type="checkbox" id="enable_pingback" name="ums_fanmtl_list[enable_pingback][]"';
                if ($enable_pingback == '1') {
                    $output .= ' checked';
                }
@@ -1402,7 +1403,7 @@
                        <b>' . esc_html__("Get Publish Date From Novel", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <input type="checkbox" id="get_date" name="ums_text_list[get_date][]"';
+                       <input type="checkbox" id="get_date" name="ums_fanmtl_list[get_date][]"';
                if ($get_date == '1') {
                    $output .= ' checked';
                }
@@ -1418,7 +1419,7 @@
                        <b>' . esc_html__("Global Chapter Warning Message", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <input class="cr_width_full" type="text" name="ums_text_list[chapter_warning][]" value="' . esc_attr($chapter_warning) . '" placeholder="Global Chapter Warning Message" >
+                       <input class="cr_width_full" type="text" name="ums_fanmtl_list[chapter_warning][]" value="' . esc_attr($chapter_warning) . '" placeholder="Global Chapter Warning Message" >
                            
            </div>
            </td></tr><tr><td>
@@ -1430,7 +1431,7 @@
                        <b>' . esc_html__("First Chapter Slug", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <input class="cr_width_full" type="text" name="ums_text_list[chapter_slug][]" value="' . esc_attr($chapter_slug) . '" placeholder="chapter-1" >
+                       <input class="cr_width_full" type="text" name="ums_fanmtl_list[chapter_slug][]" value="' . esc_attr($chapter_slug) . '" placeholder="chapter-1" >
                            
            </div>
            
@@ -1443,7 +1444,7 @@
                        <b>' . esc_html__("Strip Images, Videos And Scripts From Chapters", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <input type="checkbox" id="strip_images" name="ums_text_list[strip_images][]"';
+                       <input type="checkbox" id="strip_images" name="ums_fanmtl_list[strip_images][]"';
                if ($strip_images == '1') {
                    $output .= ' checked';
                }
@@ -1460,7 +1461,7 @@
                            <b>' . esc_html__("Automatically Translate Content To", 'ultimate-manga-scraper') . ':</b><br/><b>' . esc_html__("Info:", 'ultimate-manga-scraper') . '</b> ' . esc_html__("for translation, the plugin also supports WPML.", 'ultimate-manga-scraper') . ' <b><a href="https://wpml.org/?aid=238195&affiliate_key=ix3LsFyq0xKz" target="_blank">' . esc_html__("Get WPML now!", 'ultimate-manga-scraper') . '</a></b>
                            
                            </td><td>
-                           <select class="cr_width_full" id="translate" name="ums_text_list[rule_translate][]" >';
+                           <select class="cr_width_full" id="translate" name="ums_fanmtl_list[rule_translate][]" >';
            $i = 0;
            foreach ($GLOBALS['language_names'] as $lang) {
                $output .= '<option value="' . esc_attr($GLOBALS['language_codes'][$i]) . '"';
@@ -1506,13 +1507,13 @@
                        <b>' . esc_html__("Do Not Translate Title", 'ultimate-manga-scraper') . ':</b>
                        
                        </td><td>
-                       <input type="checkbox" id="no_translate_title" name="ums_text_list[no_translate_title][]"';
+                       <input type="checkbox" id="no_translate_title" name="ums_fanmtl_list[no_translate_title][]"';
                if ($no_translate_title == '1') {
                    $output .= ' checked';
                }
                $output .= '>
                            
-           </div></table></div> 
+           </div></td></tr></table></div> 
        </div>
        <div class="codemodalfzr-footer">
          <br/>
@@ -1524,16 +1525,16 @@
    </div>       
                        </td>
    						<td class="cr_comm_td"><span class="wpums-delete">X</span></td>
-                           <td class="cr_comm_td"><input type="checkbox" name="ums_text_list[active][]" class="activateDeactivateClass" value="1"';
+                           <td class="cr_comm_td"><input type="checkbox" name="ums_fanmtl_list[active][]" class="activateDeactivateClass" value="1"';
                if (isset($active) && $active === '1') {
                    $output .= ' checked';
                }
                $output .= '/>
-                           <input type="hidden" name="ums_text_list[last_run][]" value="' . esc_attr($last_run) . '"/></td>
+                           <input type="hidden" name="ums_fanmtl_list[last_run][]" value="' . esc_attr($last_run) . '"/></td>
                            <td class="cr_comm_td"><div class="bws_help_box bws_help_box_right dashicons dashicons-editor-help cr_align_middle">
                            <div class="bws_hidden_help_text cr_min_260px">' . esc_html__('Novels Generated:', 'ultimate-manga-scraper') . ' ' . esc_html($generated_posts) . '<br/>';
                if ($generated_posts != 0) {
-                   $output .= '<a href="' . get_admin_url() . 'edit.php?coderevolution_post_source=Ums_1_' . esc_html($cont) . '&post_type=wp-manga" target="_blank">' . esc_html__('View Generated Novels', 'ultimate-manga-scraper') . '</a><br/>';
+                   $output .= '<a href="' . get_admin_url() . 'edit.php?coderevolution_post_source=Ums_6_' . esc_html($cont) . '&post_type=wp-manga" target="_blank">' . esc_html__('View Generated Novels', 'ultimate-manga-scraper') . '</a><br/>';
                }
                $output .= esc_html__('Last Run: ', 'ultimate-manga-scraper');
                if ($last_run == '1988-01-27 00:00:00') {
@@ -1595,12 +1596,12 @@
                            <div>
                            <img id="run_img' . esc_html($cont) . '" src="' . plugin_dir_url(dirname(__FILE__)) . 'images/running.gif' . '" alt="Running" class="cr_status_icon';
                if (!empty($running)) {
-                   if (!in_array(array($cont => 1), $running)) {
+                   if (!in_array(array($cont => 2), $running)) {
                        $output .= ' cr_hidden';
                    }
                    else
                    {
-                       $f = fopen(get_temp_dir() . 'ums_1_' . $cont, 'w');
+                       $f = fopen(get_temp_dir() . 'ums_6_' . $cont, 'w');
                        if($f !== false)
                        {
                            if (!flock($f, LOCK_EX | LOCK_NB)) {
@@ -1609,7 +1610,7 @@
                            {
                                $output .= ' cr_hidden';
                                flock($f, LOCK_UN);
-                               if (($xxkey = array_search(array($cont => 1), $running)) !== false) {
+                               if (($xxkey = array_search(array($cont => 2), $running)) !== false) {
                                    unset($running[$xxkey]);
                                    update_option('ums_running_list', $running);
                                }
@@ -1621,7 +1622,7 @@
                }
                $output .= '" title="status">
                            <div class="codemainfzr">
-                           <select id="actions" class="actions" name="actions" onchange="actionsChangedManual(' . esc_html($cont) . ', this.value, 1);" onfocus="this.selectedIndex = 0;">
+                           <select id="actions" class="actions" name="actions" onchange="actionsChangedManual(' . esc_html($cont) . ', this.value, 6);" onfocus="this.selectedIndex = 0;">
                                <option value="select" disabled selected>' . esc_html__("Select an Action", 'ultimate-manga-scraper') . '</option>
                                <option value="run">' . esc_html__("Run This Rule Now", 'ultimate-manga-scraper') . '</option>
                                <option value="trash">' . esc_html__("Move All Novels To Trash", 'ultimate-manga-scraper') . '</option>

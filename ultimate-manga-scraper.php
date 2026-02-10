@@ -735,6 +735,9 @@ function ums_register_my_custom_menu_page()
         $mangaxyx = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (novlove.com)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (novlove.com)', 'ultimate-manga-scraper'), 'manage_options', 'ums_novel_panel', 'ums_novel_panel');
         add_action( 'load-' . $mangaxyx, 'ums_load_admin_js' );
         add_action( 'load-' . $mangaxyx, 'ums_load_all_admin_js' );
+        $mangafan = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (FanMTL/ReadWN)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (FanMTL/ReadWN)', 'ultimate-manga-scraper'), 'manage_options', 'ums_fanmtl_panel', 'ums_fanmtl_panel');
+        add_action( 'load-' . $mangafan, 'ums_load_admin_js' );
+        add_action( 'load-' . $mangafan, 'ums_load_all_admin_js' );
         //$mangaxy = add_submenu_page('ums_admin_settings', esc_html__('Web Novel Scraper (NewNovel.org)', 'ultimate-manga-scraper'), esc_html__('Web Novel Scraper (NewNovel.org)', 'ultimate-manga-scraper'), 'manage_options', 'ums_vipnovel_panel', 'ums_vipnovel_panel');
         //add_action( 'load-' . $mangaxy, 'ums_load_admin_js' );
         //add_action( 'load-' . $mangaxy, 'ums_load_all_admin_js' );
@@ -854,7 +857,9 @@ function ums_auto_clear_log()
     global $wp_filesystem;
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-       wp_filesystem($creds);
+       if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+           ums_log_to_file('Failed to initialize WordPress filesystem');
+       }
     }
     if ($wp_filesystem->exists(WP_CONTENT_DIR . '/ums_info.log')) {
         $wp_filesystem->delete(WP_CONTENT_DIR . '/ums_info.log');
@@ -1800,8 +1805,8 @@ function ums_get_web_page($url, $ua = '', $use_phantom = '0', $phantom_wait = ''
                     CURLOPT_CONNECTTIMEOUT => 10,
                     CURLOPT_TIMEOUT => 120,
                     CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_SSL_VERIFYHOST => 0,
-                    CURLOPT_SSL_VERIFYPEER => 0,
+                    CURLOPT_SSL_VERIFYHOST => 2,
+                    CURLOPT_SSL_VERIFYPEER => true,
                     CURLOPT_COOKIE => 'isAdult=1'
                 );
                 $ch         = curl_init($url);
@@ -1825,7 +1830,10 @@ function ums_get_web_page($url, $ua = '', $use_phantom = '0', $phantom_wait = ''
                     global $wp_filesystem;
                     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                        wp_filesystem($creds);
+                        if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                            ums_log_to_file('Failed to initialize WordPress filesystem in ums_get_web_page');
+                            return $content;
+                        }
                     }
                     return $wp_filesystem->get_contents($url);
                 }
@@ -2001,8 +2009,8 @@ function ums_get_manga_page($url)
         CURLOPT_CONNECTTIMEOUT => 10,
         CURLOPT_TIMEOUT => 120,
         CURLOPT_MAXREDIRS => 10,
-        CURLOPT_SSL_VERIFYHOST => 0,
-        CURLOPT_SSL_VERIFYPEER => 0,
+        CURLOPT_SSL_VERIFYHOST => 2,
+        CURLOPT_SSL_VERIFYPEER => true,
         CURLOPT_COOKIE => 'webstickynode=c24fa7357dc1dc361a8957736ebdb93c;wd=2133x1087;presence=EDvF3EtimeF1680850190EuserFA21B01157412606A2EstateFDutF0CEchF_7bCC;fr=0M12KGXSyvzIKQzQc.AWWEs8ckc4zZ1cvV60Dtu9wq6Nw.BkL70H.ia.AAA.0.0.BkL70H.AWXuzvceS5I;c_user=100001157412606;usida=eyJ2ZXIiOjEsImlkIjoiQXJzcWdiMDExNnQwOG0iLCJ0aW1lIjoxNjgwODUwMTg4fQ%3D%3D;dpr=0.8999999761581421;xs=44%3AYKtoDsOJnuA45g%3A2%3A1662217638%3A-1%3A6679%3A%3AAcWh5qXW2KHRwlWehThVlw_TX2bQy1OCtjcqL1AkH0AfYQ'
     );
     $ch         = curl_init($url);
@@ -2319,7 +2327,10 @@ function ums_wp_mcl_e_upload_file( $url, $use_phantom, $phantom_wait, $post_id =
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') )
     {
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-        wp_filesystem($creds);
+        if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+            ums_log_to_file('Failed to initialize WordPress filesystem in ums_create_featured_image');
+            return false;
+        }
     }
     $file = $wp_filesystem->put_contents( $file_tmp_path, $content );
     $wp_filetype = wp_check_filetype(basename($file_tmp_path), null );
@@ -2697,7 +2708,9 @@ function ums_fetch_single_chapter( $chapter, $volume_id, $post_id, $itemx, $stor
     global $wp_filesystem;
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-       wp_filesystem($creds);
+       if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+           ums_log_to_file('Failed to initialize WordPress filesystem');
+       }
     }
     if (!$wp_filesystem->exists( $extract ) ){
         if( ! wp_mkdir_p( $extract ) ){
@@ -2825,7 +2838,9 @@ function ums_get_upload_cloud_list($upload_cloud_file){
     global $wp_filesystem;
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-       wp_filesystem($creds);
+       if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+           ums_log_to_file('Failed to initialize WordPress filesystem');
+       }
     }
     if ($wp_filesystem->exists( $upload_cloud_file ) ){
         $content = $wp_filesystem->get_contents( $upload_cloud_file );
@@ -2928,7 +2943,9 @@ function ums_fetch_single_chapter_generic( $ums_chapter_images, $volume_id, $pos
     global $wp_filesystem;
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-       wp_filesystem($creds);
+       if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+           ums_log_to_file('Failed to initialize WordPress filesystem');
+       }
     }
     if (!$wp_filesystem->exists( $extract ) ){
         if( ! wp_mkdir_p( $extract ) ){
@@ -3039,7 +3056,9 @@ function ums_put_upload_cloud_list( $item, $upload_cloud_file ){
         global $wp_filesystem;
         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-            wp_filesystem($creds);
+            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                ums_log_to_file('Failed to initialize WordPress filesystem');
+            }
         }
         $list[ $item['id'] ] = $item;
         $wp_filesystem->put_contents( $upload_cloud_file, json_encode( $list, JSON_PRETTY_PRINT ) );
@@ -3181,7 +3200,9 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
     global $wp_filesystem;
     if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
         include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-        wp_filesystem($creds);
+        if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+            ums_log_to_file('Failed to initialize WordPress filesystem');
+        }
     }
     $theme = wp_get_theme();
     if ( 'Madara' != $theme->name && 'Madara' != $theme->parent_theme ) {
@@ -3708,6 +3729,73 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         $rules = get_option('ums_manga_generic_list');
                         $rules[$param][3] = ums_get_date_now();
                         update_option('ums_manga_generic_list', $rules, false);
+                    }
+                }
+            }
+            elseif($type == 6)
+            {
+                $GLOBALS['wp_object_cache']->delete('ums_fanmtl_list', 'options');
+                if (!get_option('ums_fanmtl_list')) {
+                    $rules = array();
+                } else {
+                    $rules = get_option('ums_fanmtl_list');
+                }
+                if (!empty($rules)) {
+                    foreach ($rules as $request => $bundle[]) {
+                        if ($cont == $param) {
+                            $bundle_values    = array_values($bundle);
+                            $myValues         = $bundle_values[$cont];
+                            $array_my_values  = array_values($myValues);for($iji=0;$iji<count($array_my_values);++$iji){if(is_string($array_my_values[$iji])){$array_my_values[$iji]=stripslashes($array_my_values[$iji]);}}
+                            $manga_name       = isset($array_my_values[0]) ? $array_my_values[0] : '';
+                            $schedule         = isset($array_my_values[1]) ? $array_my_values[1] : '';
+                            $active           = isset($array_my_values[2]) ? $array_my_values[2] : '';
+                            $last_run         = isset($array_my_values[3]) ? $array_my_values[3] : '';
+                            $max              = isset($array_my_values[4]) ? $array_my_values[4] : '';
+                            $post_status      = isset($array_my_values[5]) ? $array_my_values[5] : '';
+                            $post_user_name   = isset($array_my_values[6]) ? $array_my_values[6] : '';
+                            $item_create_tag  = isset($array_my_values[7]) ? $array_my_values[7] : '';
+                            $default_category = isset($array_my_values[8]) ? $array_my_values[8] : '';
+                            $auto_categories  = isset($array_my_values[9]) ? $array_my_values[9] : '';
+                            $can_create_tag   = isset($array_my_values[10]) ? $array_my_values[10] : '';
+                            $use_phantom      = isset($array_my_values[11]) ? $array_my_values[11] : '';
+                            $reverse_chapters = isset($array_my_values[12]) ? $array_my_values[12] : '';
+                            $max_manga        = isset($array_my_values[13]) ? $array_my_values[13] : '';
+                            $chapter_warning  = isset($array_my_values[14]) ? $array_my_values[14] : '';
+                            $enable_comments  = isset($array_my_values[15]) ? $array_my_values[15] : '';
+                            $enable_pingback  = isset($array_my_values[16]) ? $array_my_values[16] : '';
+                            $get_date         = isset($array_my_values[17]) ? $array_my_values[17] : '';
+                            $rule_translate   = isset($array_my_values[18]) ? $array_my_values[18] : '';
+                            $no_translate_title= isset($array_my_values[19]) ? $array_my_values[19] : '';
+                            $chapter_slug     = isset($array_my_values[20]) ? $array_my_values[20] : '';
+                            $phantom_wait     = isset($array_my_values[21]) ? $array_my_values[21] : '';
+                            $strip_images     = isset($array_my_values[22]) ? $array_my_values[22] : '';
+                            $found            = 1;
+                            break;
+                        }
+                        $cont = $cont + 1;
+                    }
+                } else {
+                    ums_log_to_file('No rules found for ums_fanmtl_list!');
+                    if($auto == 1)
+                    {
+                        ums_clearFromList($param, $type);
+                    }
+                    return 'fail';
+                }
+                if ($found == 0) {
+                    ums_log_to_file($param . ' not found in ums_fanmtl_list!');
+                    if($auto == 1)
+                    {
+                        ums_clearFromList($param, $type);
+                    }
+                    return 'fail';
+                } else {
+                    if($rerun_count == 0)
+                    {
+                        $GLOBALS['wp_object_cache']->delete('ums_fanmtl_list', 'options');
+                        $rules = get_option('ums_fanmtl_list');
+                        $rules[$param][3] = ums_get_date_now();
+                        update_option('ums_fanmtl_list', $rules, false);
                     }
                 }
             }
@@ -4397,7 +4485,9 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         global $wp_filesystem;
                         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                            wp_filesystem($creds);
+                            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                                ums_log_to_file('Failed to initialize WordPress filesystem');
+                            }
                         }
                         $prefixh = 'http://wuxiaworld.site/novel/';
                         $wprefixh = 'http://www.wuxiaworld.site/novel/';
@@ -4895,7 +4985,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                         }
                                     }
                                 }
-                                $post_args['description'] = str_ireplace('wuxiaworld.site', $_SERVER['HTTP_HOST'], $post_args['description']);
+                                $post_args['description'] = str_ireplace('wuxiaworld.site', parse_url(home_url(), PHP_URL_HOST), $post_args['description']);
                                 $arr = ums_spin_and_translate($post_args['title'], $post_args['description'], $rule_translate, 'en');
                                 if($arr === false)
                                 {
@@ -5972,7 +6062,9 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         global $wp_filesystem;
                         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                            wp_filesystem($creds);
+                            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                                ums_log_to_file('Failed to initialize WordPress filesystem');
+                            }
                         }
                         $prefixh = 'http://novlove.com/novel/';
                         $wprefixh = 'http://www.novlove.com/novel/';
@@ -6567,7 +6659,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                         }
                                     }
                                 }
-                                $post_args['description'] = str_ireplace('novlove.com', $_SERVER['HTTP_HOST'], $post_args['description']);
+                                $post_args['description'] = str_ireplace('novlove.com', parse_url(home_url(), PHP_URL_HOST), $post_args['description']);
                                 $arr = ums_spin_and_translate($post_args['title'], $post_args['description'], $rule_translate, 'en');
                                 if($arr === false)
                                 {
@@ -7233,6 +7325,585 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                     }
                 }
             }
+            elseif($type == 6)
+            {
+                if(trim($max_manga) != '')
+                {
+                    $get_max_manga = intval(trim($max_manga));
+                }
+                else
+                {
+                    $get_max_manga = 999;
+                }
+                $items = array();
+                $page_increased = false;
+                {
+                    $manga_arr = array();
+                    try
+                    {
+                        global $wp_filesystem;
+                        if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
+                            include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
+                            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                                ums_log_to_file('Failed to initialize WordPress filesystem');
+                            }
+                        }
+                        $allowed_domains = array(
+                            'fanmtl.com', 'readwn.com', 'wuxiabee.com', 'wuxiafox.com', 
+                            'mtlnovel.me', 'novelmt.com', 'wuxiabox.com', 'freewebnovel.com', 
+                            'readlightnovel.me', 'readnovelfull.com', 'novelhall.com', 'novelall.com', 
+                            'wuxiaworld.site', 'lightnovelworld.com', 'novelbin.com', 'bestlightnovel.com', 
+                            'readlightnovels.net', 'novelonlinefull.com', 'readfreewebnovel.com', 'novelmt.org'
+                        );
+                        $manga_names = explode(',', $manga_name);
+                        $manga_names = array_map('trim', $manga_names);
+                        foreach($manga_names as $mngn)
+                        {
+                            $is_allowed = false;
+                            foreach($allowed_domains as $domain)
+                            {
+                                if(stripos($mngn, $domain) !== false)
+                                {
+                                    $is_allowed = true;
+                                    break;
+                                }
+                            }
+                            if($is_allowed)
+                            {
+                                $manga_arr[] = $mngn;
+                            }
+                            else
+                            {
+                                ums_log_to_file('URL not from allowed domains, skipping: ' . $mngn);
+                                continue;
+                            }
+                        }
+                        if(count($manga_arr) == 0)
+                        {
+                            ums_log_to_file('No Web Novel matched your query: ' . $manga_name);
+                            return 'nochange';
+                        }
+                        $scraped_manga = 0;
+                        foreach($manga_arr as $current_manga)
+                        {
+                            if($get_max_manga <= $scraped_manga)
+                            {
+                                break;
+                            }
+                            $current_manga = trim($current_manga, '/');
+                            $current_manga = $current_manga . '/';
+                            $html_site = ums_get_web_page($current_manga, ums_get_random_user_agent(), $use_phantom, $phantom_wait);
+                            if($html_site == false)
+                            {
+                                ums_log_to_file('Failed to download manga page: ' . $current_manga);
+                                continue;
+                            }
+                            if(stristr($html_site, 'Cloudflare Ray ID:') !== false)
+                            {
+                                ums_log_to_file('CloudFlare protection active, access is limited! Please install puppeteer on your site and set the "Content Scraping Method To Use" to Puppeteer for scraping to work. Manga URL: ' . $current_manga);
+                                sleep(1);
+                                continue;
+                            }
+                            if (isset($ums_Main_Settings['request_timeout']) && $ums_Main_Settings['request_timeout'] != '') {
+                                $timeout = intval($ums_Main_Settings['request_timeout']);
+                            } else {
+                                $timeout = 1;
+                            }
+                            sleep($timeout);
+                            require_once (dirname(__FILE__) . "/res/simple_html_dom.php"); 
+                            $html = ums_str_get_html( $html_site );
+                            $name_str = '';
+                            $my_slug = '';
+                            $parsed_url = parse_url($current_manga);
+                            $my_slug = str_replace('/', '-', trim($parsed_url['path'], '/'));
+                            $tag = $html->find( 'div.main-head h1', 0 );
+                            if($tag){
+                                $name_str = trim($tag->plaintext);
+                            }
+                            if($name_str == '')
+                            {
+                                preg_match_all('#<title>([^<|]*?)[\|<]#i', $html_site, $tmathc);
+                                if(isset($tmathc[1][0]))
+                                {
+                                    $name_str = trim($tmathc[1][0]);
+                                }
+                            }
+                            if (isset($ums_Main_Settings['enable_detailed_logging'])) {
+                                ums_log_to_file('Processing novel: ' . $name_str);
+                            }
+                            $find_post = new WP_Query( array(
+                                'title'     => $name_str,
+                                'post_type' => 'wp-manga',
+                            ) );
+                            $existing_post_id = false;
+                            if( $find_post->have_posts() )
+                            {
+                                $existing_post_id = $find_post->posts[0]->ID;
+                            }
+                            if($existing_post_id == false)
+                            {
+                                $args = array(
+                                    'post_type'  => 'wp-manga',
+                                    'meta_key'   => '_manga_import_slug',
+                                    'meta_value' => $my_slug,
+                                    'post_status' => array('publish','draft','pending','trash','private','future')
+                                );
+                                $query = new WP_Query( $args );
+                                if( $query->have_posts() ){
+                                    $existing_post_id = $query->posts[0]->ID;
+                                }
+                            }
+                            if($existing_post_id == false)
+                            {
+                                $desc = '';
+                                $desc_tag = $html->find( '.summary .content', 0 );
+                                if($desc_tag)
+                                {
+                                    $desc = trim($desc_tag->plaintext);
+                                }
+                                $thumb = '';
+                                $img = $html->find( 'figure.cover img', 0 );
+                                if($img)
+                                {
+                                    $thumb = $img->src;
+                                    if(!filter_var($thumb, FILTER_VALIDATE_URL))
+                                    {
+                                        $thumb = ums_prepare_url($current_manga) . $thumb;
+                                    }
+                                }
+                                $status = 'on-going';
+                                $xtype = 'Web Novel';
+                                $alter_name = '';
+                                $xrelease = '';
+                                $xauthor = '';
+                                $author = '';
+                                $author_tag = $html->find( 'span[itemprop="author"]', 0 );
+                                if($author_tag)
+                                {
+                                    $xauthor = trim($author_tag->plaintext);
+                                    $author = $xauthor;
+                                }
+                                $xartists = '';
+                                $xgenres = '';
+                                $data = $html->find( '.categories a' );
+                                if( !empty( $data ) ){
+                                    $genres = array();
+                                    foreach($data as $genre){
+                                        array_push($genres, trim($genre->plaintext));
+                                    }
+                                    $xgenres = implode(',', $genres);
+                                }
+                                $viewsm = rand(100,500);
+                                $xrating = array();
+                                $xtags = '';
+                                $xtime_year = '';
+                                $post_args = array(
+                                    'manga_import_slug' => $my_slug,
+                                    'title'             => $name_str,
+                                    'post_status'       => $post_status,
+                                    'description'       => $desc,
+                                    'thumb'             => $thumb,
+                                    'status'            => $status,
+                                    'altername'         => strip_tags( $alter_name ),
+                                    'type'              => strip_tags( $xtype ),
+                                    'release'           => $xtime_year,
+                                    'authors'           => strip_tags( $xauthor ),
+                                    'artists'           => strip_tags( $xartists ),
+                                );
+                                $post_args['genres'] = '';
+                                if($auto_categories == 'genre')
+                                {
+                                    $post_args['genres'] = strip_tags( $xgenres );
+                                }
+                                if($default_category != '')
+                                {
+                                    if($post_args['genres'] != '')
+                                    {
+                                        $post_args['genres'] .= ',';
+                                    }
+                                    $genreplus = get_term_by('id', $default_category, 'wp-manga-genre');
+                                    if($genreplus !== false)
+                                    {
+                                        $post_args['genres'] .= $genreplus->slug;
+                                    }
+                                }
+                                $post_args['views'] = strip_tags( $viewsm  );
+                                $post_args['ratings'] = $xrating;
+                                if($can_create_tag == 'genre')
+                                {
+                                    $post_args['tags'] = strip_tags( $xgenres );
+                                }
+                                elseif($can_create_tag == 'tags')
+                                {
+                                    $post_args['tags'] = strip_tags( $xtags );
+                                }
+                                $chapter_warning = '';
+                                $desc = $post_args['description'];
+                                if(empty(trim($desc)))
+                                {
+                                    $desc = 'Empty description.';
+                                }
+                                $za_xpost_args = array(
+                                    'post_title'    => ums_utf8_encode(trim($post_args['title'])),
+                                    'post_content'  => ums_utf8_encode(trim($desc)),
+                                    'post_type'     => 'wp-manga',
+                                    'post_status'   => $post_args['post_status']
+                                );
+                                if($assign_to_author == '1' && !empty($xauthor))
+                                {
+                                    $sp_post_user_name = '1';
+                                    $author_obj = get_user_by('login', $xauthor);
+                                    if ( $author_obj !== false )
+                                    {
+                                        $sp_post_user_name = $author_obj->ID;
+                                    }
+                                    else
+                                    {
+                                        if(!username_exists($xauthor))
+                                        {
+                                            $ppass = wp_generate_password( 12, false );
+                                            $curr_id = wp_create_user($xauthor, $ppass, ums_generate_random_email());
+                                            if ( is_int($curr_id) )
+                                            {
+                                                $u = new WP_User($curr_id);
+                                                $u->remove_role('subscriber');
+                                                $u->add_role('author');
+                                                $sp_post_user_name               = $curr_id;
+                                            }
+                                        }
+                                    }
+                                    $za_xpost_args['post_author']               = ums_utf8_encode($sp_post_user_name);
+                                }
+                                else
+                                {
+                                    $za_xpost_args['post_author']               = ums_utf8_encode($post_user_name);
+                                }
+                                
+                                if (isset($ums_Main_Settings['enable_detailed_logging'])) {
+                                    ums_log_to_file('Inserting new novel: ' . $za_xpost_args['post_title']);
+                                }
+                                $existing_post_id = wp_insert_post( $za_xpost_args );
+                                if( ! $existing_post_id || is_wp_error( $existing_post_id ) ){
+                                    ums_log_to_file('Failed to insert novel into db: ' . $post_args['title']);
+                                    continue;
+                                }
+                                add_post_meta($existing_post_id, 'ums_parent_rule', $type . '-' . $param);
+                                wp_set_object_terms( $existing_post_id, 'Ums_' . $type . '_' . $param, 'coderevolution_post_source', true);
+                                if($thumb != '')
+                                {
+                                    $thumb_id = ums_wp_mcl_e_upload_file( $post_args['thumb'], $use_phantom, $phantom_wait, $existing_post_id );
+                                    if($thumb_id === false)
+                                    {
+                                        include_once( ABSPATH . 'wp-admin/includes/image.php' );
+                                        $thcontent = ums_get_web_page($thumb);
+                                        if (isset($ums_Main_Settings['request_timeout']) && $ums_Main_Settings['request_timeout'] != '') {
+                                            $timeout = intval($ums_Main_Settings['request_timeout']);
+                                        } else {
+                                            $timeout = 1;
+                                        }
+                                        sleep($timeout);
+                                        $pathinfo = pathinfo( $thumb );
+                                        if( $thcontent != false ){
+                                            $upload_dir = wp_upload_dir();
+                                            $file_tmp_path = $upload_dir['basedir'] . '/' . $pathinfo['filename'] . '-' . $existing_post_id . '.' . explode('?',$pathinfo['extension'])[0];
+                                            $file = $wp_filesystem->put_contents( $file_tmp_path, $thcontent );
+                                            $wp_filetype = wp_check_filetype(basename($file_tmp_path), null );
+                                            $attachment = array(
+                                                'post_mime_type' => $wp_filetype['type'],
+                                                'post_title' => $existing_post_id,
+                                                'post_content' => '',
+                                                'post_status' => 'inherit'
+                                            );
+                                            $attach_id = wp_insert_attachment( $attachment, $file_tmp_path );
+                                            $thumb_id = $attach_id;
+                                            $imagenew = get_post( $attach_id );
+                                            $fullsizepath = get_attached_file( $imagenew->ID );
+                                            require_once( ABSPATH . 'wp-admin/includes/image.php' );
+                                            require_once( ABSPATH . 'wp-admin/includes/media.php' );
+                                            $attach_data = wp_generate_attachment_metadata( $attach_id, $fullsizepath );
+                                            wp_update_attachment_metadata( $attach_id, $attach_data );
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    $thumb_id = false;
+                                }
+                                $meta_data = array(
+                                    '_manga_import_slug'     => $my_slug,
+                                    '_thumbnail_id'          => $thumb_id,
+                                    '_wp_manga_alternative'  => strip_tags( $alter_name ),
+                                    '_wp_manga_type'         => strip_tags( $xtype ),
+                                    '_wp_manga_status'       => $status,
+                                    '_wp_manga_chapter_type' => 'text',
+                                    '_wp_manga_chapters_warning'=> $chapter_warning,
+                                );
+                                foreach( $meta_data as $key => $value ){
+                                    if( !empty( $value ) ){
+                                        update_post_meta( $existing_post_id, $key, $value );
+                                    }
+                                }
+                                $manga_terms = array(
+                                    'wp-manga-release'     => strip_tags( $xrelease ),
+                                    'wp-manga-author'      => strip_tags( $xauthor ),
+                                    'wp-manga-artist'      => strip_tags( $xartists ),
+                                    'wp-manga-genre'       => isset( $post_args['genres'] ) ? $post_args['genres'] : '',
+                                    'wp-manga-tag'         => isset( $post_args['tags'] ) ? $post_args['tags'] : null,
+                                );
+                                foreach( $manga_terms as $tax => $term ){
+                                    $resp = ums_add_manga_terms( $existing_post_id, $term, $tax );
+                                }
+                                ums_update_post_views( $existing_post_id, strip_tags( $viewsm ) );
+                                ums_update_post_ratings( $existing_post_id, $xrating );
+                            }
+                            $chapters = array();
+                            $ums_max_chapters = $max;
+                            if($reverse_chapters == '1')
+                            {
+                                $reverse = true;
+                            }
+                            else
+                            {
+                                $reverse = false;
+                            }
+                            $all_chapter_urls = array();
+                            $page_num = 1;
+                            $has_more_pages = true;
+                            while($has_more_pages)
+                            {
+                                $page_url = $current_manga;
+                                if($page_num > 1)
+                                {
+                                    $page_url = $current_manga . '?page=' . $page_num;
+                                }
+                                if($page_num == 1)
+                                {
+                                    $page_html = $html_site;
+                                }
+                                else
+                                {
+                                    $page_html = ums_get_web_page($page_url, ums_get_random_user_agent(), $use_phantom, $phantom_wait);
+                                    if($page_html == false)
+                                    {
+                                        ums_log_to_file('Failed to download chapter list page: ' . $page_url);
+                                        break;
+                                    }
+                                    if (isset($ums_Main_Settings['request_timeout']) && $ums_Main_Settings['request_timeout'] != '') {
+                                        $timeout = intval($ums_Main_Settings['request_timeout']);
+                                    } else {
+                                        $timeout = 1;
+                                    }
+                                    sleep($timeout);
+                                }
+                                $html_page = ums_str_get_html( $page_html );
+                                $chapter_links = $html_page->find('ul.chapter-list a');
+                                if(!empty($chapter_links))
+                                {
+                                    foreach($chapter_links as $ch_link)
+                                    {
+                                        $ch_url = $ch_link->href;
+                                        if(!filter_var($ch_url, FILTER_VALIDATE_URL))
+                                        {
+                                            $ch_url = ums_prepare_url($current_manga) . $ch_url;
+                                        }
+                                        $ch_no_tag = $ch_link->find('.chapter-no', 0);
+                                        $ch_title_tag = $ch_link->find('.chapter-title', 0);
+                                        $ch_title = '';
+                                        if($ch_no_tag)
+                                        {
+                                            $ch_title = trim($ch_no_tag->plaintext);
+                                        }
+                                        if($ch_title_tag)
+                                        {
+                                            if($ch_title != '')
+                                            {
+                                                $ch_title .= ' - ';
+                                            }
+                                            $ch_title .= trim($ch_title_tag->plaintext);
+                                        }
+                                        $all_chapter_urls[] = array('url' => $ch_url, 'title' => $ch_title);
+                                    }
+                                }
+                                $pagination = $html_page->find('ul.pagination', 0);
+                                if($pagination)
+                                {
+                                    $next_page = $pagination->find('a.next', 0);
+                                    if($next_page)
+                                    {
+                                        $page_num++;
+                                    }
+                                    else
+                                    {
+                                        $has_more_pages = false;
+                                    }
+                                }
+                                else
+                                {
+                                    $has_more_pages = false;
+                                }
+                            }
+                            if($reverse == true)
+                            {
+                                $all_chapter_urls = array_reverse($all_chapter_urls);
+                            }
+                            if(empty($all_chapter_urls))
+                            {
+                                if (isset($ums_Main_Settings['enable_detailed_logging'])) {
+                                    ums_log_to_file('Skipping web novel (no chapters found): ' . $name_str);
+                                }
+                                continue;
+                            }
+                            $local_imported = 0;
+                            $new_chap = false;
+                            foreach($all_chapter_urls as $chap_data)
+                            {
+                                $randsleep = rand(500,1000);
+                                usleep($randsleep * 1000);
+                                if($ums_max_chapters <= $local_imported)
+                                {
+                                    break;
+                                }
+                                $chapter_url = $chap_data['url'];
+                                $chapter_title = $chap_data['title'];
+                                if (isset($ums_Main_Settings['enable_detailed_logging'])) {
+                                    ums_log_to_file('Processing novel chapter: ' . $chapter_url);
+                                }
+                                $page_html = ums_get_web_page($chapter_url, ums_get_random_user_agent(), $use_phantom, $phantom_wait);
+                                if( $page_html == false ){
+                                    ums_log_to_file('Failed to download HTML for current chapter: ' . $chapter_url);
+                                    continue;
+                                }
+                                if(stristr($page_html, 'Cloudflare Ray ID:') !== false)
+                                {
+                                    ums_log_to_file('CloudFlare protection active on chapter, access is limited! Please install puppeteer on your site and set the "Content Scraping Method To Use" to Puppeteer for scraping to work. Chapter URL: ' . $chapter_url);
+                                    sleep(1);
+                                    continue;
+                                }
+                                $html = ums_str_get_html( $page_html );
+                                if( empty( $html ) ){
+                                    ums_log_to_file('Failed to parse HTML for current chapter: ' . $chapter_url);
+                                    continue;
+                                }
+                                $slugified_name = $wp_manga_storage->slugify( $chapter_title );
+                                $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
+                                if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                {
+                                    if (isset($ums_Main_Settings['enable_detailed_logging'])) {
+                                        ums_log_to_file('Chapter is already published, skipping it: ' . $chapter_2['chapter_name']);
+                                    }
+                                    continue;
+                                }
+                                $content = '';
+                                $content_tag = $html->find('div.chapter-content', 0);
+                                if($content_tag)
+                                {
+                                    $adsboxes = $content_tag->find('.adsbox');
+                                    if(!empty($adsboxes))
+                                    {
+                                        foreach($adsboxes as $ad)
+                                        {
+                                            $ad->outertext = '';
+                                        }
+                                    }
+                                    $content = $content_tag->innertext;
+                                }
+                                $qtags = array('iframe', 'script', 'ins', 'style');
+                                foreach ($qtags as $qtag) {
+                                    $regex = '#<\s*' . $qtag . '[^>]*>.*?<\s*/\s*'. $qtag . '>#msi';
+                                    $content = preg_replace($regex, '', $content);
+                                }
+                                $content = preg_replace('#<\/?div([^>]*)>#i', '', $content);
+                                if($strip_images == '1')
+                                {
+                                    $content = ums_sanitize_html_content($content);
+                                }
+                                $chapter_content = trim($content);
+                                $chapter_content = ums_strip_links($chapter_content);
+                                if($chapter_content == '')
+                                {
+                                    if (isset($ums_Main_Settings['enable_detailed_logging'])) {
+                                        ums_log_to_file('Skipping current chapter (empty content): ' . $chapter_url);
+                                    }
+                                    continue;
+                                }
+                                $arr = ums_spin_and_translate($chapter_title, $chapter_content, $rule_translate, 'en');
+                                if($arr === false)
+                                {
+                                    if (isset($ums_Main_Settings['enable_detailed_logging'])) {
+                                        ums_log_to_file('Skipping current chapter (translation failed): ' . $chapter_url);
+                                    }
+                                }
+                                elseif($no_translate_title != '1' && !empty($arr[0]) && !empty($arr[1]))
+                                {
+                                    $chapter_title = $arr[0];
+                                    $chapter_content = $arr[1];
+                                }
+                                global $wp_manga_text_type;
+                                if(empty($chapter_title))
+                                {
+                                    $chapter_title = 'Chapter';
+                                }
+                                $xext_name = '';
+                                $chapter_args = array(
+                                    'post_id'             => $existing_post_id,
+                                    'chapter_name'        => $chapter_title,
+                                    'chapter_name_extend' => $xext_name,
+                                    'volume_id'           => '',
+                                    'chapter_content'     => $chapter_content,
+                                );
+                                $slugified_name = $wp_manga_storage->slugify( $chapter_title );
+                                $chapter_2 = $wp_manga_chapter->get_chapter_by_slug( $existing_post_id, $slugified_name );
+                                if($chapter_2 && strtolower($chapter_2['chapter_slug']) == strtolower($slugified_name))
+                                {
+                                    ums_log_to_file('Chapter name already published, we will skip: ' . $chapter_2['chapter_name']);
+                                    continue; 
+                                }
+                                else
+                                {
+                                    if (isset($ums_Main_Settings['enable_detailed_logging'])) {
+                                        ums_log_to_file('Now publishing: ' . print_r($chapter_title, true));
+                                    }
+                                }
+                                $chapter_id = $wp_manga_text_type->insert_chapter( $chapter_args );
+                                if( $chapter_id ){
+                                    if( is_wp_error( $chapter_id ) ){
+                                        ums_log_to_file('Failed to insert new chapter: ' . $chapter_title . ' error: ' . $chapter_id->get_error_message());
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        $new_chap = true;
+                                        $ums_imported_chapters++;
+                                        $local_imported++;
+                                    }
+                                }
+                                if (isset($ums_Main_Settings['request_timeout']) && $ums_Main_Settings['request_timeout'] != '') {
+                                    $timeout = intval($ums_Main_Settings['request_timeout']);
+                                } else {
+                                    $timeout = 1;
+                                }
+                                sleep($timeout);
+                            }
+                            if($new_chap == true)
+                            {
+                                if (isset($ums_Main_Settings['enable_detailed_logging'])) {
+                                    ums_log_to_file('Total novel chapters scraped: ' . $local_imported);
+                                }
+                                $scraped_manga++;
+                            }                            
+                        }
+                    }
+                    catch(Exception $e)
+                    {
+                        ums_log_to_file('Importing failed: ' . $e->getMessage());
+                        if($auto == 1)
+                        {
+                            ums_clearFromList($param, $type);
+                        }
+                        return 'fail';
+                    }
+                }
+            }
             elseif($type == 3)
             {
                 if(trim($max_manga) != '')
@@ -7252,7 +7923,9 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         global $wp_filesystem;
                         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                            wp_filesystem($creds);
+                            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                                ums_log_to_file('Failed to initialize WordPress filesystem');
+                            }
                         }
                         $prefixh = 'http://newnovel.org/novel/';
                         $wprefixh = 'http://www.newnovel.org/novel/';
@@ -7733,7 +8406,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                         }
                                     }
                                 }
-                                $post_args['description'] = str_ireplace('newnovel.org', $_SERVER['HTTP_HOST'], $post_args['description']);
+                                $post_args['description'] = str_ireplace('newnovel.org', parse_url(home_url(), PHP_URL_HOST), $post_args['description']);
                                 $arr = ums_spin_and_translate($post_args['title'], $post_args['description'], $rule_translate, 'en');
                                 if($arr === false)
                                 {
@@ -8774,7 +9447,9 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         global $wp_filesystem;
                         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                            wp_filesystem($creds);
+                            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                                ums_log_to_file('Failed to initialize WordPress filesystem');
+                            }
                         }
                         $manga_names = explode(',', $manga_name);
                         $manga_names = array_map('trim', $manga_names);
@@ -9278,7 +9953,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                         }
                                     }
                                 }
-                                $post_args['description'] = str_ireplace($domain, $_SERVER['HTTP_HOST'], $post_args['description']);
+                                $post_args['description'] = str_ireplace($domain, parse_url(home_url(), PHP_URL_HOST), $post_args['description']);
                                 $arr = ums_spin_and_translate($post_args['title'], $post_args['description'], $rule_translate, 'en');
                                 if($arr === false)
                                 {
@@ -10254,7 +10929,9 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                         global $wp_filesystem;
                         if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base') ){
                             include_once(ABSPATH . 'wp-admin/includes/file.php');$creds = request_filesystem_credentials( site_url() );
-                            wp_filesystem($creds);
+                            if (!wp_filesystem($creds) || !is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+                                ums_log_to_file('Failed to initialize WordPress filesystem');
+                            }
                         }
                         $manga_names = explode(',', $manga_name);
                         $manga_names = array_map('trim', $manga_names);
@@ -10649,7 +11326,7 @@ function ums_run_rule($param, $type, $auto = 1, $rerun_count = 0)
                                 $post_args['views'] = $viewsm;
                                 $post_args['ratings'] = $xrating;
                                 $post_args['tags'] = strip_tags( $xtags );
-                                $post_args['description'] = str_ireplace($domain, $_SERVER['HTTP_HOST'], $post_args['description']);
+                                $post_args['description'] = str_ireplace($domain, parse_url(home_url(), PHP_URL_HOST), $post_args['description']);
                                 $arr = ums_spin_and_translate($post_args['title'], $post_args['description'], $rule_translate, 'en');
                                 if($arr === false)
                                 {
@@ -11582,8 +12259,8 @@ function ums_translate($title, $content, $from, $to)
                 CURLOPT_CONNECTTIMEOUT => 10,
                 CURLOPT_TIMEOUT => 60,
                 CURLOPT_MAXREDIRS => 10,
-                CURLOPT_SSL_VERIFYHOST => 0,
-                CURLOPT_SSL_VERIFYPEER => 0
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_SSL_VERIFYPEER => true
             );
             $ch = curl_init();
             if ($ch === FALSE) {
@@ -12271,14 +12948,14 @@ function ums_register_mysettings()
     
     if(isset($_GET['ums_page']))
     {
-        $curent_page = $_GET["ums_page"];
+        $current_page = $_GET["ums_page"];
     }
     else
     {
-        $curent_page = '';
+        $current_page = '';
     }
     $all_rules = array();
-    $last_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $last_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
     if(stristr($last_url, 'ums_items_panel') !== false)
     {
         $GLOBALS['wp_object_cache']->delete('ums_rules_list', 'options');
@@ -12320,7 +12997,7 @@ function ums_register_mysettings()
     {
         $max_pages = 1;
     }
-    if((stristr($last_url, 'ums_items_panel') !== false || stristr($last_url, 'ums_novel_panel') !== false || stristr($last_url, 'ums_novel_generic_panel') !== false || stristr($last_url, 'ums_manga_generic_panel') !== false || stristr($last_url, 'ums_text_panel') !== false) && (!is_numeric($curent_page) || $curent_page > $max_pages || $curent_page <= 0))
+    if((stristr($last_url, 'ums_items_panel') !== false || stristr($last_url, 'ums_novel_panel') !== false || stristr($last_url, 'ums_novel_generic_panel') !== false || stristr($last_url, 'ums_manga_generic_panel') !== false || stristr($last_url, 'ums_text_panel') !== false) && (!is_numeric($current_page) || $current_page > $max_pages || $current_page <= 0))
     {
         if(stristr($last_url, 'ums_page=') === false)
         {
@@ -12337,15 +13014,15 @@ function ums_register_mysettings()
         {
             if(isset($_GET['ums_page']))
             {
-                $curent_page = $_GET["ums_page"];
+                $current_page = $_GET["ums_page"];
             }
             else
             {
-                $curent_page = '';
+                $current_page = '';
             }
-            if(is_numeric($curent_page))
+            if(is_numeric($current_page))
             {
-                $last_url = str_replace('ums_page=' . $curent_page, 'ums_page=' . $max_pages, $last_url);
+                $last_url = str_replace('ums_page=' . $current_page, 'ums_page=' . $max_pages, $last_url);
             }
             else
             {
@@ -12393,6 +13070,7 @@ function ums_admin_load_files()
 require(dirname(__FILE__) . "/res/ums-rules-list.php");
 require(dirname(__FILE__) . "/res/ums-text-list.php");
 require(dirname(__FILE__) . "/res/ums-novel-list.php");
+require(dirname(__FILE__) . "/res/ums-fanmtl-list.php");
 require(dirname(__FILE__) . "/res/ums-vipnovel-list.php");
 require(dirname(__FILE__) . "/res/ums-novel-generic-list.php");
 require(dirname(__FILE__) . "/res/ums-manga-generic-list.php");

@@ -34,7 +34,7 @@
 <div class="wrap gs_popuptype_holder seo_pops">
     <h2><?php echo esc_html__("Generic Web Novels Scraper (Any Madara Theme Website)", 'ultimate-manga-scraper');?></h2>
 <div>
-<form id="myForm" method="post" action="<?php echo (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";?>">
+<form id="myForm" method="post" action="<?php echo esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));?>">
       <?php
          wp_nonce_field('ums_save_rules', '_umsr_nonce');
          
@@ -572,7 +572,7 @@
          </div>
          <hr/>
          <?php
-            $next_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $next_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
             if(stristr($next_url, 'ums_page=') === false)
             {
                 if(stristr($next_url, '?') === false)
@@ -600,17 +600,16 @@
             }
             else
             {
-                if(isset($_GET['ums_page']))
-                {
-                    $curent_page = $_GET["ums_page"];
+                if(isset($_GET['ums_page'])) {
+                    $current_page = intval($_GET['ums_page']);
                 }
                 else
                 {
-                    $curent_page = '';
+                    $current_page = '';
                 }
-                if(is_numeric($curent_page))
+                if(is_numeric($current_page))
                 {
-                    $next_page = $curent_page + 1;
+                    $next_page = $current_page + 1;
                     if($next_page > $max_pages)
                     {
                         $next_page = $max_pages;
@@ -619,7 +618,7 @@
                     {
                         $next_page = 1;
                     }
-                    $next_url = str_replace('ums_page=' . $curent_page, 'ums_page=' . $next_page, $next_url);
+                    $next_url = str_replace('ums_page=' . $current_page, 'ums_page=' . $next_page, $next_url);
                 }
                 else
                 {
@@ -647,7 +646,7 @@
                     }
                 }
             }
-            $prev_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $prev_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
             if(stristr($prev_url, 'ums_page=') === false)
             {
                 if(stristr($prev_url, '?') === false)
@@ -661,17 +660,16 @@
             }
             else
             {
-                if(isset($_GET['ums_page']))
-                {
-                    $curent_page = $_GET["ums_page"];
+                if(isset($_GET['ums_page'])) {
+                    $current_page = intval($_GET['ums_page']);
                 }
                 else
                 {
-                    $curent_page = '';
+                    $current_page = '';
                 }
-                if(is_numeric($curent_page))
+                if(is_numeric($current_page))
                 {
-                    $go_to = $curent_page - 1;
+                    $go_to = $current_page - 1;
                     if($go_to <= 0)
                     {
                         $go_to = 1;
@@ -680,7 +678,7 @@
                     {
                         $go_to = $max_pages;
                     }
-                    $prev_url = str_replace('ums_page=' . $curent_page, 'ums_page=' . $go_to, $prev_url);
+                    $prev_url = str_replace('ums_page=' . $current_page, 'ums_page=' . $go_to, $prev_url);
                 }
                 else
                 {
@@ -694,7 +692,7 @@
                     }
                 }
             }
-            $first_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $first_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
             if(stristr($first_url, 'ums_page=') === false)
             {
                 if(stristr($first_url, '?') === false)
@@ -708,17 +706,16 @@
             }
             else
             {
-                if(isset($_GET['ums_page']))
-                {
-                    $curent_page = $_GET["ums_page"];
+                if(isset($_GET['ums_page'])) {
+                    $current_page = intval($_GET['ums_page']);
                 }
                 else
                 {
-                    $curent_page = '';
+                    $current_page = '';
                 }
-                if(is_numeric($curent_page))
+                if(is_numeric($current_page))
                 {
-                    $first_url = str_replace('ums_page=' . $curent_page, 'ums_page=1', $first_url);
+                    $first_url = str_replace('ums_page=' . $current_page, 'ums_page=1', $first_url);
                 }
                 else
                 {
@@ -732,7 +729,7 @@
                     }
                 }
             }
-            $last_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $last_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
             if(stristr($last_url, 'ums_page=') === false)
             {
                 if(stristr($last_url, '?') === false)
@@ -746,17 +743,16 @@
             }
             else
             {
-                if(isset($_GET['ums_page']))
-                {
-                    $curent_page = $_GET["ums_page"];
+                if(isset($_GET['ums_page'])) {
+                    $current_page = intval($_GET['ums_page']);
                 }
                 else
                 {
-                    $curent_page = '';
+                    $current_page = '';
                 }
-                if(is_numeric($curent_page))
+                if(is_numeric($current_page))
                 {
-                    $last_url = str_replace('ums_page=' . $curent_page, 'ums_page=' . $max_pages, $last_url);
+                    $last_url = str_replace('ums_page=' . $current_page, 'ums_page=' . $max_pages, $last_url);
                 }
                 else
                 {
@@ -772,7 +768,7 @@
             }
             if(isset($_GET['ums_page']) && is_numeric($_GET['ums_page']))
             {
-                $this_page = $_GET["ums_page"];
+                $this_page = intval($_GET["ums_page"]);
             }
             else
             {
@@ -832,7 +828,9 @@
         $rules_per_page = get_option('ums_posts_per_page', 10);
         if(isset($_POST['posts_per_page']))
         {
-            update_option('ums_posts_per_page', $_POST['posts_per_page']);
+            $posts_per_page = intval($_POST['posts_per_page']);
+            $posts_per_page = max(1, min($posts_per_page, 100)); // Clamp between 1 and 100
+            update_option('ums_posts_per_page', $posts_per_page);
         }
        check_admin_referer('ums_save_rules', '_umsr_nonce');
        $data2 = $_POST['ums_novel_generic_list'];
@@ -846,13 +844,13 @@
        $scad = false;
        if(isset($_GET["ums_page"]) && is_numeric($_GET["ums_page"]))
        {
-           $curent_page = $_GET["ums_page"];
+           $current_page = intval($_GET["ums_page"]);
        }
        else
        {
-           $curent_page = 1;
+           $current_page = 1;
        }
-       $offset = ($curent_page - 1) * $rules_per_page;
+       $offset = ($current_page - 1) * $rules_per_page;
        $cont  = 0;
        $cat_cont = $offset;
        if (isset($data2['location'][0])) {
@@ -921,7 +919,7 @@
            {
                $max_pages = 1;
            }
-           $last_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+           $last_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
            if(stristr($last_url, 'ums_page=') === false)
            {
                if(stristr($last_url, '?') === false)
@@ -935,17 +933,16 @@
            }
            else
            {
-               if(isset($_GET['ums_page']))
-               {
-                   $curent_page = $_GET["ums_page"];
+               if(isset($_GET['ums_page'])) {
+                    $current_page = intval($_GET['ums_page']);
                }
                else
                {
-                   $curent_page = '';
+                   $current_page = '';
                }
-               if(is_numeric($curent_page))
+               if(is_numeric($current_page))
                {
-                   $last_url = str_replace('ums_page=' . $curent_page, 'ums_page=' . $max_pages, $last_url);
+                   $last_url = str_replace('ums_page=' . $current_page, 'ums_page=' . $max_pages, $last_url);
                }
                else
                {
@@ -969,7 +966,7 @@
            {
                $max_pages = 1;
            }
-           $last_url = (ums_isSecure() ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+           $last_url = esc_url_raw((ums_isSecure() ? "https://" : "http://") . sanitize_text_field($_SERVER["HTTP_HOST"]) . sanitize_text_field($_SERVER["REQUEST_URI"]));
            if(stristr($last_url, 'ums_page=') === false)
            {
                if(stristr($last_url, '?') === false)
@@ -983,17 +980,16 @@
            }
            else
            {
-               if(isset($_GET['ums_page']))
-               {
-                   $curent_page = $_GET["ums_page"];
+               if(isset($_GET['ums_page'])) {
+                    $current_page = intval($_GET['ums_page']);
                }
                else
                {
-                   $curent_page = '';
+                   $current_page = '';
                }
-               if(is_numeric($curent_page))
+               if(is_numeric($current_page))
                {
-                   $last_url = str_replace('ums_page=' . $curent_page, 'ums_page=' . $max_pages, $last_url);
+                   $last_url = str_replace('ums_page=' . $current_page, 'ums_page=' . $max_pages, $last_url);
                }
                else
                {
@@ -1030,11 +1026,11 @@
        if (!empty($rules)) {
             if(isset($_GET["ums_page"]) && is_numeric($_GET["ums_page"]))
             {
-                $curent_page = $_GET["ums_page"];
+                $current_page = intval($_GET["ums_page"]);
             }
             else
             {
-                $curent_page = 1;
+                $current_page = 1;
             }
             $unlocker = get_option('ums_minute_running_unlocked', false);
             $rules_per_page = get_option('ums_posts_per_page', 10);
@@ -1083,7 +1079,7 @@
            $unlocker = get_option('ums_minute_running_unlocked', false);
            $rules_per_page = get_option('ums_posts_per_page', 10);
            foreach ($rules as $request => $bundle[]) {
-                if(($cont < ($curent_page - 1) * $rules_per_page) || ($cont >= $curent_page * $rules_per_page))
+                if(($cont < ($current_page - 1) * $rules_per_page) || ($cont >= $current_page * $rules_per_page))
                 {
                     $cont++;
                     continue;
