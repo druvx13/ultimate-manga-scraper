@@ -129,3 +129,28 @@
     background-color: #5cb85c;
     color: white;
 }
+
+/* ============================================================
+ * Responsive Styles — Rules Table & Modal
+ * ============================================================ */
+
+/* Tablet (≤ 1024px) — ensure horizontal scroll on wide tables */
+@media only screen and (max-width: 1024px) {
+    #mainRules { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tabela    { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
+/* Mobile (≤ 782px) */
+@media only screen and (max-width: 782px) {
+    /* Modal fills most of the screen */
+    .codemodalfzr-content { width: 95% !important; }
+    .codemodalfzr { padding-top: 10px; }
+
+    /* Rules table: allow text to wrap so columns don't push off-screen */
+    #mainRules td, #mainRules th { white-space: normal; padding: 4px; }
+    .tabela td, .tabela th       { white-space: normal; padding: 6px; }
+
+    /* Action select: full width on mobile */
+    .codemainfzr { width: 100% !important; }
+    .codemainfzr select { width: 100%; font-size: 13px; }
+}

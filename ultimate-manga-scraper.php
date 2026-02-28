@@ -704,6 +704,7 @@ function ums_enhancements_enqueue_scripts($hook) {
     if ($hook != 'ultimate-web-novel-manga-scraper_page_ums_enhancements') {
         return;
     }
+    wp_enqueue_style('ums-enhancements-style', plugins_url('styles/ums-enhancements.css', __FILE__), array(), '1.0.0');
     wp_enqueue_script('ums-enhancements', plugin_dir_url(__FILE__) . 'scripts/madara-enhancements.js', array('jquery'), '1.0', true);
     wp_localize_script('ums-enhancements', 'madaraEnhancements', array(
         'ajaxUrl' => admin_url('admin-ajax.php'),

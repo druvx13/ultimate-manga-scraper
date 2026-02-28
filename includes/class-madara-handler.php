@@ -79,6 +79,7 @@ class UMS_Madara_Handler {
                 </label>
                 <p id="manga-count">Manga Loaded: 0</p>
             </div>
+            <div id="manga-table-wrapper">
             <table class="widefat" id="manga-table">
                 <thead>
                     <tr>
@@ -114,6 +115,7 @@ class UMS_Madara_Handler {
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            </div><!-- #manga-table-wrapper -->
             <button id="load-more" class="button button-secondary">Load More</button> <!-- Load More Button -->
         </div>
         <?php
