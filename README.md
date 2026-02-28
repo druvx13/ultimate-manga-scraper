@@ -53,7 +53,7 @@ It handles the entire lifecycle of content acquisition:
 *   **CMS**: WordPress 5.0+
 *   **Theme**: Madara (Active)
 *   **Plugin Dependency**: Madara Core (`WP_MANGA_STORAGE`)
-*   **PHP**: 7.4+
+*   **PHP**: 8.2+
 *   **Extensions**: `curl`, `dom`, `mbstring`, `json`, `libxml`
 *   **Optional**:
     *   `Node.js` (for Puppeteer)
@@ -62,7 +62,7 @@ It handles the entire lifecycle of content acquisition:
 
 ## 4. Technology Stack
 
-*   **Language**: PHP 7/8
+*   **Language**: PHP 8
 *   **Frontend**: jQuery (Admin UI)
 *   **Parsers**: PHP Simple HTML DOM Parser, DOMDocument
 *   **Headless**: PhantomJS (JS), Puppeteer (Node.js)

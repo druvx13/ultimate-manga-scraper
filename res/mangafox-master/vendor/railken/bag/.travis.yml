@@ -1,0 +1,67 @@
+language: php
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - libxml2-utils
+  code_climate:
+    repo_token:
+      secure: "fmnYLVinZsUXNAITwtISv6gea5l/RWInxOqhgNpnaShDTMmT/n/oFR38yoSMh5eHepkHszBNbsT93Pj8zRMp674oLh1Wn6SyN5UoPhrm2FEDw8Yb5B7ht5Mxu2RKsnStWGXLUL1hJ9nfVt52HiYk2ALUjMCMkMAb+0+FRbJFJ3LZsJMpl5pzYART5ZF1EUzxpYft1/S6N3W+tUkop1oRGDjKyQLCD8Zq20JNJpmIm44c153NaJYLQW3Rw15xffX+2h1EPOJRUd+oUEVziwQnRb4f0Fz6j/bymxs3NKrByCou8PqvilRiFjtPOI943E3h0voimQJbdrI8EcMz/6OU92JL9P1VDbKDi/dzY4whiquCKsm2uCevnpHzA7Z9BVvpPolxzXwlaY60rY0IPUPiqs4F1UzxRDTrzQvzqTrmmAbcBOVfX/r4mqdqHpANLEAKcELq/vMeeOcqncve9vvpGRpJF/hksiiioQplM6J67QjSCE/tiavU18Ewzlk0GOJxcInYmgI/8zu+luH049t+kBKilUF16Bbe9Td9oK2yR3n+axqxPpKpr1Vz9WpRNvcSsr1mwAXi6gjnaksN83t8UUf485fkowi8cWMqBPLs0W+g4oV0oqHHbvTXpNdKoyYa/EKQHW00ELOLvcJehdJMvHkTre0ffnytUeGC5Ny4sX0="
+
+php:
+  - 7.0
+  - 7.1
+  - 7.2
+
+matrix:
+  allow_failures:
+    - php: master
+  fast_finish: true
+
+env:
+  matrix:
+    - DEPENDENCIES="high"
+    - DEPENDENCIES="low"
+  global:
+    - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
+
+before_install:
+  - composer clear-cache
+
+install:
+  - if [[ "$DEPENDENCIES" = 'high' ]]; then travis_retry composer update $DEFAULT_COMPOSER_FLAGS; fi
+  - if [[ "$DEPENDENCIES" = 'low' ]]; then travis_retry composer update $DEFAULT_COMPOSER_FLAGS --prefer-lowest; fi
+
+before_script:
+  - echo 'zend.assertions=1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - echo 'assert.exception=On' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+
+script:
+  - ./vendor/bin/phpunit --coverage-text --coverage-clover=build/logs/clover.xml
+  - ./vendor/bin/phpunit --configuration ./build/travis-ci-fail.xml > /dev/null; if [ $? -eq 0 ]; then echo "SHOULD FAIL"; false; else echo "fail checked"; fi;
+  
+after_script:
+  - ./vendor/bin/test-reporter
+
+jobs:
+  include:
+    - stage: Quality
+      php: 7.2
+      env: PHPStan
+      install: travis_retry composer update --prefer-dist --prefer-stable
+      before_script:
+        - travis_retry composer require --dev --prefer-dist --prefer-stable phpstan/phpstan:^0.9
+      script:
+        - vendor/bin/phpstan analyse --level=0 src
+        - vendor/bin/phpstan analyse --level=1 tests
+    - stage: Style
+      php: 7.2
+      env: php-cs-fixer
+      install:
+        - phpenv config-rm xdebug.ini
+        - travis_retry composer update --prefer-dist --prefer-stable
+      script:
+        - ./vendor/bin/php-cs-fixer --diff --dry-run -v fix src
+        - ./vendor/bin/php-cs-fixer --diff --dry-run -v fix tests

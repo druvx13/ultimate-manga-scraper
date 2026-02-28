@@ -11,7 +11,7 @@ Before you begin, ensure you have:
 ✅ WordPress 5.0 or higher  
 ✅ Madara theme installed and activated  
 ✅ Madara Core plugin installed and activated  
-✅ PHP 7.2 or higher with cURL, DOM, and mbstring extensions  
+✅ PHP 8.2 or higher with cURL, DOM, and mbstring extensions  
 
 ### Step 1: Install the Plugin
 
