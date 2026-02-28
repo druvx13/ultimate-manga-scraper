@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/druvx13/ultimate-manga-scraper
  * Description: This plugin will scrape manga for you, day and night
  * Author: NIKOL
- * Version: 2.0.3
+ * Version: 2.0.4
  * Author URI: https://github.com/druvx13/ultimate-manga-scraper
  * License: LUCA Free License v1.0
  * License URI: https://github.com/druvx13/ultimate-manga-scraper/blob/main/LICENSE
@@ -629,17 +629,17 @@ function ums_get_random_user_agent($ua = '') {
 		return $ua;
 	}
 	$os_type = rand(1, 3);
-    $chrome_version = rand(100, 108) . '.0.' . rand(1, 4044) . '.' . rand(0, 138);
+    $chrome_version = rand(124, 136) . '.0.' . rand(6000, 7000) . '.' . rand(0, 200);
     if ($os_type == 1) {
-        $agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36";
+        $agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36";
     } elseif ($os_type == 2) {
-        $agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36";
-        $mac_version = "10_" . rand(6, 15) . "_" . rand(1, 4);
-        $agent = str_replace('10_15_4', $mac_version, $agent);
+        $mac_major = rand(13, 15);
+        $mac_minor = rand(0, 7);
+        $agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X {$mac_major}_{$mac_minor}_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36";
     } elseif ($os_type == 3) {
-        $agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36";
+        $agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36";
     }
-    $agent = str_replace("81.0.4044.138", $chrome_version, $agent);
+    $agent = str_replace("136.0.0.0", $chrome_version, $agent);
     return $agent;
 }
 function ums_assign_var(&$target, $var, $root = false) {
@@ -704,6 +704,7 @@ function ums_enhancements_enqueue_scripts($hook) {
     if ($hook != 'ultimate-web-novel-manga-scraper_page_ums_enhancements') {
         return;
     }
+    wp_enqueue_style('ums-enhancements-style', plugins_url('styles/ums-enhancements.css', __FILE__), array(), '1.0.0');
     wp_enqueue_script('ums-enhancements', plugin_dir_url(__FILE__) . 'scripts/madara-enhancements.js', array('jquery'), '1.0', true);
     wp_localize_script('ums-enhancements', 'madaraEnhancements', array(
         'ajaxUrl' => admin_url('admin-ajax.php'),
@@ -2291,7 +2292,7 @@ function ums_wp_mcl_e_upload_file( $url, $use_phantom, $phantom_wait, $post_id =
             $headers[] = 'Sec-Ch-Ua: ^^';
             $headers[] = 'Referer: https://fanfox.net/';
             $headers[] = 'Sec-Ch-Ua-Mobile: ?0';
-            $headers[] = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36';
+            $headers[] = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36';
             $headers[] = 'Sec-Ch-Ua-Platform: ^^Windows^^\"\"';
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         }
@@ -2345,7 +2346,8 @@ function ums_update_post_ratings( $post_id, $ratings = array() ){
         return false;
     }
 
-    extract( $ratings );
+    $avg     = $ratings['avg'];
+    $numbers = $ratings['numbers'];
 
     $totals = intval( (float)trim($avg) * (float)$numbers );
     $int_avg_totals = intval( $avg ) * $numbers;

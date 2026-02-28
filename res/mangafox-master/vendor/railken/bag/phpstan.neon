@@ -1,0 +1,3 @@
+parameters:
+	ignoreErrors:
+		- '#Access to an undefined property Railken\\Bag::\$[a-zA-Z0-9_]+#'

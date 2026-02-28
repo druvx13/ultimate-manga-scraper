@@ -3,7 +3,7 @@
 ## System Requirements
 
 *   **WordPress**: Version 5.0 or higher.
-*   **PHP**: Version 7.2 or higher (7.4+ recommended).
+*   **PHP**: Version 8.2 or higher.
 *   **Theme**: **Madara** (By MangaBooth). This plugin is strictly an add-on for Madara.
 *   **Plugins**:
     *   **Madara Core** (`WP_MANGA_STORAGE` class must be available).

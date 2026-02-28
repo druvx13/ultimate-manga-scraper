@@ -76,3 +76,17 @@
   .modern-button:hover {
     background-color: #005a8c;
   }
+/* ============================================================
+ * Responsive Styles — Activation / License
+ * ============================================================ */
+
+@media only screen and (max-width: 640px) {
+    .verification-container {
+        margin: 20px auto;
+        padding: 20px;
+        width: auto;
+    }
+    .help-section { flex-direction: column; }
+    .help-icon    { margin-right: 0; margin-bottom: 10px; }
+    .input-text, .modern-button { font-size: 14px; padding: 12px 20px; }
+}

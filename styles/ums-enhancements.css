@@ -1,0 +1,137 @@
+/*
+ * Copyright (C) 2026 NIKOL
+ * Licensed under LUCA Free License v1.0
+ * DO WHAT THE FUCK YOU WANT TO.
+ */
+
+/* ============================================================
+ * Madara Enhancements Admin Page
+ * ============================================================ */
+
+/* Search / URL form layout */
+#url-settings-form,
+#search-form {
+    background: #fff;
+    border: 1px solid #e2e4e7;
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+}
+
+#url-settings-form h2,
+#search-form h2 {
+    margin-top: 0;
+}
+
+#search-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+#search-form h2 {
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+#search-form label,
+#url-settings-form .form-table th {
+    font-weight: 600;
+}
+
+#search-query {
+    flex: 1 1 200px;
+    min-width: 150px;
+}
+
+#search-type {
+    flex: 0 1 160px;
+    min-width: 120px;
+}
+
+#search-button { flex: 0 0 auto; }
+
+/* Manga count / auto-load bar */
+#manga-count {
+    font-weight: 600;
+    margin: 8px 0;
+}
+
+/* Manga table: horizontal scroll on all viewports */
+#manga-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+
+#manga-table {
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+}
+
+#manga-table th,
+#manga-table td {
+    padding: 8px 10px;
+    vertical-align: top;
+    border-bottom: 1px solid #e2e4e7;
+    word-break: break-word;
+}
+
+#manga-table thead th {
+    background: #1d2327;
+    color: #fff;
+    font-weight: 600;
+    text-align: left;
+    white-space: nowrap;
+}
+
+#manga-table tbody tr:nth-child(even) { background: #f6f7f7; }
+#manga-table tbody tr:hover           { background: #eaf3fb; }
+
+/* Cover image cell */
+#manga-table td img {
+    display: block;
+    width: 80px;
+    height: auto;
+    border-radius: 3px;
+}
+
+/* Action column */
+#manga-table td .add-manga-form { margin: 0; }
+
+/* Load More button */
+#load-more {
+    display: block;
+    margin: 12px auto;
+}
+
+/* ============================================================
+ * Responsive overrides
+ * ============================================================ */
+
+/* Tablet (≤ 1024px) — compact the search bar */
+@media only screen and (max-width: 1024px) {
+    #search-query { min-width: 120px; }
+}
+
+/* Mobile (≤ 782px) */
+@media only screen and (max-width: 782px) {
+    #search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    #search-query,
+    #search-type,
+    #search-button { width: 100%; }
+
+    #manga-table td img { width: 60px; }
+
+    #url-settings-form .form-table th,
+    #url-settings-form .form-table td {
+        display: block;
+        width: 100%;
+        padding: 4px 0;
+    }
+}

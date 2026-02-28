@@ -4,7 +4,7 @@
  * DO WHAT THE FUCK YOU WANT TO.
  */
 "use strict"; 
-var initial = '';
+let initial = '';
 function umsLoading(btn)
 {
     btn.attr('disabled','disabled');
@@ -131,27 +131,27 @@ else
     window.onload = mainChanged;
     jQuery(document).ready(function(){
         jQuery('span.wpums-delete').on('click', function(){
-            var confirm_delete = confirm('Delete This Rule?');
+            const confirm_delete = confirm('Delete This Rule?');
             if (confirm_delete) {
                 jQuery(this).parent().parent().remove();
                 jQuery('#myForm').submit();						
             }
         });
-        var plugin_slug = mycustommainsettings.plugin_slug;
+        const plugin_slug = mycustommainsettings.plugin_slug;
         jQuery('#' + plugin_slug + '_register').on('click', function()
         {
-            var ajaxurl = mycustommainsettings.ajaxurl;
-            var nonce = jQuery('#' + plugin_slug + '_activation_nonce').val();
-            var code = jQuery('#' + plugin_slug + '_register_code').val();
+            const ajaxurl = mycustommainsettings.ajaxurl;
+            const nonce = jQuery('#' + plugin_slug + '_activation_nonce').val();
+            const code = jQuery('#' + plugin_slug + '_register_code').val();
             if(code == '')
             {
                 alert('You need to enter a purchase code for the activation to work.');
             }
             else
             {
-                var thisbut = jQuery(this);
+                const thisbut = jQuery(this);
                 umsLoading(thisbut);
-                var data = {
+                const data = {
                     action: 'ums_activation',
                     code: code,
                     nonce: nonce
@@ -175,14 +175,14 @@ else
         });
         jQuery('#' + plugin_slug + '_revoke_license').on('click', function()
         {
-            var confirm_delete = confirm('Are you sure you want to revoke your license?');
+            const confirm_delete = confirm('Are you sure you want to revoke your license?');
             if (confirm_delete) 
             {
-                var ajaxurl = mycustommainsettings.ajaxurl;
-                var nonce = jQuery('#' + plugin_slug + '_activation_nonce').val();
-                var thisbut = jQuery(this);
+                const ajaxurl = mycustommainsettings.ajaxurl;
+                const nonce = jQuery('#' + plugin_slug + '_activation_nonce').val();
+                const thisbut = jQuery(this);
                 umsLoading(thisbut);
-                var data = {
+                const data = {
                     action: 'ums_revoke',
                     nonce: nonce
                 };
@@ -204,7 +204,7 @@ else
             }
         });
     });
-    var unsaved = false;
+    let unsaved = false;
     jQuery(document).ready(function () {
         jQuery(":input").change(function(){
             if (this.id != 'PreventChromeAutocomplete' && this.className != 'sc_chat_form_field_prompt_text')

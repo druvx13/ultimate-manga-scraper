@@ -23,7 +23,7 @@ No. The plugin is tightly integrated with Madara's custom post types, taxonomies
 ### What are the minimum requirements?
 
 - WordPress 5.0+
-- PHP 7.2+ (7.4+ recommended)
+- PHP 8.2+
 - Madara theme (active)
 - Madara Core plugin (for WP_MANGA_STORAGE)
 - PHP extensions: cURL, DOM, mbstring, json, libxml

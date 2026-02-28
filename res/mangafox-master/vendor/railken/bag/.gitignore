@@ -1,0 +1,6 @@
+vendor/
+.php_cs.cache
+build/
+.phpunit.result.cache
+.phpunit.cache/test-results
+*.lock

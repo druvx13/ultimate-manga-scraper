@@ -75,7 +75,7 @@ class GoogleTranslator {
 		curl_setopt ( $this->ch, CURLOPT_CONNECTTIMEOUT, 10 );
 		curl_setopt ( $this->ch, CURLOPT_TIMEOUT, 200 );
 		curl_setopt ( $this->ch, CURLOPT_REFERER, 'http://www.bing.com/' );
-		curl_setopt ( $this->ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36' );
+		curl_setopt ( $this->ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 15_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36' );
 		curl_setopt ( $this->ch, CURLOPT_MAXREDIRS, 20 );
 		curl_setopt ( $this->ch, CURLOPT_FOLLOWLOCATION, 1 );
 		$x = 'error';
@@ -91,7 +91,7 @@ class GoogleTranslator {
 		$json_result = json_decode ( $exec );
 		if(is_array($json_result [0]))
 		{
-			$json_changed = array();
+			$json_changed = [];
 			foreach($json_result as $jrez)
 			{
 				if(is_array($jrez) && isset($jrez[0]))
@@ -107,7 +107,7 @@ class GoogleTranslator {
 		if (! isset ( $json_result [0] )) {
 			throw new Exception ( 'Can not get JSON from returned response: ' . $exec );
 		}
-		$json_result_new= array();
+		$json_result_new= [];
 		foreach($json_result as $json_array){
 		
 			if(is_array($json_array)){
@@ -151,7 +151,7 @@ class GoogleTranslator {
 		curl_setopt ( $this->ch, CURLOPT_CONNECTTIMEOUT, 10 );
 		curl_setopt ( $this->ch, CURLOPT_TIMEOUT, 200 );
 		curl_setopt ( $this->ch, CURLOPT_REFERER, 'http://www.bing.com/' );
-		curl_setopt ( $this->ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36' );
+		curl_setopt ( $this->ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 15_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36' );
 		curl_setopt ( $this->ch, CURLOPT_MAXREDIRS, 20 );
 		curl_setopt ( $this->ch, CURLOPT_FOLLOWLOCATION, 1 );
 		$data = curl_exec ( $this->ch );
@@ -297,7 +297,7 @@ class GoogleTranslator {
                 'oe'   => 'UTF-8'
 		];
 		curl_setopt ( $this->ch, CURLOPT_POSTFIELDS, $post );
-		$headers = array();
+		$headers = [];
 		
 		$headers[] = "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 		$headers[] = "Accept-Language: en-US,en;q=0.5";
